@@ -1,11 +1,9 @@
 package edu.iuh.authenticationservice.entity;
 
-import edu.iuh.StudentRegisterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,21 +16,16 @@ import java.util.List;
 @Data
 @Entity(name = "student_auth")
 @SequenceGenerator(name = "entity_seq", initialValue = 10000000, allocationSize = 1)
-public class StudentAuth implements UserDetails {
+public class Auth implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entity_seq")
-    private long mssv;
+    private long id;
     private String password;
     private UserRole role;
 
-    public StudentAuth(String password, UserRole role) {
+    public Auth(String password, UserRole role) {
         this.password = password;
         this.role = role;
-    }
-
-    public StudentAuth(String password) {
-        this.password = password;
-        this.role = UserRole.STUDENT;
     }
 
     @Override
@@ -47,7 +40,7 @@ public class StudentAuth implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(this.mssv);
+        return String.valueOf(this.getId());
     }
 
     @Override

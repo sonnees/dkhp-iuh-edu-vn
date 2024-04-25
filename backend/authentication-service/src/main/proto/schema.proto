@@ -1,24 +1,24 @@
 syntax = "proto3";
-
 option java_multiple_files = true;
 
+package edu.iuh;
 import "google/protobuf/empty.proto";
 
-package edu.iuh;
-
 message AuthRequest {
-  int64 mssv = 1;
+  int64 id = 1;
   string password = 2;
 }
 
-message RegisterRequest {
-  int64 mssv = 1;
-  string password = 2;
-  string role = 3;
-}
+message RegisterRequest {}
 
 message JwtToken {
   string token = 1;
+}
+
+message AuthInfo{
+  int64 id = 1;
+  string password = 2;
+  string role = 3;
 }
 
 service AuthService {
@@ -26,7 +26,9 @@ service AuthService {
 }
 
 service RegisterService {
-  rpc register(RegisterRequest) returns(JwtToken){}
+  rpc registerStudent(RegisterRequest) returns(AuthInfo){}
+  rpc registerAdministrator(RegisterRequest) returns(AuthInfo){}
+  rpc registerStaff(RegisterRequest) returns(AuthInfo){}
 }
 
 

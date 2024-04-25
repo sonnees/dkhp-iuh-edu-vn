@@ -33,7 +33,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
     @Override
     public void authorize(AuthRequest request, StreamObserver<JwtToken> responseObserver) {
         Authentication authenticate = jwtAuthProvider.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getMssv(), request.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.getId(), request.getPassword()));
 
         Instant now = Instant.now();
         Instant expiration = now.plus(24, ChronoUnit.HOURS);
@@ -44,7 +44,7 @@ public class AuthGrpcService extends AuthServiceGrpc.AuthServiceImplBase {
                 JwtToken.newBuilder()
                         .setToken(Jwts.builder()
                 .setSubject((String) authenticate.getPrincipal())
-                .claim("auth", authorities)
+                .claim("role", authorities)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
                 .signWith(JwtAuthProvider.getSignInKey(jwtSecretKey), SignatureAlgorithm.HS256)
