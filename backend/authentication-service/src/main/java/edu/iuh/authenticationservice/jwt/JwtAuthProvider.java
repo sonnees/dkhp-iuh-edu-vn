@@ -1,7 +1,7 @@
 package edu.iuh.authenticationservice.jwt;
 
 import edu.iuh.authenticationservice.StudentAuthRepository;
-import edu.iuh.authenticationservice.entity.StudentAuth;
+import edu.iuh.authenticationservice.entity.Auth;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -35,7 +35,7 @@ public class JwtAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if(!authentication.isAuthenticated()) {
-            Optional<StudentAuth> studentAuth = repository.findById(Long.parseLong(authentication.getName()));
+            Optional<Auth> studentAuth = repository.findById(Long.parseLong(authentication.getName()));
             if(studentAuth.isEmpty())
                 throw new UsernameNotFoundException("User not found with id: " + authentication.getName());
 
