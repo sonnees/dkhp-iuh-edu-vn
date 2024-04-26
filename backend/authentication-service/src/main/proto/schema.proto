@@ -11,6 +11,12 @@ message AuthRequest {
 
 message RegisterRequest {}
 
+message ChangePasswordRequest{
+  int64 id = 1;
+  string oldPass = 2;
+  string newPass = 3;
+}
+
 message JwtToken {
   string token = 1;
 }
@@ -21,8 +27,11 @@ message AuthInfo{
   string role = 3;
 }
 
+message ChangePassword {}
+
 service AuthService {
   rpc authorize(AuthRequest) returns(JwtToken){}
+  rpc changePassword(ChangePasswordRequest) returns(ChangePassword){}
 }
 
 service RegisterService {
@@ -30,5 +39,6 @@ service RegisterService {
   rpc registerAdministrator(RegisterRequest) returns(AuthInfo){}
   rpc registerStaff(RegisterRequest) returns(AuthInfo){}
 }
+
 
 

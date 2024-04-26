@@ -1,6 +1,6 @@
 package edu.iuh.authenticationservice.jwt;
 
-import edu.iuh.authenticationservice.StudentAuthRepository;
+import edu.iuh.authenticationservice.AuthRepository;
 import edu.iuh.authenticationservice.entity.Auth;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -19,10 +19,10 @@ import java.util.*;
 
 @Component
 public class JwtAuthProvider implements AuthenticationProvider {
-    private final StudentAuthRepository repository;
+    private final AuthRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtAuthProvider(StudentAuthRepository repository, PasswordEncoder passwordEncoder) {
+    public JwtAuthProvider(AuthRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }

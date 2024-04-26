@@ -1,7 +1,7 @@
 package edu.iuh.authenticationservice.service;
 
 import edu.iuh.*;
-import edu.iuh.authenticationservice.StudentAuthRepository;
+import edu.iuh.authenticationservice.AuthRepository;
 import edu.iuh.authenticationservice.entity.Auth;
 import edu.iuh.authenticationservice.entity.UserRole;
 import io.grpc.stub.StreamObserver;
@@ -13,13 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @GrpcService
 @Slf4j
 public class RegisterGrpcService extends RegisterServiceGrpc.RegisterServiceImplBase {
-    private final StudentAuthRepository repository;
+    private final AuthRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${default.password}")
     String defaultPassword;
 
-    public RegisterGrpcService(StudentAuthRepository repository, PasswordEncoder passwordEncoder) {
+    public RegisterGrpcService(AuthRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
