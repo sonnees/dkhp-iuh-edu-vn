@@ -1,6 +1,6 @@
 package edu.iuh.authenticationservice.config;
 
-import edu.iuh.authenticationservice.StudentAuthRepository;
+import edu.iuh.authenticationservice.AuthRepository;
 import edu.iuh.authenticationservice.jwt.JwtAuthProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,9 +34,9 @@ public class SecurityConfig {
     @Value("${jwt.secret.key}")
     String jwtSecretKey;
 
-    private final StudentAuthRepository repository;
+    private final AuthRepository repository;
 
-    public SecurityConfig(StudentAuthRepository repository) {
+    public SecurityConfig(AuthRepository repository) {
         this.repository = repository;
     }
 

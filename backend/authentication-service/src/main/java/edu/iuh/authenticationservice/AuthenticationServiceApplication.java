@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 @SpringBootApplication
 public class AuthenticationServiceApplication {
-	private StudentAuthRepository repository;
+	private AuthRepository repository;
 	private PasswordEncoder passwordEncoder;
 	public static void main(String[] args) {
 		SpringApplication.run(AuthenticationServiceApplication.class, args);
