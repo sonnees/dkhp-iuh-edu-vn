@@ -1,25 +1,22 @@
 package edu.iuh.administratorservice.controller;
 import edu.iuh.administratorservice.async.InsertDetailCourseAsync;
 import edu.iuh.administratorservice.dto.FileNameDTO;
-import edu.iuh.administratorservice.dto.StaffDTO;
 import edu.iuh.administratorservice.entity.Course;
 import edu.iuh.administratorservice.dto.CourseCreateDTO;
-import edu.iuh.administratorservice.entity.DetailCourse;
 import edu.iuh.administratorservice.repository.CourseRepository;
-import edu.iuh.administratorservice.repository.DetailCourseRepository;
 import edu.iuh.administratorservice.repository.SemesterRepository;
 import edu.iuh.administratorservice.repository.SubjectRepository;
 import edu.iuh.administratorservice.serialization.ExcelFileHandle;
 import edu.iuh.administratorservice.serialization.JsonConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +41,7 @@ public class CourseController {
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<String>> create(@RequestBody FileNameDTO info) {
+    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody FileNameDTO info) {
         log.info("### enter api.v1.course.create  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
         List<CourseCreateDTO> infos = excelFileHandle.toCourseCreate(info.getFileName());
@@ -56,7 +53,7 @@ public class CourseController {
                                 .flatMap(subject -> courseRepository.save(new Course(semester, subject, courseCreateDTO.getTuitionFee()))
                                         .switchIfEmpty(Mono.error(new RuntimeException("Fail save course")))
                                         .map(course -> {
-                                            insertDetailCourseAsync.insertDetailCourse(courseCreateDTO, course.getId());
+                                            insertDetailCourseAsync.insertDetailCourse(courseCreateDTO, course.getId(),exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
                                             return Mono.empty();
                                         })
                                 )

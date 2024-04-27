@@ -6,11 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class AdministratorServiceApplication {
-
+public class SchedulerServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AdministratorServiceApplication.class, args);
+        SpringApplication.run(SchedulerServiceApplication.class, args);
     }
 
     @Bean
