@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+package edu.iuh;
+import "google/protobuf/empty.proto";
+
+message RegisterRequest {}
+
+message AuthInfo{
+  int64 id = 1;
+  string password = 2;
+  string role = 3;
+}
+
+service RegisterService {
+  rpc registerStudent(RegisterRequest) returns(AuthInfo){}
+  rpc registerAdministrator(RegisterRequest) returns(AuthInfo){}
+  rpc registerStaff(RegisterRequest) returns(AuthInfo){}
+}
+
+

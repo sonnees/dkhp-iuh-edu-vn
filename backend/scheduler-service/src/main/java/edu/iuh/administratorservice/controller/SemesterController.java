@@ -1,9 +1,6 @@
 package edu.iuh.administratorservice.controller;
-import edu.iuh.administratorservice.dto.ClassesCreateDTO;
 import edu.iuh.administratorservice.dto.SemesterCreateDTO;
-import edu.iuh.administratorservice.entity.Classes;
 import edu.iuh.administratorservice.entity.Semester;
-import edu.iuh.administratorservice.repository.ClassesRepository;
 import edu.iuh.administratorservice.repository.SemesterRepository;
 import edu.iuh.administratorservice.serialization.JsonConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 @RequestMapping("/api/v1/semester")
 @Controller
