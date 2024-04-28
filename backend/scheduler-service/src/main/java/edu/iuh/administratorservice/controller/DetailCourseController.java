@@ -36,7 +36,7 @@ public class DetailCourseController {
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange , @RequestBody DetailCourseCreateDTO info){
+    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody DetailCourseCreateDTO info){
         log.info("### enter api.v1.detail_course.create  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
         WebClient webClient = builder.build();
@@ -56,7 +56,7 @@ public class DetailCourseController {
                             log.error("# {} #", "Fail find staff");
                             return Mono.just(ResponseEntity.status(500).body("Fail find staff"));
                         }).then(Mono.empty()))
-                        .flatMap(staff -> detailCourseRepository.save(new DetailCourse(info, course, new Staff2DTO(staff.getId(),staff.getFullName())))
+                        .flatMap(staff -> detailCourseRepository.save(new DetailCourse(info, new Staff2DTO(staff.getId(),staff.getFullName())))
                                 .switchIfEmpty(Mono.defer(()->{
                                     log.error("# {} #", "Fail save detail course");
                                     return Mono.just(ResponseEntity.status(500).body("Fail save detail course"));
@@ -65,13 +65,43 @@ public class DetailCourseController {
 
     }
 
-    @GetMapping("/search-by-course-id")
+    @PostMapping("/search-by-course-id")
     public Mono<ResponseEntity<String>> searchBySemesterID(@RequestParam UUID courseID){
         log.info("### enter api.v1.detail_course.search-by-course-id ###");
         log.info("# courseID: {} #", courseID);
         return detailCourseRepository.searchByCourseID(courseID)
                 .collectList()
                 .flatMap(detailCourses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(detailCourses))))
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
+    @PostMapping("/decrease-class-size-available")
+    public Mono<ResponseEntity<String>> decreaseClassSizeAvailable(@RequestParam UUID id){
+        log.info("### enter api.v1.detail_course.decrease-class-size-available ###");
+        log.info("# courseID: {} #", id);
+        return detailCourseRepository.decreaseClassSizeAvailable(id)
+                .flatMap(aLong -> {
+                    if(aLong<=0) return Mono.just(ResponseEntity.status(409).body("Not available"));
+                    return Mono.just(ResponseEntity.ok("available"));
+                })
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
+    @PostMapping("/increase-class-size-available")
+    public Mono<ResponseEntity<String>> increaseClassSizeAvailable(@RequestParam UUID id){
+        log.info("### enter api.v1.detail_course.increase-class-size-available ###");
+        log.info("# courseID: {} #", id);
+        return detailCourseRepository.increaseClassSizeAvailable(id)
+                .flatMap(aLong -> {
+                    if(aLong<=0) return Mono.just(ResponseEntity.status(404).body("Not found"));
+                    return Mono.just(ResponseEntity.ok("Success"));
+                })
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));

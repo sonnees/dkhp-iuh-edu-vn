@@ -1,13 +1,13 @@
 package edu.iuh.administratorservice.serialization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.iuh.administratorservice.dto.StaffDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @AllArgsConstructor
 @Component
 public class JsonConverter {
-    private ObjectMapper objectMapper;
 
     public <T> String objToString(T obj) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -19,4 +19,5 @@ public class JsonConverter {
         }
         return objStr;
     }
+
 }

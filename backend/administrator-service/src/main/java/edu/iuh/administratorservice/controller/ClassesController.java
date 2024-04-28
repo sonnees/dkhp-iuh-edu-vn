@@ -4,9 +4,11 @@ import edu.iuh.RegisterRequest;
 import edu.iuh.RegisterServiceGrpc;
 import edu.iuh.administratorservice.dto.ClassesCreateDTO;
 import edu.iuh.administratorservice.dto.FileNameDTO;
+import edu.iuh.administratorservice.dto.StudentCreate2DTO;
 import edu.iuh.administratorservice.dto.StudentCreateDTO;
 import edu.iuh.administratorservice.entity.Classes;
 import edu.iuh.administratorservice.repository.ClassesRepository;
+import edu.iuh.administratorservice.repository.MajorsRepository;
 import edu.iuh.administratorservice.serialization.ExcelFileHandle;
 import edu.iuh.administratorservice.serialization.JsonConverter;
 import io.grpc.ManagedChannel;
@@ -18,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,19 +28,24 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/v1/classes")
 @Controller
 @Slf4j
 public class ClassesController {
     private final ClassesRepository classesRepository;
+    private final MajorsRepository majorsRepository;
     private final JsonConverter jsonConverter;
     private final ExcelFileHandle excelFileHandle;
     private final WebClient.Builder builder;
 
-    public ClassesController(ClassesRepository classesRepository, JsonConverter jsonConverter, ExcelFileHandle excelFileHandle, WebClient.Builder builder) {
+    public ClassesController(ClassesRepository classesRepository, MajorsRepository majorsRepository, JsonConverter jsonConverter, ExcelFileHandle excelFileHandle, WebClient.Builder builder) {
         this.classesRepository = classesRepository;
+        this.majorsRepository = majorsRepository;
         this.jsonConverter = jsonConverter;
         this.excelFileHandle = excelFileHandle;
         this.builder = builder;
@@ -57,7 +63,7 @@ public class ClassesController {
                 .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
     }
 
-    @GetMapping("/get-all")
+    @PostMapping("/get-all")
     public Mono<ResponseEntity<String>> getAll(){
         log.info("### enter api.v1.classes.get-all ###");
         return classesRepository.findAll(Sort.by(Sort.Order.by("name")))
@@ -120,6 +126,25 @@ public class ClassesController {
                         .bodyValue(studentCreates)
                         .retrieve()
                         .bodyToMono(Void.class)
+                        .switchIfEmpty(Mono.defer(() -> {
+                            List<StudentCreate2DTO> studentCreate2DTOS = new ArrayList<>();
+                            return Flux.fromIterable(studentCreates)
+                                            .flatMap(dto -> classesRepository.findById(dto.getClassesID())
+                                                    .flatMap(classes -> majorsRepository.findById(classes.getMajorsID())
+                                                            .flatMap(majors -> {
+                                                                List<UUID> uuids = new ArrayList<>();
+                                                                uuids.addAll(Arrays.stream(majors.getElectiveSubjects()).toList());
+                                                                uuids.addAll(Arrays.stream(majors.getRequiredCourses()).toList());
+                                                                studentCreate2DTOS.add(new StudentCreate2DTO(dto.getId(),dto.getEmail(),uuids));
+                                                                return webClient.post()
+                                                                        .uri("http://SCHEDULER-SERVICE/api/v1/student/creates")
+                                                                        .header("Authorization", exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                                        .bodyValue(studentCreate2DTOS)
+                                                                        .retrieve()
+                                                                        .bodyToMono(Void.class);
+                                                            }))).then(Mono.empty());
+                        }))
                         .then(Mono.just(ResponseEntity.ok("Success")))));
     }
 

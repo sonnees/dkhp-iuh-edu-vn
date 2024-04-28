@@ -1,6 +1,7 @@
 package edu.iuh.administratorservice.repository;
 
 import edu.iuh.administratorservice.entity.Course;
+import edu.iuh.administratorservice.enums.Status;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -14,10 +15,14 @@ import java.util.UUID;
 @Repository
 public interface CourseRepository extends ReactiveMongoRepository<Course, UUID> {
 
-    @Query("{'semester._id': ?0}")
+    @Query("{'semester._id': ?0, status: true}")
     Flux<Course> searchBySemesterID(UUID semesterID);
 
     @Query("{'semester._id': ?0}")
     @Update(update = "{$set:{status: ?1}}")
-    Mono<Long> changeStatusBySemesterID(UUID semesterID, boolean status);
+    Mono<Long> changeStatusBySemesterID(UUID semesterID, Status status);
+
+    @Query("{'_id': ?0}")
+    @Update(update = "{$set:{status: ?1}}")
+    Mono<Long> changeStatusByID(UUID id, Status status);
 }

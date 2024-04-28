@@ -35,7 +35,7 @@ public class SemesterController {
                 });
     }
 
-    @GetMapping("/search-by-year")
+    @PostMapping("/search-by-year")
     public Mono<ResponseEntity<String>> searchByYear(@RequestParam int year){
         log.info("### enter api.v1.detail_course.search-by-year ###");
         log.info("# year: {} #", year);
