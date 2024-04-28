@@ -67,8 +67,8 @@ public class StaffController {
                     AuthInfo authInfo = (AuthInfo) o;
                     return staffRepository.save(new Staff(authInfo.getId(),info))
                             .switchIfEmpty(Mono.defer(()->{
-                                log.error("# {} #", "Fail save");
-                                return Mono.just(ResponseEntity.status(500).body("Fail save"));
+                                log.error("# {} #", "Fail save staff");
+                                return Mono.just(ResponseEntity.status(500).body("Fail save staff"));
                             }).then(Mono.empty()))
                             .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
                 });
@@ -109,13 +109,13 @@ public class StaffController {
                     return staffRepository.save(new Staff(authInfo.getId(),info))
                             .switchIfEmpty(Mono.defer(()->{
                                 log.error("# {} #", "Fail save");
-                                return Mono.just(ResponseEntity.status(500).body("Fail save"));
+                                return Mono.just(ResponseEntity.status(500).body("Fail save admin"));
                             }).then(Mono.empty()))
                             .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
                 });
     }
 
-    @GetMapping("/get-all")
+    @PostMapping("/get-all")
     public Mono<ResponseEntity<String>> getAll(){
         log.info("### enter api.v1.staff.get-all ###");
         return staffRepository.findAll(Sort.by(Sort.Order.by("fullName")))
@@ -127,12 +127,13 @@ public class StaffController {
                 });
     }
 
-    @GetMapping("/search-by-id")
+    @PostMapping("/search-by-id")
     public Mono<ResponseEntity<String>> searchByID(@RequestParam String id){
         log.info("### enter api.v1.staff.search-by-id ###");
         log.info("# id: {} #", id);
         return staffRepository.findById(id)
-                .flatMap(detailCourses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(detailCourses))))
+                .flatMap(staff -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(staff))))
+                .switchIfEmpty(Mono.defer(()->Mono.just(ResponseEntity.status(404).body("Not found"))))
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));

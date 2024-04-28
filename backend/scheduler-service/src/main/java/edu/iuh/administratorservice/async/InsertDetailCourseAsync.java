@@ -5,6 +5,7 @@ import edu.iuh.administratorservice.dto.Staff2DTO;
 import edu.iuh.administratorservice.dto.StaffDTO;
 import edu.iuh.administratorservice.entity.DetailCourse;
 import edu.iuh.administratorservice.repository.DetailCourseRepository;
+import edu.iuh.administratorservice.serialization.JsonConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class InsertDetailCourseAsync {
     private DetailCourseRepository detailCourseRepository;
     private final WebClient.Builder builder;
+    private JsonConverter jsonConverter;
     @Async
     public void insertDetailCourse(CourseCreateDTO dto, UUID courseID, String token){
         WebClient webClient = builder.build();
@@ -28,10 +30,10 @@ public class InsertDetailCourseAsync {
         webClient.post()
                 .uri("http://ADMINISTRATOR-SERVICE/api/v1/staff/search-by-id?id="+dto.getTheoryStaff())
                 .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(StaffDTO.class)
-                .flatMap(staff -> {
+                .bodyToMono(String.class)
+                .flatMap(s -> {
+                    StaffDTO staff = jsonConverter.stringToObj(s);
                     log.info("** staff: {}", staff);
                     DetailCourse detailCourse = new DetailCourse(
                             courseID, new Staff2DTO(staff.getId(), staff.getFullName()), dto.getTheorySize(), 0, dto.getTheoryCalender()
@@ -45,10 +47,10 @@ public class InsertDetailCourseAsync {
         webClient.post()
                 .uri("http://ADMINISTRATOR-SERVICE/api/v1/staff/search-by-id?id="+dto.getPracticalStaff().get(0))
                 .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(StaffDTO.class)
-                .flatMap(staff -> {
+                .bodyToMono(String.class)
+                .flatMap(s -> {
+                    StaffDTO staff = jsonConverter.stringToObj(s);
                     DetailCourse detailCourse = new DetailCourse(
                             courseID, new Staff2DTO(staff.getId(), staff.getFullName()), dto.getTheorySize() / 3, 1, dto.getPracticalCalender1()
                     );
@@ -58,10 +60,10 @@ public class InsertDetailCourseAsync {
         webClient.post()
                 .uri("http://ADMINISTRATOR-SERVICE/api/v1/staff/search-by-id?id="+dto.getPracticalStaff().get(1))
                 .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(StaffDTO.class)
-                .flatMap(staff -> {
+                .bodyToMono(String.class)
+                .flatMap(s -> {
+                    StaffDTO staff = jsonConverter.stringToObj(s);
                     DetailCourse detailCourse = new DetailCourse(
                             courseID, new Staff2DTO(staff.getId(), staff.getFullName()), dto.getTheorySize() / 3, 2, dto.getPracticalCalender2()
                     );
@@ -71,10 +73,10 @@ public class InsertDetailCourseAsync {
         webClient.post()
                 .uri("http://ADMINISTRATOR-SERVICE/api/v1/staff/search-by-id?id="+dto.getPracticalStaff().get(2))
                 .header("Authorization", token)
-                .contentType(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(StaffDTO.class)
-                .flatMap(staff -> {
+                .bodyToMono(String.class)
+                .flatMap(s -> {
+                    StaffDTO staff = jsonConverter.stringToObj(s);
                     DetailCourse detailCourse = new DetailCourse(
                             courseID, new Staff2DTO(staff.getId(), staff.getFullName()), dto.getTheorySize() / 3, 3, dto.getPracticalCalender3()
                     );

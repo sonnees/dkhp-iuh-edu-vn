@@ -33,27 +33,28 @@ public class SubjectController {
                     log.error("# {} #", "Fail save");
                     return Mono.just(ResponseEntity.status(500).body("Fail save"));
                 }).then(Mono.empty()))
-                .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
+                .flatMap(subject -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(subject))));
     }
 
-    @GetMapping("/get-all")
+    @PostMapping("/get-all")
     public Mono<ResponseEntity<String>> getAll(){
         log.info("### enter api.v1.subject.get-all ###");
         return subjectRepository.findAll(Sort.by(Sort.Order.by("name")))
                 .collectList()
-                .flatMap(detailCourses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(detailCourses))))
+                .flatMap(subjects -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(subjects))))
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));
                 });
     }
 
-    @GetMapping("/search-by-id")
+    @PostMapping("/search-by-id")
     public Mono<ResponseEntity<String>> searchByID(@RequestParam UUID id){
         log.info("### enter api.v1.subject.search-by-id ###");
         log.info("# id: {} #", id);
         return subjectRepository.findById(id)
-                .flatMap(detailCourses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(detailCourses))))
+                .flatMap(subject -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(subject))))
+                .switchIfEmpty(Mono.defer(()->Mono.just(ResponseEntity.status(404).body("Not Found"))))
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));

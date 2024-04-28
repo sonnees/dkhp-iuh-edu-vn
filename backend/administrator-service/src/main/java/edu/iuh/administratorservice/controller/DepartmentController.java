@@ -37,7 +37,7 @@ public class DepartmentController {
                 .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
     }
 
-    @GetMapping("/get-all")
+    @PostMapping("/get-all")
     public Mono<ResponseEntity<String>> getAll(){
         log.info("### enter api.v1.department.get-all ###");
         return departmentRepository.findAll()

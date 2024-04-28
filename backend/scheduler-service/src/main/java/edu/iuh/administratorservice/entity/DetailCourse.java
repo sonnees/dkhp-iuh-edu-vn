@@ -24,14 +24,16 @@ public class DetailCourse {
     private UUID courseID;
     private Staff2DTO staff;
     private int classSize;
+    private int classSizeAvailable;
     private int groupNumber;
     private CalenderC calender;
 
-    public DetailCourse(DetailCourseCreateDTO dto, Course course, Staff2DTO staff) {
+    public DetailCourse(DetailCourseCreateDTO dto, Staff2DTO staff) {
         this.id = UUID.randomUUID();
         this.courseID = dto.getCourseID();
         this.staff = staff;
         this.classSize = dto.getClassSize();
+        this.classSizeAvailable = dto.getClassSize();
         this.groupNumber = dto.getGroupNumber();
         this.calender = dto.getCalender();
     }
@@ -41,6 +43,7 @@ public class DetailCourse {
         this.courseID = courseID;
         this.staff = staff;
         this.classSize = classSize;
+        this.classSizeAvailable = classSize;
         this.groupNumber = groupNumber;
         this.calender = calender;
     }

@@ -36,7 +36,7 @@ public class StudentController {
                 });
     }
 
-    @GetMapping("/search-by-id")
+    @PostMapping("/search-by-id")
     public Mono<ResponseEntity<String>> searchByID(@RequestParam String id){
         log.info("### enter api.v1.student.search-by-id ###");
         log.info("# id: {} #", id);
@@ -48,7 +48,7 @@ public class StudentController {
                 });
     }
 
-    @GetMapping("/search-by-classes-id")
+    @PostMapping("/search-by-classes-id")
     public Mono<ResponseEntity<String>> searchByID(@RequestParam UUID classesID){
         log.info("### enter api.v1.student.search-by-classes-id ###");
         log.info("# id: {} #", classesID);

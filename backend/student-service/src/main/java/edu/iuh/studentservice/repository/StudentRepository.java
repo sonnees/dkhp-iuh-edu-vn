@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface StudentRepository extends ReactiveMongoRepository<Student, String> {
-    @Query(value = "{'classes._id': ?0}", sort = "{fullName: 1}")
+    @Query(value = "{'classesID': ?0}", sort = "{fullName: 1}")
     Flux<Student> searchByClassesID(UUID classesID);
 }
