@@ -1,6 +1,7 @@
-package edu.iuh.studentservice.entity;
+package edu.iuh.studentservice.dto;
 
-import edu.iuh.studentservice.dto.TimetableCreateDTO;
+import edu.iuh.studentservice.entity.ClassHour;
+import edu.iuh.studentservice.entity.ClassRoom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +11,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-@Document(collection = "timetable")
-public class Timetable {
+public class TimetableCreateDTO {
     @Field(targetType = FieldType.STRING)
-    @Id
-    private UUID id;
     private String[] studentID;
     private String subjectName;
     @Field(targetType = FieldType.STRING)
@@ -30,14 +27,4 @@ public class Timetable {
     private Date date;
     private String staffName;
 
-    public Timetable(TimetableCreateDTO dto) {
-        this.id = UUID.randomUUID();
-        this.studentID = dto.getStudentID();
-        this.subjectName = dto.getSubjectName();
-        this.courseID = dto.getCourseID();
-        this.classHour = dto.getClassHour();
-        this.classRoom = dto.getClassRoom();
-        this.date = dto.getDate();
-        this.staffName = dto.getStaffName();
-    }
 }

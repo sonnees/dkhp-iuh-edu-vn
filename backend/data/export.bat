@@ -10,4 +10,8 @@ mongoexport --db SchedulerService --collection detail_course --out detail_course
 mongoexport --db SchedulerService --collection registration_form --out registration_form.json
 mongoexport --db SchedulerService --collection student --out student_.json
 
+mongoexport --db StudentService --collection student --out student.json
+mongoexport --db StudentService --collection timetable --out timetable.json
+mongoexport --db StudentService --collection academic_results --out academic_results.json
+
 
