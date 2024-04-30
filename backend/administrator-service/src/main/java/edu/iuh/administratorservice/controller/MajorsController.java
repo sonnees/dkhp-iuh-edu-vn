@@ -37,7 +37,7 @@ public class MajorsController {
                 .flatMap(department -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(department))));
     }
 
-    @GetMapping("/search-by-department-id")
+    @PostMapping("/search-by-department-id")
     public Mono<ResponseEntity<String>> searchBySemesterID(@RequestParam UUID departmentID){
         log.info("### enter api.v1.detail_course.search-by-department-id ###");
         log.info("# departmentID: {} #", departmentID);

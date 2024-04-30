@@ -14,11 +14,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class StudentCreateDTO {
+    private String id;
     private String fullName;
     private boolean sex;
     private String phoneNumber;
     private String email;
     private String address;
     private UUID classesID;
+    private Status status;
 }
 
