@@ -2,12 +2,14 @@ package edu.iuh.administratorservice.controller;
 
 import edu.iuh.administratorservice.dto.RegistrationFormDTO;
 import edu.iuh.administratorservice.dto.RegistrationFormRemoveDTO;
+import edu.iuh.administratorservice.dto.RegistrationGenFileUpdateScoreDTO;
 import edu.iuh.administratorservice.dto.StudentAppendSubjectDTO;
 import edu.iuh.administratorservice.entity.DetailCourse;
 import edu.iuh.administratorservice.entity.RegistrationForm;
 import edu.iuh.administratorservice.entity.Semester2;
 import edu.iuh.administratorservice.entity.Subject2;
 import edu.iuh.administratorservice.repository.*;
+import edu.iuh.administratorservice.serialization.ExcelFileHandle;
 import edu.iuh.administratorservice.serialization.JsonConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -35,14 +38,17 @@ public class RegistrationFormController {
     private final CourseRepository courseRepository;
     private final WebClient.Builder builder;
     private final JsonConverter jsonConverter;
+    private final ExcelFileHandle excelFileHandle;
 
-    public RegistrationFormController(RegistrationFormRepository registrationFormRepository, DetailCourseRepository detailCourseRepository, StudentRepository studentRepository, CourseRepository courseRepository, WebClient.Builder builder, JsonConverter jsonConverter) {
+
+    public RegistrationFormController(RegistrationFormRepository registrationFormRepository, DetailCourseRepository detailCourseRepository, StudentRepository studentRepository, CourseRepository courseRepository, WebClient.Builder builder, JsonConverter jsonConverter, ExcelFileHandle excelFileHandle) {
         this.registrationFormRepository = registrationFormRepository;
         this.detailCourseRepository = detailCourseRepository;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
         this.builder = builder;
         this.jsonConverter = jsonConverter;
+        this.excelFileHandle = excelFileHandle;
     }
 
     @PostMapping("/create")
@@ -118,6 +124,33 @@ public class RegistrationFormController {
                 .onErrorResume(e -> {
                     log.error("# {} #", e.getMessage());
                     return Mono.just(ResponseEntity.status(404).body("Not found"));
+                });
+    }
+
+    @PostMapping("/search-by-courseID")
+    public Mono<ResponseEntity<String>> searchByCourseID(@RequestParam UUID id){
+        log.info("### enter api.v1.detail_course.search-by-courseID ###");
+        log.info("# id: {} #", id);
+        return registrationFormRepository.searchByCourseID(id)
+                .flatMap(detailCourses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(detailCourses))))
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
+    @PostMapping("/gen-file-update-score")
+    public Mono<ResponseEntity<String>> genFileUpdateScore(@RequestBody RegistrationGenFileUpdateScoreDTO info){
+        log.info("### enter api.v1.detail_course.gen-file-update-score ###");
+        log.info("# info: {} #", jsonConverter.objToString(info));
+        return registrationFormRepository.searchByCourseID(info.getCourseID())
+                .flatMap(registrationSearchByCourseIDDTO -> {
+                    excelFileHandle.writeToExcel(registrationSearchByCourseIDDTO, info.getFileName(), info.getCourseID().toString());
+                    return Mono.just(ResponseEntity.ok(jsonConverter.objToString(info.getFileName())));
+                })
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
                 });
     }
 

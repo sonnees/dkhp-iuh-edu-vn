@@ -1,10 +1,7 @@
 package edu.iuh.administratorservice.controller;
 import edu.iuh.administratorservice.async.InsertDetailCourseAsync;
-import edu.iuh.administratorservice.dto.AcademicResultsDTO;
-import edu.iuh.administratorservice.dto.FileNameDTO;
-import edu.iuh.administratorservice.dto.TimetableCreateDTO;
+import edu.iuh.administratorservice.dto.*;
 import edu.iuh.administratorservice.entity.Course;
-import edu.iuh.administratorservice.dto.CourseCreateDTO;
 import edu.iuh.administratorservice.enums.Status;
 import edu.iuh.administratorservice.repository.*;
 import edu.iuh.administratorservice.serialization.ExcelFileHandle;
@@ -166,22 +163,20 @@ public class CourseController {
                                                                             .bodyValue(timetableCreateDTOS)
                                                                             .retrieve()
                                                                             .bodyToMono(Void.class)
-                                                                            .switchIfEmpty(Mono.defer(() -> {
-                                                                                return Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
-                                                                                        .flatMap(s -> {
-                                                                                            AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
-                                                                                                    s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()
-                                                                                            );
-                                                                                            return webClient.post()
-                                                                                                    .uri("http://STUDENT-SERVICE/api/v1/academic-results/append")
-                                                                                                    .header("Authorization", exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
-                                                                                                    .contentType(MediaType.APPLICATION_JSON)
-                                                                                                    .bodyValue(academicResultsDTO)
-                                                                                                    .retrieve()
-                                                                                                    .bodyToMono(Void.class);
-                                                                                        })
-                                                                                        .then(Mono.empty());
-                                                                            }));
+                                                                            .switchIfEmpty(Mono.defer(() -> Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
+                                                                                    .flatMap(s -> {
+                                                                                        AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
+                                                                                                s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()
+                                                                                        );
+                                                                                        return webClient.post()
+                                                                                                .uri("http://STUDENT-SERVICE/api/v1/academic-results/append")
+                                                                                                .header("Authorization", exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                                                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                                                .bodyValue(academicResultsDTO)
+                                                                                                .retrieve()
+                                                                                                .bodyToMono(Void.class);
+                                                                                    })
+                                                                                    .then(Mono.empty())));
                                                                 })))
                                                 .then(Mono.empty())));
                     }))
@@ -197,7 +192,7 @@ public class CourseController {
 
     @PostMapping("/change-status-by-id")
     public Mono<ResponseEntity<String>> changeStatusByID(@RequestParam UUID id, @RequestParam Status status){
-        log.info("### enter api.v1.course.change-status-by-id###");
+        log.info("### enter api.v1.course.change-status-by-id ###");
         log.info("# id: {} status: {} #", id, status);
         return courseRepository.findById(id)
                 .flatMap(course -> courseRepository.changeStatusByID(id, status)
@@ -240,6 +235,34 @@ public class CourseController {
                             log.error("Error occurred: {}", e.getMessage());
                             return Mono.just(false);
                         }));
+    }
+
+    @PostMapping("/update-score")
+    public Mono<ResponseEntity<String>> updateScore(ServerWebExchange exchange, @RequestBody CourseUpdateScoreDTO info){
+        log.info("### enter api.v1.course.update-score ###");
+        log.info("# info: {} #", info);
+        WebClient webClient = builder.build();
+        return  courseRepository.findById(info.getCourseID())
+                .flatMap(course -> {
+                    log.info(jsonConverter.objToString(course));
+                    List<AcademicResultsUpdateScoreDTO> score = excelFileHandle.toScore(info.getFileName(), course);
+                    if (score==null) return Mono.error(new RuntimeException("Not read file"));
+                    return Mono.defer(() -> Flux.fromIterable(score)
+                            .collectList()
+                            .flatMap(list -> webClient.post()
+                                    .uri("http://STUDENT-SERVICE/api/v1/academic-results/update-score")
+                                    .header("Authorization", exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .bodyValue(list)
+                                    .retrieve()
+                                    .bodyToMono(Void.class)).then(Mono.just(ResponseEntity.ok("Success")))
+                            .onErrorResume(e -> {
+                                log.error("Error occurred: {}", e.getMessage());
+                                return Mono.error(new RuntimeException(e.getMessage()));
+                            }));
+                })
+                .switchIfEmpty(Mono.error(new RuntimeException("Error in courseID")));
+
     }
 
 

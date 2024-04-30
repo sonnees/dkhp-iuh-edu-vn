@@ -1,6 +1,7 @@
 package edu.iuh.administratorservice.repository;
 
 import edu.iuh.administratorservice.dto.RegistrationSearch3FieldDTO;
+import edu.iuh.administratorservice.dto.RegistrationSearchByCourseIDDTO;
 import edu.iuh.administratorservice.entity.Course;
 import edu.iuh.administratorservice.entity.RegistrationForm;
 import edu.iuh.administratorservice.enums.Status;
@@ -27,4 +28,10 @@ public interface RegistrationFormRepository extends ReactiveMongoRepository<Regi
     })
     Flux<RegistrationSearch3FieldDTO> search3FieldDTO(UUID semesterID);
 
+    @Aggregation({
+            "{$match:{'course._id':?0}}",
+            "{$group:{'_id':{id:'$course._id'}, 'studentIDs':{$addToSet:'$studentID'}}}",
+            " {$project:{_id:0, studentIDs:1}}"
+    })
+    Mono<RegistrationSearchByCourseIDDTO> searchByCourseID(UUID courseID);
 }

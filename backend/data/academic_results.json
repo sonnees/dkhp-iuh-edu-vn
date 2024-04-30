@@ -1,28 +1,28 @@
-{"_id":"10000016","semesters":[] }
-{"_id":"10000017","semesters":[] }
-{"_id":"10000018","semesters":[] }
-{"_id":"10000019","semesters":[] }
-{"_id":"10000020","semesters":[] }
-{"_id":"10000021","semesters":[] }
-{"_id":"10000022","semesters":[] }
-{"_id":"10000023","semesters":[] }
-{"_id":"10000024","semesters":[] }
-{"_id":"10000025","semesters":[] }
-{"_id":"10000026","semesters":[] }
-{"_id":"10000027","semesters":[] }
-{"_id":"10000028","semesters":[] }
-{"_id":"10000029","semesters":[] }
-{"_id":"10000030","semesters":[] }
-{"_id":"10000031","semesters":[] }
-{"_id":"10000032","semesters":[] }
-{"_id":"10000033","semesters":[] }
-{"_id":"10000034","semesters":[] }
-{"_id":"10000035","semesters":[] }
-{"_id":"10000036","semesters":[] }
-{"_id":"10000037","semesters":[] }
-{"_id":"10000038","semesters":[] }
-{"_id":"10000039","semesters":[] }
-{"_id":"10000040","semesters":[] }
-{"_id":"10000041","semesters":[] }
-{"_id":"10000042","semesters":[] }
-{"_id":"10000043","semesters":[] }
+{"_id":"10000026","semesters":[]}
+{"_id":"10000028","semesters":[]}
+{"_id":"10000030","semesters":[]}
+{"_id":"10000029","semesters":[]}
+{"_id":"10000031","semesters":[]}
+{"_id":"10000032","semesters":[]}
+{"_id":"10000020","semesters":[]}
+{"_id":"10000019","semesters":[]}
+{"_id":"10000037","semesters":[]}
+{"_id":"10000033","semesters":[]}
+{"_id":"10000038","semesters":[]}
+{"_id":"10000024","semesters":[]}
+{"_id":"10000021","semesters":[]}
+{"_id":"10000016","semesters":[]}
+{"_id":"10000034","semesters":[]}
+{"_id":"10000017","semesters":[]}
+{"_id":"10000035","semesters":[]}
+{"_id":"10000036","semesters":[]}
+{"_id":"10000022","semesters":[]}
+{"_id":"10000040","semesters":[{"_id":"dd2e5d9a-74c7-4232-9d56-ee253821241d","subjects":[{"_id":"5688926e-17c6-4cce-bc29-df1e29e60304","subjectName":"Lập trình hướng sự kiện với công nghệ Java","creditUnits":3,"midtermScore":0.0,"finalScore":0.0}]},{"_id":"dd2e5d9a-74c7-4232-9d56-ee253821241d","subjects":[{"_id":"35dec163-f78a-47b5-807a-d75f70763d68","subjectName":"Hệ quản trị cơ sở dữ liệu NoSQL MongoDB","creditUnits":3,"midtermScore":0.0,"finalScore":0.0}]}]}
+{"_id":"10000025","semesters":[]}
+{"_id":"10000039","semesters":[]}
+{"_id":"10000027","semesters":[]}
+{"_id":"10000023","semesters":[]}
+{"_id":"10000018","semesters":[]}
+{"_id":"10000041","semesters":[{"_id":"dd2e5d9a-74c7-4232-9d56-ee253821241d","subjects":[{"_id":"35dec163-f78a-47b5-807a-d75f70763d68","subjectName":"Hệ quản trị cơ sở dữ liệu NoSQL MongoDB","creditUnits":3,"midtermScore":0.0,"finalScore":0.0}]}]}
+{"_id":"10000042","semesters":[{"_id":"dd2e5d9a-74c7-4232-9d56-ee253821241d","subjects":[{"_id":"35dec163-f78a-47b5-807a-d75f70763d68","subjectName":"Hệ quản trị cơ sở dữ liệu NoSQL MongoDB","creditUnits":3,"midtermScore":0.0,"finalScore":0.0}]},{"_id":"dd2e5d9a-74c7-4232-9d56-ee253821241d","subjects":[{"_id":"5688926e-17c6-4cce-bc29-df1e29e60304","subjectName":"Lập trình hướng sự kiện với công nghệ Java","creditUnits":3,"midtermScore":0.0,"finalScore":0.0}]}]}
+{"_id":"10000043","semesters":[]}
