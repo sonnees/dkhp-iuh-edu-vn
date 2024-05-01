@@ -58,16 +58,22 @@ public class RegistrationFormController {
         List<UUID> detailCourseIDs = Arrays.stream(info.getDetailCourseIDs()).toList();
         return Flux.fromIterable(detailCourseIDs)
                 .flatMap(uuid -> detailCourseRepository.decreaseClassSizeAvailable(uuid)
-                        .flatMap(aLong -> {
-                            if(aLong<=0) return Mono.error(new RuntimeException("decrease"));
-                            return Mono.just(aLong);
-                        }))
+                        .flatMap(Mono::just)
+                )
                 .collectList()
-                .flatMap(list -> detailCourseRepository.findById(detailCourseIDs.get(0))
-                        .flatMap(detailCourse -> courseRepository.findById(detailCourse.getCourseID())
-                                .flatMap(course -> registrationFormRepository.save(new RegistrationForm(info.getStudentID(), course, info.getGroupNumber()))
-                                        .switchIfEmpty(Mono.error(new RuntimeException("fail"))))
-                        ))
+                .flatMap(list -> {
+                    log.info("{}", list.toString());
+                    if(list.get(1)<=0 && list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
+                    if(list.get(1)<=0 && list.get(0)>0) {
+                        return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[1])
+                                .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
+                    }
+                    return detailCourseRepository.findById(detailCourseIDs.get(0))
+                            .flatMap(detailCourse -> courseRepository.findById(detailCourse.getCourseID())
+                                    .flatMap(course -> registrationFormRepository.save(new RegistrationForm(info.getStudentID(), course, info.getGroupNumber()))
+                                            .switchIfEmpty(Mono.error(new RuntimeException("fail"))))
+                            );
+                })
                 .flatMap(registrationForm -> {
                     StudentAppendSubjectDTO dto = new StudentAppendSubjectDTO(info.getStudentID(), registrationForm.getCourse().getSemester().getId(), new Subject2(registrationForm));
                     return studentRepository.findBySemesterID(dto.getId(), dto.getSemesterID())
@@ -96,7 +102,7 @@ public class RegistrationFormController {
     }
 
     @PostMapping("/delete")
-    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody RegistrationFormRemoveDTO info) {
+    public Mono<ResponseEntity<String>> delete(ServerWebExchange exchange, @RequestBody RegistrationFormRemoveDTO info) {
         log.info("### enter api.v1.registration-form.delete  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
         return studentRepository.removeSubject(info.getId(), info.getSemesterID(), info.getSubjectID())
