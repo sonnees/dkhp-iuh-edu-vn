@@ -18,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class RegistrationFormDTO {
+    private String gmail;
     private String studentID;
     private UUID[] detailCourseIDs; // group f
     private int groupNumber;

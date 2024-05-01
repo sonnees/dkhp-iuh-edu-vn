@@ -1,5 +1,8 @@
 package edu.iuh.administratorservice.controller;
 
+import edu.iuh.RegisterFormRequest;
+import edu.iuh.RegisterFormResponse;
+import edu.iuh.SendEmailServiceGrpc;
 import edu.iuh.administratorservice.dto.RegistrationFormDTO;
 import edu.iuh.administratorservice.dto.RegistrationFormRemoveDTO;
 import edu.iuh.administratorservice.dto.RegistrationGenFileUpdateScoreDTO;
@@ -11,6 +14,9 @@ import edu.iuh.administratorservice.entity.Subject2;
 import edu.iuh.administratorservice.repository.*;
 import edu.iuh.administratorservice.serialization.ExcelFileHandle;
 import edu.iuh.administratorservice.serialization.JsonConverter;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,17 +68,51 @@ public class RegistrationFormController {
                 )
                 .collectList()
                 .flatMap(list -> {
-                    log.info("{}", list.toString());
                     if(list.get(1)<=0 && list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
                     if(list.get(1)<=0 && list.get(0)>0) {
                         return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[1])
                                 .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
                     }
+
+                    ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9092)
+                            .usePlaintext()
+                            .build();
+                    SendEmailServiceGrpc.SendEmailServiceStub stub = SendEmailServiceGrpc.newStub(channel);
+
                     return detailCourseRepository.findById(detailCourseIDs.get(0))
                             .flatMap(detailCourse -> courseRepository.findById(detailCourse.getCourseID())
                                     .flatMap(course -> registrationFormRepository.save(new RegistrationForm(info.getStudentID(), course, info.getGroupNumber()))
+                                            .flatMap(registrationForm -> Mono.create(sink ->{
+                                                log.info("**** {}", 1);
+                                                RegisterFormRequest request = RegisterFormRequest.newBuilder()
+                                                        .setStudentID(info.getStudentID())
+                                                        .setSubjectName(course.getSubject().getName())
+                                                        .setRegisterFormID(registrationForm.getId().toString())
+                                                        .setTuitionFee(course.getTuitionFee())
+                                                        .setGmail(info.getGmail())
+                                                        .build();
+                                                log.info("**** {}", request);
+                                                stub.registerFormSuccess(request, new StreamObserver<RegisterFormResponse>() {
+                                                    @Override
+                                                    public void onNext(RegisterFormResponse value) {
+                                                        sink.success(value);
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Throwable t) {
+                                                        log.error("# {} #", "Fail stub");
+                                                        sink.error(t);
+                                                    }
+
+                                                    @Override
+                                                    public void onCompleted() {
+                                                        channel.shutdown();
+                                                    }
+                                                });
+                                            }).then(Mono.just(registrationForm)))
                                             .switchIfEmpty(Mono.error(new RuntimeException("fail"))))
                             );
+
                 })
                 .flatMap(registrationForm -> {
                     StudentAppendSubjectDTO dto = new StudentAppendSubjectDTO(info.getStudentID(), registrationForm.getCourse().getSemester().getId(), new Subject2(registrationForm));
