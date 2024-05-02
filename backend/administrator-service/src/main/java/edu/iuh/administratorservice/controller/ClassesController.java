@@ -137,7 +137,7 @@ public class ClassesController {
                                                                 uuids.addAll(Arrays.stream(majors.getRequiredCourses()).toList());
                                                                 studentCreate2DTOS.add(new StudentCreate2DTO(dto.getId(),dto.getEmail(),uuids));
                                                                 return webClient.post()
-                                                                        .uri("http://SCHEDULER-SERVICE/api/v1/student/creates")
+                                                                        .uri("http://SCHEDULER-SERVICE/api/v1/student-2/creates")
                                                                         .header("Authorization", exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                                                                         .contentType(MediaType.APPLICATION_JSON)
                                                                         .bodyValue(studentCreate2DTOS)
