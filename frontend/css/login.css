@@ -1,0 +1,44 @@
+/* Màu nền và màu chữ cho input "user" */
+.user-input {
+    background-color: #ffffff; /* Màu nền */
+    color: #000000; /* Màu chữ */
+    border: 1px solid #cccccc; /* Viền */
+    padding: 8px; /* Khoảng cách nội dung */
+    margin-bottom: 10px; /* Khoảng cách với phần tử dưới */
+    width: 280px;
+    border-radius: 4px;
+}
+
+/* Màu nền và màu chữ cho input "password" */
+.password-input {
+    background-color: #cce6ff; /* Màu nền */
+    color: #0000cc; /* Màu chữ */
+    border: 1px solid #99b3ff; /* Viền */
+    padding: 8px; /* Khoảng cách nội dung */
+    width: 280px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.button_login {
+    background-color: #ff5a00; /* Màu nền */
+    border: none; /* Không có viền */
+    color: white; /* Màu chữ */
+    padding: 15px 32px; /* Kích thước padding */
+    text-align: center; /* Căn giữa nội dung */
+    text-decoration: none; /* Không gạch chân */
+    display: inline-block; /* Hiển thị như một phần tử inline-block */
+    font-size: 16px; /* Kích thước chữ */
+    margin: 4px 2px; /* Khoảng cách ngoại vi */
+    cursor: pointer; /* Con trỏ là pointer khi di chuột qua */
+    border-radius: 8px; /* Bo góc */
+    width: 280px;
+    margin-bottom: 10px;
+}
+
+.background-div {
+    /* background-image: url('https://get.wallhere.com/photo/gray-white-spots-abstraction-faded-644375.jpg'); Đường dẫn đến hình ảnh nền */
+    background-image: url('/img/bac.jpg'); /* Đường dẫn đến hình ảnh nền */
+    background-size: cover; /* Hiển thị hình ảnh nền sao cho nó phủ toàn bộ phần tử */
+    background-position: center; /* Căn giữa hình ảnh nền */
+}
