@@ -7,10 +7,12 @@ function submitLoginForm() {
         .then(response => response.json()) // Parse phản hồi thành JSON
         .then(data => {
             // Xử lý dữ liệu nhận được từ endpoint
-            if (data) {
+            if (data.token) {
                 // Nếu nhận được token, chuyển hướng đến trang khác và gửi token qua query params
                 
-                console.log(data);
+                // console.log(data);
+                localStorage.setItem("token", data.token);
+                window.location.href = "dashboard.html";
             } else {
                 
                 console.error('Token not received');
