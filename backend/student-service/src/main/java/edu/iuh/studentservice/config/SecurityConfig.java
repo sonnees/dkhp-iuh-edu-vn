@@ -35,8 +35,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http.authorizeExchange(
                         auth -> auth
-                                .pathMatchers("/api/v1/staff/create-administrator").hasAuthority("ADMIN")
-                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR")
+                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR","STUDENT")
                 )
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
