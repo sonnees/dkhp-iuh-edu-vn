@@ -1,0 +1,54 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tạo Học kì</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+        .selected-row {
+            background-color: #f0f0f0; /* Màu nền được chọn */
+        }
+    </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <h2>Tạo ngành</h2>
+            <form>
+                <div class="form-group col-md-3">
+                    <label for="nganhName">Nhập năm:</label>
+                    <input type="number" value="2024" class="form-control"
+                        id="year" placeholder="Tên ngành">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="nganhName">Nhập kì:</label>
+                    <input type="number" value="1" class="form-control"
+                        id="semester" placeholder="Tên ngành">
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    id="submitButton">Submit</button>
+                <button type="button" class="btn btn-warning" id="editButton"
+                    disabled>Sửa</button>
+                <input type="hidden" id="editIndex" value>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Kì</th>
+                        <th>Năm</th>
+                    </tr>
+                </thead>
+                <tbody id="semesterTable">
+                    <!-- Dữ liệu của bảng môn học bắt buộc sẽ được thêm sau bằng JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <script src="/js/createSemester.js"></script>
+
+    </body>
+</html>
