@@ -1,0 +1,44 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+package edu.iuh;
+import "google/protobuf/empty.proto";
+
+message AuthRequest {
+  int64 id = 1;
+  string password = 2;
+}
+
+message RegisterRequest {}
+
+message ChangePasswordRequest{
+  int64 id = 1;
+  string oldPass = 2;
+  string newPass = 3;
+}
+
+message JwtToken {
+  string token = 1;
+}
+
+message AuthInfo{
+  int64 id = 1;
+  string password = 2;
+  string role = 3;
+}
+
+message ChangePassword {}
+
+service AuthService {
+  rpc authorize(AuthRequest) returns(JwtToken){}
+  rpc changePassword(ChangePasswordRequest) returns(ChangePassword){}
+}
+
+service RegisterService {
+  rpc registerStudent(RegisterRequest) returns(AuthInfo){}
+  rpc registerAdministrator(RegisterRequest) returns(AuthInfo){}
+  rpc registerStaff(RegisterRequest) returns(AuthInfo){}
+}
+
+
+
