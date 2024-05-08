@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1/course")
-@Controller
+@RestController
 @Slf4j
 public class CourseController {
     private final CourseRepository courseRepository;
