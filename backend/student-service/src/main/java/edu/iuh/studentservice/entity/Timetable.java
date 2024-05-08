@@ -1,13 +1,16 @@
 package edu.iuh.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.iuh.studentservice.dto.TimetableCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +30,7 @@ public class Timetable {
     private UUID courseID;
     private ClassHour classHour;
     private ClassRoom classRoom;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private String staffName;
 

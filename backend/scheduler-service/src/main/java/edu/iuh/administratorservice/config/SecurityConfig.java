@@ -35,8 +35,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http.authorizeExchange(
                         auth -> auth
-                                .pathMatchers("/api/v1/staff/create-administrator").hasAuthority("ADMIN")
-                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR","STUDENT")
+                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR", "STUDENT")
                 )
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
@@ -46,7 +45,7 @@ public class SecurityConfig {
                 .cors(customizer -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowCredentials(true);
-                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:3005"));
+                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:5500"));
                     corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
                     corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
                     customizer.configurationSource(request -> corsConfiguration);

@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/student")
+@RequestMapping("/api/v1/student-2")
 @Controller
 @Slf4j
 public class StudentController {
@@ -56,21 +56,4 @@ public class StudentController {
                     return Mono.error(new Throwable(e));
                 });
     }
-
-    @PostMapping("/remove-subject")
-    public Mono<ResponseEntity<String>> removeSubject(@RequestBody RegistrationFormRemoveDTO info){
-        log.info("### enter api.v1.subject.remove-subject ###");
-        log.info("# info {} #", jsonConverter.objToString(info));
-        return studentRepository.removeSubject(info.getId(), info.getSemesterID(), info.getSubjectID())
-                .flatMap(aLong -> {
-                    if(aLong<=0) return Mono.defer(()->Mono.just(ResponseEntity.status(500).body("Fail")));
-                    return Mono.just(ResponseEntity.ok("Success"));
-                })
-                .onErrorResume(e -> {
-                    log.error("Error occurred: {}", e.getMessage());
-                    return Mono.error(new Throwable(e));
-                });
-    }
-
-
 }

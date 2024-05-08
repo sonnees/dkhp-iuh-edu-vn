@@ -11,6 +11,7 @@ function submitLoginForm() {
                 // Nếu nhận được token, chuyển hướng đến trang khác và gửi token qua query params
                 
                 // console.log(data);
+                localStorage.setItem("studentID", id);
                 localStorage.setItem("token", data.token);
                 window.location.href = "dashboard.html";
             } else {

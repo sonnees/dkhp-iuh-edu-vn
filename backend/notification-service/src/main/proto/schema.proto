@@ -1,0 +1,22 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+package edu.iuh;
+import "google/protobuf/empty.proto";
+
+message RegisterFormRequest {
+  string studentID = 1;
+  string subjectName = 2;
+  string registerFormID = 3;
+  int64 tuitionFee = 4;
+  string gmail = 5;
+}
+
+message RegisterFormResponse {}
+
+service SendEmailService {
+  rpc registerFormSuccess(RegisterFormRequest) returns(RegisterFormResponse){}
+}
+
+
+

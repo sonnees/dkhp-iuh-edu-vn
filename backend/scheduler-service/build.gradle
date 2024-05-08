@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
 
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
