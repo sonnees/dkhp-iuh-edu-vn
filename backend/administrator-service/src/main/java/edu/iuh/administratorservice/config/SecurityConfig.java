@@ -44,14 +44,15 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .anonymous(Customizer.withDefaults())
-                .cors(customizer -> {
-                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowCredentials(true);
-                    corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
-                    corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
-                    customizer.configurationSource(request -> corsConfiguration);
-                })
+//                .cors(customizer -> {
+//                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+//                    corsConfiguration.setAllowCredentials(true);
+//                    corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
+//                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//                    corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+//                    customizer.configurationSource(request -> corsConfiguration);
+//                })
+                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .build();
     }
