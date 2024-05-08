@@ -35,6 +35,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http.authorizeExchange(
                         auth -> auth
+                                .pathMatchers("/v3/**","/swagger-ui/**", "/context-path/**","/webjars/**","/swagger-ui.html").permitAll()
                                 .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR","STUDENT")
                 )
                 .authenticationManager(authenticationManager)

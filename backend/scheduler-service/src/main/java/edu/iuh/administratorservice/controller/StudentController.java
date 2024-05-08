@@ -8,17 +8,14 @@ import edu.iuh.administratorservice.serialization.JsonConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @RequestMapping("/api/v1/student-2")
-@Controller
+@RestController
 @Slf4j
 public class StudentController {
     private final StudentRepository studentRepository;
