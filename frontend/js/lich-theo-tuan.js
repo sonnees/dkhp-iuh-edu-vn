@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 }); 
 
 function handleButtonPrevious () {
+    clearData();
     let dateString = document.getElementById("lichtheotuan-mon").innerText;
     let curDate = new Date(dateString);
     let newDate = new Date(curDate);
@@ -47,6 +48,7 @@ function handleButtonPrevious () {
 }
 
 function handleButtonNext () {
+    clearData();
     let dateString = document.getElementById("lichtheotuan-mon").innerText;
     let curDate = new Date(dateString);
     let newDate = new Date(curDate);
@@ -54,75 +56,105 @@ function handleButtonNext () {
     setDay(newDate);
 }
 
+function clearData() {
+    document.getElementById("sang-mon").innerHTML="";
+    document.getElementById("sang-tue").innerHTML="";
+    document.getElementById("sang-wed").innerHTML="";
+    document.getElementById("sang-thu").innerHTML="";
+    document.getElementById("sang-fri").innerHTML="";
+    document.getElementById("sang-sat").innerHTML="";
+    document.getElementById("sang-sun").innerHTML="";
+
+    document.getElementById("chieu-mon").innerHTML="";
+    document.getElementById("chieu-tue").innerHTML="";
+    document.getElementById("chieu-wed").innerHTML="";
+    document.getElementById("chieu-thu").innerHTML="";
+    document.getElementById("chieu-fri").innerHTML="";
+    document.getElementById("chieu-sat").innerHTML="";
+    document.getElementById("chieu-sun").innerHTML="";
+
+    document.getElementById("toi-mon").innerHTML="";
+    document.getElementById("toi-tue").innerHTML="";
+    document.getElementById("toi-wed").innerHTML="";
+    document.getElementById("toi-thu").innerHTML="";
+    document.getElementById("toi-fri").innerHTML="";
+    document.getElementById("toi-sat").innerHTML="";
+    document.getElementById("toi-sun").innerHTML="";
+
+}
+
 
 
 function setDay(date) {
     let curDate = new Date(date);
-    fetchDate(date);
+    
 
     let newDate = new Date(curDate);
-    console.log(newDate);
-    let day = newDate.getDate();
-    let month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    let day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    let month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     let year = newDate.getFullYear();
     document.getElementById("lichtheotuan-mon").innerHTML = year + '-' + month + '-' + day ;
+    let mon = year + '-' + month + '-' + day;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-tue").innerHTML = year + '-' + month + '-' + day ;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-wed").innerHTML = year + '-' + month + '-' + day ;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-thu").innerHTML = year + '-' + month + '-' + day ;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-fri").innerHTML = year + '-' + month + '-' + day ;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-sat").innerHTML = year + '-' + month + '-' + day ;
+    // fetchDate(year + '-' + month + '-' + day);
 
     newDate.setDate(curDate.getDate() + 1);
     curDate.setDate(newDate.getDate());
-    console.log(newDate);
-    day = newDate.getDate();
-    month = newDate.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    day = newDate.getDate() < 10 ? "0" + newDate.getDate() : newDate.getDate();
+    month = newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1; 
     year = newDate.getFullYear();
     document.getElementById("lichtheotuan-sun").innerHTML = year + '-' + month + '-' + day ;
+    let sun = year + '-' + month + '-' + day;
+    fetchDate(mon, sun);
 }
 
-function fetchDate(date) {
+function fetchDate(start, end) {
+    
     const url = 'http://localhost:8084/api/v1/timetable/search-by-student-id';
 
     const data = { 
         "studentID": localStorage.getItem("studentID"),
-        "start":date,
-        "end":date
+        "start":start,
+        "end":end
     };
 
     fetch(url, {
@@ -140,8 +172,68 @@ function fetchDate(date) {
         return response.text();
     })
     .then(data => {
-        console.log('Response:', data);
-        // Process the response here
+        // console.log('Response:', data);
+        let temp = "";
+        json = JSON.parse(data);
+        if (json) {
+            json.map((lich) => {
+                console.log(lich);
+                //kiem tra buoi hoc
+                if (lich.classHour=="HOUR_1_TO_3" || lich.classHour=="HOUR_4_TO_6") {
+                    temp += "sang-";
+                } else if (lich.classHour=="HOUR_7_TO_9" || lich.classHour=="HOUR_10_TO_12") {
+                    temp += "chieu-";
+                } else if (lich.classHour=="HOUR_13_TO_15") {
+                    temp += "toi-";
+                }
+
+                //kiem tra thu
+                let date = new Date(lich.date);
+
+                switch (date.getDay()) {
+                    case 0:
+                        temp+="sun";
+                        break;
+                    case 1:
+                        temp+="mon";
+                        break;
+                    case 2:
+                        temp+="tue";
+                        break;
+                    case 3:
+                        temp+="wed";
+                        break;
+                    case 4:
+                        temp+="thu";
+                        break;
+                    case 5:
+                        temp+="fri";
+                        break;
+                    case 6:
+                        temp+="sat";
+                        break;
+                    default:
+                        break;
+                }
+
+                // console.log(temp);
+                // <p>Course ID: ${lich.courseID}</p>
+                document.getElementById(temp).innerHTML = `
+                <div class="d-inline-block border px-2" style="width: 120px; background-color: #fffccc;">
+                    <p>${lich.subjectName}</p>
+                    <p>Tiết: ${lich.classHour}</p>
+                    <p>Phòng: ${lich.classRoom}</p>
+                    <p>GV: ${lich.staffName}</p>  
+                </div>
+                `;
+
+
+
+
+                temp = "";
+            })
+        }
+        
     })
     .catch(error => {
         console.error('There was a problem with the request:', error);

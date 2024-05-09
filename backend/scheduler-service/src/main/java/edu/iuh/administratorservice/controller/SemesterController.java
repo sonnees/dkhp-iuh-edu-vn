@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RequestMapping("/api/v1/semester")
-@Controller
+@RestController
 @Slf4j
 public class SemesterController {
     private final SemesterRepository semesterRepository;

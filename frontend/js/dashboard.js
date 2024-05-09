@@ -21,15 +21,29 @@ function fetchStudentID() {
         return response.text();
     })
     .then(data => {
-        console.log('Response:', data);
-        // Process the response here
+        json = JSON.parse(data);
+        // console.log(json);
+        // nameUser
+        // console.log(json.fullName);
+        document.getElementById("nameUser").innerHTML = json.fullName;
+        document.getElementById("mssv").innerHTML = json.id;
+        document.getElementById("name").innerHTML = json.fullName;
+        document.getElementById("sex").innerHTML = json.sex ? "Nam" : "Nữ";
+        document.getElementById("address").innerHTML = json.address;
+        document.getElementById("sdt").innerHTML = json.phoneNumber;
+        document.getElementById("email").innerHTML = json.email;
     })
     .catch(error => {
-        console.error('There was a problem with the request:', error);
+        console.warn('There was a problem with the request:', error);
     });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
     fetchStudentID();
 });
+
+function handleLogout() {
+    window.location.href = "login.html";
+    localStorage.clear();  
+}
 

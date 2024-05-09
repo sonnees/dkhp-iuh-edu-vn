@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng thông tin sinh viên</title>
+    <title>Đăng ký học phần</title>
 
 
     <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/DangKyHocPhan.css">
     <script src="https://kit.fontawesome.com/ba77084f0d.js" crossorigin="anonymous"></script>
+    <script src="/js/DangKyHocPhan.js"></script>
     <script src="/js/dashboard.js"></script>
 
 </head>
@@ -57,16 +58,54 @@
                 </nav>
             </div>
             <div class="col-md-9 bg-white" >
-                <div class="mt-3">
-                    <h4>Thông tin sinh viên</h4>
-                    <hr>
-                    <p>MSSV: <span id="mssv"> </span></p>
-                    <p>Tên: <span id="name"> </span></p>
-                    <p>Giới tính: <span id="sex"> </span></p>
-                    <p>Địa chỉ: <span id="address"> </span></p>
-                    <p>SĐT: <span id="sdt"> </span></p>
-                    <p>Email: <span id="email"> </span></p>
+                <h4 class="row fw-bolder fs-4 ps-3 pt-3" style="color: #667580;">Lịch học, lịch thi theo tuần</h1>
+
+                <div class="d-flex flex-row justify-content-end mx-5 my-2">
+                    <div class="">
+                        <label for="semester">Chọn học kỳ:</label>
+                        <select id="semester" name="semester">
+                            <option value="semester1" selected>HK1(2024-2025)</option>
+                            <option value="semester2">HK2(2024-2025)</option>
+                            <option value="semester3">HK3(2024-2025)</option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <button type="button" class="border-white text-white" style="background-color: #1da1f2;" onclick="handleButtonPrevious()"> &lt; Trở về</button>
+                    </div>
+                    <div class="">
+                        <button type="button" class="border-white text-white" style="background-color: #1da1f2;" onclick="handleButtonNext()"> Tiếp &gt;</button>
+                    </div>
                 </div>
+
+                <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">MÔN HỌC PHẦN ĐANG CHỜ ĐĂNG KÝ</h1>
+
+                <div class="table-responsive">
+                    <table id="subjectTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                        <thead>
+                          <tr>
+                            <th>STT</th>
+                            <th>Mã môn học</th>
+                            <th>Tên môn học</th>
+                            <th>Số tín chỉ</th>
+                            <th>Tiên quyết</th>
+                            <th>Học phần tương đương</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Dữ liệu từ API sẽ được thêm vào đây -->
+                        </tbody>
+                      </table>
+                </div>
+
+                <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">LỚP HỌC PHẦN CHỜ ĐĂNG KÝ</h1>
+
+
+                <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">CHI TIẾT LỚP HỌC PHẦN</h1>
+
+                <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">LỚP HỌC PHẦN ĐÃ ĐĂNG KÝ TRONG KỲ NÀY</h1>
+
+
+
             </div>
         </div>
     </div>

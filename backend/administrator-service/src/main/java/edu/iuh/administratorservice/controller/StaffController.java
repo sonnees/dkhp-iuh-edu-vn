@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/staff")
-@Controller
+@RestController
 @Slf4j
 public class StaffController {
     private final StaffRepository staffRepository;

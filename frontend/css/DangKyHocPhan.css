@@ -1,0 +1,4 @@
+/* Tạo hiệu ứng khi được chọn */
+.selected {
+    background-color: #d1cb64;
+}

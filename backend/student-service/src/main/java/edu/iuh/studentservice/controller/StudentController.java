@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/student")
-@Controller
+@RestController
 @Slf4j
 public class StudentController {
     private final StudentRepository studentRepository;
