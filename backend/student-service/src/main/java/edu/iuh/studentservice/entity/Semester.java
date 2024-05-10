@@ -4,6 +4,7 @@ import edu.iuh.studentservice.dto.AcademicResultsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 public class Semester {
+    @Indexed
     @Field(targetType = FieldType.STRING)
     private UUID id;
     private List<Subject> subjects;
