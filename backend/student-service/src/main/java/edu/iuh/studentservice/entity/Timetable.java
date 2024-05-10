@@ -24,6 +24,7 @@ public class Timetable {
     @Field(targetType = FieldType.STRING)
     @Id
     private UUID id;
+    @Indexed()
     private String[] studentID;
     private String subjectName;
     @Field(targetType = FieldType.STRING)
@@ -31,6 +32,7 @@ public class Timetable {
     private ClassHour classHour;
     private ClassRoom classRoom;
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Indexed()
     private Date date;
     private String staffName;
 
