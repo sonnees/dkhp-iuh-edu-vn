@@ -15,8 +15,7 @@
                     <div class="form-group col-md-6">
                         <label for="courseNameInput">Tên môn học:</label>
                         <input type="text" class="form-control"
-                            id="courseID" style="display:none;"
-                            placeholder="Nhập tên môn học">
+                            id="courseID" style="display:none;">
                         <input type="text" class="form-control"
                             id="courseNameInput" placeholder="Nhập tên môn học">
                     </div>
@@ -60,34 +59,34 @@
                 <button type="submit" class="btn btn-primary"
                     id="submitBtn">Submit</button>
                 <button type="button" class="btn btn-success" id="updateBtn">Cập
-                    nhật</button> <!
+                    nhật</button>
             </form>
-                <br>
-                <h3>Danh sách môn học</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên môn học</th>
-                            <th>Số tín chỉ</th>
-                            <th>Số tiết lý thuyết</th>
-                            <th>Số tiết thực hành</th>
-                            <th>Môn tiên quyết</th>
-                        </tr>
-                    </thead>
-                    <tbody id="courseList">
-                        <!-- Danh sách môn học sẽ được thêm vào đây -->
-                    </tbody>
-                </table>
-            </div>
+            <br>
+            <h3>Danh sách môn học</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên môn học</th>
+                        <th>Số tín chỉ</th>
+                        <th>Số tiết lý thuyết</th>
+                        <th>Số tiết thực hành</th>
+                        <th>Môn tiên quyết</th>
+                    </tr>
+                </thead>
+                <tbody id="courseList">
+                    <!-- Danh sách môn học sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+        </div>
 
-            <script
-                src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-            <script
-                src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-            <script
-                src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-            <script>
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
             document.getElementById("prerequisiteCheckbox").addEventListener("change", function() {
                 var majorSelect = document.getElementById("majorSelect");
                 if (this.checked) {
@@ -314,5 +313,5 @@ document.getElementById("updateBtn").addEventListener("click", function(event) {
         }
 
             </script>
-        </body>
-    </html>
+    </body>
+</html>
