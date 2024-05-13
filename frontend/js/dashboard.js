@@ -5,7 +5,7 @@ const tokenDisplay = document.getElementById("token");
 
 
 function fetchStudentID() {
-    const url = 'http://localhost:8084/api/v1/student/search-by-id?id='+localStorage.getItem("studentID");
+    const url = 'http://localhost:8080/api/v1/student/search-by-id?id='+localStorage.getItem("studentID");
 
     fetch(url, {
         method: 'POST',
