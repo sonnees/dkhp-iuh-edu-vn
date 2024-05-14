@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý chi tiết lớp học phần</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h2>Quản lý chi tiết lớp học phần</h2>
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="courseSelect">Lớp học phần:</label>
+                        <select class="form-control" id="courseSelect">
+                            <option value>-- Chọn lớp học phần --</option>
+                            <!-- Thêm các tùy chọn lớp học phần vào đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lecturerSelect">Giảng viên:</label>
+                        <select class="form-control" id="lecturerSelect">
+                            <option value>-- Chọn giảng viên --</option>
+                            <!-- Thêm các tùy chọn giảng viên vào đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="groupSelect">Nhóm:</label>
+                        <select class="form-control" id="groupSelect">
+                            <option value>-- Chọn nhóm --</option>
+                            <!-- Thêm các tùy chọn nhóm vào đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="capacityInput">Sỉ số:</label>
+                        <input type="number" class="form-control"
+                            id="capacityInput" placeholder="Nhập sỉ số">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="lessonInput">Số tiết học:</label>
+                        <input type="number" class="form-control"
+                            id="lessonInput" placeholder="Nhập số tiết học">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="roomBuildingSelect">Nhà:</label>
+                        <select class="form-control" id="roomBuildingSelect">
+                            <option value>-- Chọn nhà --</option>
+                            <!-- Thêm các tùy chọn nhà vào đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="roomSelect">Phòng:</label>
+                        <select class="form-control" id="roomSelect">
+                            <option value>-- Chọn phòng --</option>
+                            <!-- Thêm các tùy chọn phòng vào đây -->
+                        </select>
+                    </div>
+                    <!-- <div class="form-group col-md-6">
+
+                    </div> -->
+                    <div class="form-group col-md-4">
+                        <label for="startDateInput">Ngày bắt đầu:</label>
+                        <input type="date" class="form-control"
+                            id="startDateInput">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="endDateInput">Ngày kết thúc:</label>
+                        <input type="date" class="form-control"
+                            id="endDateInput">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <br>
+            <h3>Chi tiết lớp học phần</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã lớp học phần</th>
+                        <th>Tên lớp học phần</th>
+                        <th>Giảng viên</th>
+                        <th>Sỉ số</th>
+                        <th>Nhóm</th>
+                        <th>Số tiết</th>
+                        <th>Phòng</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                    </tr>
+                </thead>
+                <tbody id="classDetailList">
+                    <!-- Danh sách chi tiết lớp học phần sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

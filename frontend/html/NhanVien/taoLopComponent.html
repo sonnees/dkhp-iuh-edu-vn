@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý lớp học</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Quản lý lớp học</h2>
+            <form id="classForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="classNameInput">Tên lớp:</label>
+                        <input type="text" class="form-control"
+                            id="classNameInput" placeholder="Nhập tên lớp">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="educationLevelInput">Bậc đào tạo:</label>
+                        <select class="form-control" id="educationLevelInput">
+                            <option value="COLLEGE">Cao đẳng</option>
+                            <option value="UNIVERSITY">Đại học</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="trainingTypeInput">Loại đào tạo:</label>
+                        <select class="form-control" id="trainingTypeInput">
+                            <option value="REGULAR">Chính quy</option>
+                            <option value="NON_REGULAR">Không chính quy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="majorInput">Ngành:</label>
+                    <select class="form-control" id="majorInput">
+                        <!-- JavaScript sẽ thêm các tùy chọn ngành vào đây -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" id="updateButton"
+                    class="btn btn-success">Cập nhật</button>
+
+            </form>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên lớp</th>
+                        <th>Ngành</th>
+                        <th>Bậc đào tạo</th>
+                        <th>Loại đào tạo</th>
+                        <th>Hành động</th> <!-- Thêm cột hành động -->
+                    </tr>
+                </thead>
+                <tbody id="classList">
+                    <!-- Danh sách sinh viên sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+        </div>
+        <script>
+            var nganh=[
+                {"_id":"15e205ad-9d92-4464-80f0-e858c827d408","name":"Hệ Thống Thông Tin","departmentID":"82aab472-6246-2352-9b5c-aabbcc2a6cf6","electiveSubjects":["2d401045-403b-4d29-8c6d-abac0e7a8938","82aab472-d77f-4734-9b5c-aabbcc2a6cf6","84bff92e-2e8f-4ed7-bd27-d030959297a7","d616658d-bba5-460e-a0c5-9c51b328de71","bae90ee8-ad04-47a3-8ae1-edd84dc830ff"],"requiredCourses":["5b982a77-d2a7-488e-adff-e1e8d113848d","82aab472-d77f-4734-9b5c-aabbcc2a6cf6","0515146f-37a6-4111-a0a6-7a012c67d8df","27b58790-c91e-4ec2-865b-e316c1f6f982","54689d6e-868f-477b-8fcf-a573fbe9a584","d132f261-f788-495f-90c4-3a15126d1816","601bcd47-019e-4867-918e-825b73a75e79","fe5ed0ab-c915-450f-a616-2080f6c8c90a","447d5a3e-56c0-420b-bb3c-210ea8d3632e","058909d1-d08e-49a4-a3db-c34a59bbaab0"],"_class":"edu.iuh.administratorservice.entity.Majors"},
+                {"_id":"42c2e860-c7ec-4ea5-be71-65a99f9ee5da","name":"Công Nghệ Thông Tin","departmentID":"82aab472-6246-2352-9b5c-aabbcc2a6cf6","electiveSubjects":["2d401045-403b-4d29-8c6d-abac0e7a8938","82aab472-d77f-4734-9b5c-aabbcc2a6cf6","84bff92e-2e8f-4ed7-bd27-d030959297a7","d616658d-bba5-460e-a0c5-9c51b328de71","bae90ee8-ad04-47a3-8ae1-edd84dc830ff"],"requiredCourses":["cfdb6928-39a8-4c32-b148-85ffddc9b8a2","2c295b83-54cc-4ac0-9776-0863be75eb60","19803538-fa00-46db-9b3e-4c1fe389309c","e6436b12-134b-4145-ae69-c6cf4af628f0","24629680-f852-4a16-b660-b6567b433639","058909d1-d08e-49a4-a3db-c34a59bbaab0","50af5876-0c3f-4e9c-a7db-549e58148e69","5688926e-17c6-4cce-bc29-df1e29e60304","35dec163-f78a-47b5-807a-d75f70763d68","27b58790-c91e-4ec2-865b-e316c1f6f982","54689d6e-868f-477b-8fcf-a573fbe9a584"],"_class":"edu.iuh.administratorservice.entity.Majors"},
+                {"_id":"0a3bdac5-77d5-40f2-af9f-c31545b88740","name":"Kỹ Thuật Phần Mềm","departmentID":"82aab472-6246-2352-9b5c-aabbcc2a6cf6","electiveSubjects":["2d401045-403b-4d29-8c6d-abac0e7a8938","82aab472-d77f-4734-9b5c-aabbcc2a6cf6","84bff92e-2e8f-4ed7-bd27-d030959297a7","d616658d-bba5-460e-a0c5-9c51b328de71","bae90ee8-ad04-47a3-8ae1-edd84dc830ff"],"requiredCourses":["602e527e-1a33-4c12-aefd-79caf67f5a0d","d132f261-f788-495f-90c4-3a15126d1816","601bcd47-019e-4867-918e-825b73a75e79","fe5ed0ab-c915-450f-a616-2080f6c8c90a","447d5a3e-56c0-420b-bb3c-210ea8d3632e","058909d1-d08e-49a4-a3db-c34a59bbaab0","50af5876-0c3f-4e9c-a7db-549e58148e69","5688926e-17c6-4cce-bc29-df1e29e60304","35dec163-f78a-47b5-807a-d75f70763d68","27b58790-c91e-4ec2-865b-e316c1f6f982","54689d6e-868f-477b-8fcf-a573fbe9a584","e6436b12-134b-4145-ae69-c6cf4af628f0","24629680-f852-4a16-b660-b6567b433639"],"_class":"edu.iuh.administratorservice.entity.Majors"}
+            ]
+            var lop=[
+                {"_id":"518cc4b5-4b38-41de-8499-1d942c665637","name":"DHKTPM16B","majorsID":"0a3bdac5-77d5-40f2-af9f-c31545b88740","typeOfEducation":"UNIVERSITY","modeOfEducation":"REGULAR","_class":"edu.iuh.administratorservice.entity.Classes"},
+                {"_id":"6646f179-0d8d-4a09-b14c-40c254a40a9f","name":"DHKTPM16C","majorsID":"0a3bdac5-77d5-40f2-af9f-c31545b88740","typeOfEducation":"UNIVERSITY","modeOfEducation":"REGULAR","_class":"edu.iuh.administratorservice.entity.Classes"},
+                {"_id":"84d1b53a-30a3-486b-bc27-45624f4c3c57","name":"DHKTPM16E","majorsID":"0a3bdac5-77d5-40f2-af9f-c31545b88740","typeOfEducation":"UNIVERSITY","modeOfEducation":"REGULAR","_class":"edu.iuh.administratorservice.entity.Classes"},
+                {"_id":"6f6d2d18-f329-4f68-8e95-554eb74d5d68","name":"DHKTPM16A","majorsID":"0a3bdac5-77d5-40f2-af9f-c31545b88740","typeOfEducation":"UNIVERSITY","modeOfEducation":"REGULAR","_class":"edu.iuh.administratorservice.entity.Classes"},
+                {"_id":"107959e6-7d1b-46c9-b5cd-25e73ba1e3a2","name":"DHKTPM16D","majorsID":"0a3bdac5-77d5-40f2-af9f-c31545b88740","typeOfEducation":"UNIVERSITY","modeOfEducation":"REGULAR","_class":"edu.iuh.administratorservice.entity.Classes"}
+            ]
+        var majorSelect = document.getElementById("majorInput");
+        // Lặp qua mảng ngành và thêm các option vào select
+        nganh.forEach(function(major) {
+            var option = document.createElement("option");
+            option.value = major._id;
+            option.text = major.name;
+            majorSelect.appendChild(option);
+        });
+        // Hàm chuyển đổi giá trị typeOfEducation và modeOfEducation sang loại và bậc đào tạo tương ứng
+        function getEducationType(type, mode) {
+            if (type === "UNIVERSITY") {
+                type = "Đại học";
+            } else if (type === "COLLEGE") {
+                type = "Cao đẳng";
+            }
+            if (mode === "REGULAR") {
+                mode = "Chính quy";
+            } else if (mode === "NON_REGULAR") {
+                mode = "Không chính quy";
+            }
+            return { type, mode };
+        }
+
+     function displayLop() {
+            var classList = document.getElementById("classList");
+            classList.innerHTML = "";
+
+            lop.forEach(function(classItem, index) {
+                var nganhName = nganh.find(function(major) {
+                    return major._id === classItem.majorsID;
+                }).name;
+                var { type, mode } = getEducationType(classItem.typeOfEducation, classItem.modeOfEducation);
+
+                var row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${classItem.name}</td>
+                        <td>${nganhName}</td>
+                        <td>${type}</td>
+                        <td>${mode}</td>
+                        <td>
+                            <button class="btn btn-info btn-edit" data-id="${classItem._id}">Sửa</button>
+                            <button class="btn btn-danger btn-delete" data-id="${classItem._id}">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+                classList.insertAdjacentHTML("beforeend", row);
+            });
+
+            // Lắng nghe sự kiện click cho nút xóa
+            var deleteButtons = document.querySelectorAll(".btn-delete");
+            deleteButtons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    var classId = button.getAttribute("data-id");
+                    deleteClass(classId);
+                });
+            });
+
+            // Lắng nghe sự kiện click cho nút sửa
+            var editButtons = document.querySelectorAll(".btn-edit");
+            editButtons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    var classId = button.getAttribute("data-id");
+                    fillClassForm(classId);
+                });
+            });
+        }
+
+        function deleteClass(classId) {
+            // Xóa lớp học từ mảng
+            lop = lop.filter(function(classItem) {
+                return classItem._id !== classId;
+            });
+            // Hiển thị lại danh sách lớp học
+            displayLop();
+        }
+
+        function fillClassForm(classId) {
+    // Tìm lớp học trong mảng
+    var classItem = lop.find(function(item) {
+        return item._id === classId;
+    });
+    // Điền dữ liệu lớp học vào biểu mẫu
+    document.getElementById("classNameInput").value = classItem.name;
+    document.getElementById("majorInput").value = classItem.majorsID;
+    document.getElementById("educationLevelInput").value = classItem.typeOfEducation;
+    document.getElementById("trainingTypeInput").value = classItem.modeOfEducation;
+
+    // Gán giá trị của classId cho thuộc tính data-id của nút cập nhật
+    document.getElementById("updateButton").setAttribute("data-id", classId);
+}
+
+
+    displayLop()
+// Xử lý sự kiện khi submit form
+        document.getElementById("classForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Ngăn chặn việc submit form mặc định
+
+            // Lấy dữ liệu từ các trường input
+            var className = document.getElementById("classNameInput").value;
+            var majorID = document.getElementById("majorInput").value;
+            var educationLevel = document.getElementById("educationLevelInput").value;
+            var trainingType = document.getElementById("trainingTypeInput").value;
+
+            // Tạo đối tượng lớp học mới
+            var newClass = {
+                _id: generateUUID(), // Tạo ID mới
+                name: className,
+                majorsID: majorID,
+                typeOfEducation: educationLevel,
+                modeOfEducation: trainingType,
+                _class: "edu.iuh.administratorservice.entity.Classes"
+            };
+
+            // Thêm lớp học mới vào mảng
+            lop.push(newClass);
+
+            // Hiển thị lại danh sách lớp học
+            displayLop();
+
+            // Reset form
+            document.getElementById("classForm").reset();
+        });
+document.getElementById("updateButton").addEventListener("click", function() {
+    // Lấy dữ liệu từ các trường input
+    var className = document.getElementById("classNameInput").value;
+    var majorID = document.getElementById("majorInput").value;
+    var educationLevel = document.getElementById("educationLevelInput").value;
+    var trainingType = document.getElementById("trainingTypeInput").value;
+
+    // Tìm lớp học cần cập nhật trong mảng
+    var classIdToUpdate = document.getElementById("updateButton").getAttribute("data-id");
+    var classToUpdateIndex = lop.findIndex(function(classItem) {
+        return classItem._id === classIdToUpdate;
+    });
+
+    // Cập nhật thông tin lớp học
+    lop[classToUpdateIndex].name = className;
+    lop[classToUpdateIndex].majorsID = majorID;
+    lop[classToUpdateIndex].typeOfEducation = educationLevel;
+    lop[classToUpdateIndex].modeOfEducation = trainingType;
+
+    // Hiển thị lại danh sách lớp học
+    displayLop();
+
+    // Reset form
+    document.getElementById("classForm").reset();
+});
+
+        // Hàm tạo UUID ngẫu nhiên
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        </script>
+    </body>
+</html>

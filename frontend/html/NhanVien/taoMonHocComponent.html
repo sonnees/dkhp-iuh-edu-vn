@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý môn học</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Quản lý môn học</h2>
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="courseNameInput">Tên môn học:</label>
+                        <input type="text" class="form-control"
+                            id="courseID" style="display:none;">
+                        <input type="text" class="form-control"
+                            id="courseNameInput" placeholder="Nhập tên môn học">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="creditInput">Số tín chỉ:</label>
+                        <input type="number" class="form-control"
+                            id="creditInput" placeholder="Nhập số tín chỉ">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="theoryHoursInput">Số tiết lý thuyết:</label>
+                        <input type="number" class="form-control"
+                            id="theoryHoursInput"
+                            placeholder="Nhập số tiết lý thuyết">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="practiceHoursInput">Số tiết thực
+                            hành:</label>
+                        <input type="number" class="form-control"
+                            id="practiceHoursInput"
+                            placeholder="Nhập số tiết thực hành">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="majorSelect">Chọn môn tiên quyết:</label>
+                        <select class="form-control" id="majorSelect"
+                            style="display: none;">
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                id="prerequisiteCheckbox">
+                            <label class="form-check-label"
+                                for="prerequisiteCheckbox">
+                                Môn tiên quyết
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    id="submitBtn">Submit</button>
+                <button type="button" class="btn btn-success" id="updateBtn">Cập
+                    nhật</button>
+            </form>
+            <br>
+            <h3>Danh sách môn học</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên môn học</th>
+                        <th>Số tín chỉ</th>
+                        <th>Số tiết lý thuyết</th>
+                        <th>Số tiết thực hành</th>
+                        <th>Môn tiên quyết</th>
+                    </tr>
+                </thead>
+                <tbody id="courseList">
+                    <!-- Danh sách môn học sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+        </div>
+
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            document.getElementById("prerequisiteCheckbox").addEventListener("change", function() {
+                var majorSelect = document.getElementById("majorSelect");
+                if (this.checked) {
+                    majorSelect.style.display = "block";
+                } else {
+                    majorSelect.style.display = "none";
+                }
+            });
+var subjects=[
+    {"_id":"d132f261-f788-495f-90c4-3a15126d1816","name":"Mạng máy tính","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"058909d1-d08e-49a4-a3db-c34a59bbaab0","name":"Quản trị doanh nghiệp","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"bae90ee8-ad04-47a3-8ae1-edd84dc830ff","name":"Logic học","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"602e527e-1a33-4c12-aefd-79caf67f5a0d","name":"Lập trình phân tán với công nghệ Java","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["5688926e-17c6-4cce-bc29-df1e29e60304"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"54689d6e-868f-477b-8fcf-a573fbe9a584","name":"Những vấn đề xã hội và đạo đức nghề nghiệp","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"84bff92e-2e8f-4ed7-bd27-d030959297a7","name":"Toán ứng dụng","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"0ffebab2-fdb8-457e-a56f-08e3f744ed56","name":"Lập trình hướng đối tượng","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"fe5ed0ab-c915-450f-a616-2080f6c8c90a","name":"Cấu trúc dữ liệu và giải thuật","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["24629680-f852-4a16-b660-b6567b433639"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"5b982a77-d2a7-488e-adff-e1e8d113848d","name":"Tiếng Việt thực hành","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"19803538-fa00-46db-9b3e-4c1fe389309c","name":"Phân tích thiết kế hệ thống","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"50af5876-0c3f-4e9c-a7db-549e58148e69","name":"Đảm bảo chất lượng và Kiểm thử phần mềm","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"5688926e-17c6-4cce-bc29-df1e29e60304","name":"Lập trình hướng sự kiện với công nghệ Java","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["0ffebab2-fdb8-457e-a56f-08e3f744ed56","19803538-fa00-46db-9b3e-4c1fe389309c"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"e6436b12-134b-4145-ae69-c6cf4af628f0","name":"Hệ Thống và Công nghệ Web","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"2d401045-403b-4d29-8c6d-abac0e7a8938","name":"Kỹ năng sử dụng bàn phím và thiết bị văn phòng","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"82aab472-d77f-4734-9b5c-aabbcc2a6cf6","name":"Nhập môn Tin học","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"2c295b83-54cc-4ac0-9776-0863be75eb60","name":"Toán cao cấp 1","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"35dec163-f78a-47b5-807a-d75f70763d68","name":"Hệ quản trị cơ sở dữ liệu NoSQL MongoDB","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"d616658d-bba5-460e-a0c5-9c51b328de71","name":"Cấu trúc rời rạc","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"601bcd47-019e-4867-918e-825b73a75e79","name":"Mô hình hóa dữ liệu NoSQL MongoDB","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["35dec163-f78a-47b5-807a-d75f70763d68"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"24629680-f852-4a16-b660-b6567b433639","name":"Kỹ thuật lập trình","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["82aab472-d77f-4734-9b5c-aabbcc2a6cf6"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"27b58790-c91e-4ec2-865b-e316c1f6f982","name":"Nhập môn an toàn thông tin","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"447d5a3e-56c0-420b-bb3c-210ea8d3632e","name":"Phương pháp tính","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"cfdb6928-39a8-4c32-b148-85ffddc9b8a2","name":"Hệ Thống Máy tính","creditUnits":3,"theorySessions":1,"practicalSessions":2,"_class":"edu.iuh.administratorservice.entity.Subject"},
+    {"_id":"0515146f-37a6-4111-a0a6-7a012c67d8df","name":"Toán cao cấp 2","creditUnits":3,"theorySessions":1,"practicalSessions":2,"prerequisites":["2c295b83-54cc-4ac0-9776-0863be75eb60"],"_class":"edu.iuh.administratorservice.entity.Subject"},
+]
+function displayCourseList(subjects) {
+    var tbody = document.getElementById('courseList');
+    tbody.innerHTML = ''; // Xóa hết dữ liệu cũ trong tbody
+
+    let stt = 0;
+    subjects.forEach(function (subject) {
+        stt++;
+        var row = document.createElement("tr");
+        row.innerHTML = "<td>" + stt + "</td>" +
+            "<td>" + subject.name + "</td>" +
+            "<td>" + subject.creditUnits + "</td>" +
+            "<td>" + subject.theorySessions + "</td>" +
+            "<td>" + subject.practicalSessions + "</td>" +
+            "<td>" + (subject.prerequisites && subject.prerequisites.length > 0 ? getPrerequisitesNames(subject.prerequisites) : "Không có") + "</td>" +
+            "<td>" +
+            "<button class='btn btn-warning edit-button'>Sửa</button>" + // Nút sửa
+            "<button class='btn btn-danger delete-button'>Xóa</button>" + // Nút xóa
+            "</td>";
+        tbody.appendChild(row);
+
+        // Thêm sự kiện click cho nút sửa
+        row.querySelector('.edit-button').addEventListener('click', function () {
+            // Đổ dữ liệu lên các input phía trên để chỉnh sửa
+            document.getElementById('courseID').value = subject._id;
+            document.getElementById('courseNameInput').value = subject.name;
+            document.getElementById('creditInput').value = subject.creditUnits;
+            document.getElementById('theoryHoursInput').value = subject.theorySessions;
+            document.getElementById('practiceHoursInput').value = subject.practicalSessions;
+
+            // Nếu có môn tiên quyết, hiển thị checkbox và chọn môn tiên quyết
+            var checkbox = document.getElementById('prerequisiteCheckbox');
+            var majorSelect = document.getElementById('majorSelect');
+            if (subject.prerequisites && subject.prerequisites.length > 0) {
+                checkbox.checked = true;
+                majorSelect.style.display = "block";
+                majorSelect.value = subject.prerequisites[0]; // Chỉ hiển thị môn tiên quyết đầu tiên
+            } else {
+                checkbox.checked = false;
+                majorSelect.style.display = "none";
+            }
+        });
+
+        // Thêm sự kiện click cho nút xóa
+        row.querySelector('.delete-button').addEventListener('click', function () {
+            // Xóa dòng hiện tại khỏi mảng subjects
+            subjects.splice(subjects.indexOf(subject), 1);
+            // Sau đó hiển thị lại danh sách môn học
+            displayCourseList(subjects);
+        });
+    });
+}
+
+// Sử dụng hàm displayCourseList để đổ dữ liệu vào bảng môn học
+displayCourseList(subjects);
+function populatePrerequisiteSelect() {
+    var select = document.getElementById('majorSelect');
+    select.innerHTML = ''; // Xóa hết các tùy chọn cũ
+
+    subjects.forEach(function(subject) {
+        var option = document.createElement('option');
+        option.text = subject.name;
+        option.value = subject._id;
+        select.appendChild(option);
+    });
+}
+
+// Gọi hàm populatePrerequisiteSelect để đổ dữ liệu vào select khi trang được tải
+populatePrerequisiteSelect();
+function getPrerequisitesNames(prerequisiteIds) {
+    let names = [];
+    prerequisiteIds.forEach(function (prerequisiteId) {
+        let prerequisite = subjects.find(function (subject) {
+            return subject._id === prerequisiteId;
+        });
+        if (prerequisite) {
+            names.push(prerequisite.name);
+        }
+    });
+    return names.join(", ");
+}
+
+// Sử dụng hàm displayCourseList để đổ dữ liệu vào bảng môn học
+displayCourseList(subjects);
+document.getElementById("submitBtn").addEventListener("click", function(event) {
+    event.preventDefault(); // Ngăn chặn việc reload trang khi submit form
+
+    // Lấy dữ liệu từ các trường input
+    var courseName = document.getElementById('courseNameInput').value;
+    var creditUnits = parseInt(document.getElementById('creditInput').value);
+    var theorySessions = parseInt(document.getElementById('theoryHoursInput').value);
+    var practiceSessions = parseInt(document.getElementById('practiceHoursInput').value);
+    var checkbox = document.getElementById('prerequisiteCheckbox');
+    var prerequisiteId = '';
+
+    // Nếu checkbox "Môn tiên quyết" được chọn, lấy giá trị từ phần tử select
+    if (checkbox.checked) {
+        prerequisiteId = document.getElementById('majorSelect').value;
+    }
+
+    // Tạo đối tượng mới đại diện cho môn học
+    var newSubject = {
+        _id: generateUUID(), // Tạo một ID mới cho môn học
+        name: courseName,
+        creditUnits: creditUnits,
+        theorySessions: theorySessions,
+        practicalSessions: practiceSessions
+    };
+
+    // Nếu môn tiên quyết được chọn, thêm vào thuộc tính prerequisites
+    if (prerequisiteId) {
+        newSubject.prerequisites = [prerequisiteId];
+    }
+
+    // Thêm đối tượng mới vào mảng subjects
+    subjects.push(newSubject);
+
+    // Hiển thị thông báo tạo thành công
+    alert('Tạo môn học thành công!');
+
+    // Cập nhật lại giao diện hiển thị danh sách môn học
+    displayCourseList(subjects);
+
+    // Làm rỗng các trường input
+        spaceInput()
+});
+document.getElementById("updateBtn").addEventListener("click", function(event) {
+    event.preventDefault(); // Ngăn chặn việc reload trang khi click nút
+
+    // Lấy dữ liệu từ các trường input
+    var courseID = document.getElementById('courseID').value;
+    var courseName = document.getElementById('courseNameInput').value;
+    var creditUnits = parseInt(document.getElementById('creditInput').value);
+    var theorySessions = parseInt(document.getElementById('theoryHoursInput').value);
+    var practiceSessions = parseInt(document.getElementById('practiceHoursInput').value);
+    var checkbox = document.getElementById('prerequisiteCheckbox');
+    var prerequisiteId = '';
+
+    // Nếu checkbox "Môn tiên quyết" được chọn, lấy giá trị từ phần tử select
+    if (checkbox.checked) {
+        prerequisiteId = document.getElementById('majorSelect').value;
+    }
+
+    // Tìm môn học tương ứng trong mảng subjects
+    var updatedSubject = subjects.find(function(subject) {
+        return subject._id === courseID;
+    });
+
+    // Cập nhật thông tin của môn học
+    updatedSubject.name = courseName;
+    updatedSubject.creditUnits = creditUnits;
+    updatedSubject.theorySessions = theorySessions;
+    updatedSubject.practicalSessions = practiceSessions;
+
+    // Nếu môn tiên quyết được chọn, cập nhật vào thuộc tính prerequisites
+    if (prerequisiteId) {
+        updatedSubject.prerequisites = [prerequisiteId];
+    } else {
+        delete updatedSubject.prerequisites; // Xóa thuộc tính nếu không có môn tiên quyết
+    }
+
+    // Hiển thị thông báo cập nhật thành công
+    alert('Cập nhật môn học thành công!');
+
+    // Cập nhật lại giao diện hiển thị danh sách môn học
+    displayCourseList(subjects);
+
+    spaceInput()
+});
+
+
+ // Hàm tạo UUID để tạo id mới cho học kì
+        function generateUUID() {
+            var dt = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (dt + Math.random() * 16) % 16 | 0;
+                dt = Math.floor(dt / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+        function spaceInput(){
+            // Làm rỗng các trường input
+            document.getElementById('courseID').value = '';
+            document.getElementById('courseNameInput').value = '';
+            document.getElementById('creditInput').value = '';
+            document.getElementById('theoryHoursInput').value = '';
+            document.getElementById('practiceHoursInput').value = '';
+            checkbox.checked = false;
+            document.getElementById('majorSelect').style.display = "none";
+        }
+
+            </script>
+    </body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cổng thông tin nhân viên</title>
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <style>
+    /* Customize sidebar style */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 50px; /* height of navbar */
+        height: 100%;
+        width: 250px;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+    .sidebar a {
+        display: block;
+        padding: 10px 0;
+        text-decoration: none;
+    }
+    /* Add shadow to navbar */
+    .navbar {
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    /* Set margin-top for main content area */
+    #mainContent {
+        margin-top: 100px;
+        margin-left: 300px; /* Change this value as needed */
+    }
+</style>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div class="container">
+                <a href="#" onclick="loadContent('dashboard.html')">
+                    <img src="/img/band.png"
+                        alt="Banner" width="100" height="50"
+                        class="rounded-circle mr-1">
+
+                    <button class="navbar-toggler" type="button"
+                        data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse"
+                        id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#"
+                                    id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <img
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbwTuQZ34oLDTOUIsD9DPk2K0pdiYGbzKJxFYdwZbrxsh4RYngCeH5dr49F0XacGUjHHI&usqp=CAU"
+                                        alt="User Avatar" width="30" height="30"
+                                        class="rounded-circle mr-1"> Your Name
+                                </a>
+                                <div class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item"
+                                        href="#">Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar">
+                <a href="#" onclick="loadContent('taoKhoaComponent.html')">Quản lý khoa</a>
+                <a href="#" onclick="loadContent('taoNganhComponent.html')">Quản lý
+                    ngành</a>
+                <a href="#" onclick="loadContent('taoLopComponent.html')">Quản lý
+                    lớp</a>
+                <a href="#" onclick="loadContent('taoMonHocComponent.html')">Quản lý
+                    môn
+                    học</a>
+                <a href="#"
+                    onclick="loadContent('taoLopHocPhanComponent.html')">Quản lý
+                    lớp học phần</a>
+                <a href="#"
+                    onclick="loadContent('taoChiTietLHPComponent.html')">Quản lý
+                    chi tiết lớp học phần</a>
+                <a href="#"
+                    onclick="loadContent('taoDangKiHocPhanComponent.html')">Quản lý
+                    đăng
+                    kí học phần</a>
+                <a href="#"
+                    onclick="loadContent('taoTaiKhoanComponent.html')">Quản lý
+                    tài khoản</a>
+                <a href="#"
+                    onclick="loadContent('taoHocKi.html')">Quản lý
+                    học kì</a>
+                <!-- Thêm các menu item khác vào đây -->
+            </div>
+
+            <div class="container" id="mainContent">
+                <h2>Main Content Area</h2>
+
+            </div>
+
+            <script
+                src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script>
+        function loadContent(page) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                document.getElementById("mainContent").innerHTML = xhr.responseText;
+                // Nếu cần thực thi các script trong nội dung mới
+                var scripts = document.getElementById("mainContent").getElementsByTagName("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    eval(scripts[i].innerText);
+                }
+            } else {
+                console.error("Error loading page: " + xhr.status);
+            }
+        }
+    };
+    xhr.open("GET", page, true);
+    xhr.send();
+}
+
+    </script>
+
+        </body>
+    </html>
