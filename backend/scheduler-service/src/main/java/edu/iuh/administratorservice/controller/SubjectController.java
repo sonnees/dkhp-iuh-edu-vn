@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/subject")
-@Controller
+@RestController
 @Slf4j
 public class SubjectController {
     private final SubjectRepository subjectRepository;

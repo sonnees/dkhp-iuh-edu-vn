@@ -35,22 +35,23 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http.authorizeExchange(
                         auth -> auth
-                                .pathMatchers("/api/v1/staff/create-administrator").hasAuthority("ADMIN")
-                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR","STUDENT")
+                                .pathMatchers("/v3/**","/swagger-ui/**", "/context-path/**","/webjars/**","/swagger-ui.html").permitAll()
+                                .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR", "STUDENT")
                 )
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .anonymous(Customizer.withDefaults())
-                .cors(customizer -> {
-                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowCredentials(true);
-                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:5500"));
-                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
-                    corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
-                    customizer.configurationSource(request -> corsConfiguration);
-                })
+//                .cors(customizer -> {
+//                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+//                    corsConfiguration.setAllowCredentials(true);
+//                    corsConfiguration.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
+//                    corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//                    corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+//                    customizer.configurationSource(request -> corsConfiguration);
+//                })
+                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .build();
     }

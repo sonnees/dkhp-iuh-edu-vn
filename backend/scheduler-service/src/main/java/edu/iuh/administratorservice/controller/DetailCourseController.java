@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/detail_course")
-@Controller
+@RestController
 @Slf4j
 public class DetailCourseController {
     private final DetailCourseRepository detailCourseRepository;
