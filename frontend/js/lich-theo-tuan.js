@@ -149,7 +149,7 @@ function setDay(date) {
 
 function fetchDate(start, end) {
     
-    const url = 'http://localhost:8084/api/v1/timetable/search-by-student-id';
+    const url = 'http://localhost:8080/api/v1/timetable/search-by-student-id';
 
     const data = { 
         "studentID": localStorage.getItem("studentID"),

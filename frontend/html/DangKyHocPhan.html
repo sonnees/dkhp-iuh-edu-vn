@@ -78,7 +78,6 @@
                 </div>
 
                 <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">MÔN HỌC PHẦN ĐANG CHỜ ĐĂNG KÝ</h1>
-
                 <div class="table-responsive">
                     <table id="subjectTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                         <thead>
@@ -97,13 +96,80 @@
                       </table>
                 </div>
 
-                <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">LỚP HỌC PHẦN CHỜ ĐĂNG KÝ</h1>
+                <!-- <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">LỚP HỌC PHẦN CHỜ ĐĂNG KÝ</h1>
+                <div class="table-responsive">
+                    <table id="awaitTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã lớp học</th>
+                                <th>Tên môn học</th>
+                                <th>Sĩ số</th>
+                                <th>Đã đăng ký</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
 
+                        <tbody>
+                            Dữ liệu từ API sẽ được thêm vào đây
+                        </tbody>
+                    </table>
+                </div> -->
 
                 <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">CHI TIẾT LỚP HỌC PHẦN</h1>
+                <div class="row justify-content-center py-3" >
+                    <label class="col-2" for="NHOM">Nhóm thực hành: </label>
+                    <select id="NHOM" name="NHOM" class="col-2 rounded-2">
+                        <option value=0 selected></option>
+                        <option value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                    </select>
+                </div>
+            
+                <div class="table-responsive">
+                    <table id="detailTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã lớp học</th>
+                                <th>Tên môn học</th>
+                                <th>Sĩ số</th>
+                                <th>Đã đăng ký</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- Dữ liệu từ API sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row justify-content-center" >
+                    <button class="py-1 rounded-2" style="background-color: #e3af5b; width: 25%;" onclick="submitDKMH()">Đăng ký môn học</button>
+                </div>
+
 
                 <h4 class="row fw-bolder fs-4 ps-3 pt-3 justify-content-center" style="color: #e3af5b; width: 100%;">LỚP HỌC PHẦN ĐÃ ĐĂNG KÝ TRONG KỲ NÀY</h1>
+                <div class="table-responsive">
+                    <table id="hpTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã môn học</th>
+                                <th>Tên môn học</th>
+                                <th>Số tín chỉ</th>
+                                <th>Học Phí</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
 
+                        <tbody>
+                            <!-- Dữ liệu từ API sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
 
 
             </div>

@@ -32,6 +32,8 @@ function fetchStudentID() {
         document.getElementById("address").innerHTML = json.address;
         document.getElementById("sdt").innerHTML = json.phoneNumber;
         document.getElementById("email").innerHTML = json.email;
+
+        localStorage.setItem("email", json.email);
     })
     .catch(error => {
         console.warn('There was a problem with the request:', error);
