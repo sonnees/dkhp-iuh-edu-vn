@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'edu.iuh'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 
 
 java {
@@ -33,3 +33,5 @@ tasks.named('test') {
 springBoot {
 	mainClass = 'edu.iuh.YourMainClass'
 }
+
+jar.enabled=false

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class AdministratorServiceApplication {
 
-
     public static void main(String[] args) {
         SpringApplication.run(AdministratorServiceApplication.class, args);
     }
