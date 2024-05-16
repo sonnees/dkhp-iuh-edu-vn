@@ -1,4 +1,4 @@
-package com.zalolite.eurekaserver;
+package edu.iuh.eurekaserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

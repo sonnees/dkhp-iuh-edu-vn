@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    image: eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  administrator-service:
+    image: administrator-service:latest
+    container_name: administrator-service
+    ports:
+      - "8082:8082"
+      - "9091:9091"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  authentication-service:
+    image: authentication-service:latest
+    container_name: authentication-server
+    ports:
+      - "8081:8081"
+      - "9090:9090"
+
+  scheduler-service:
+    image: scheduler-service:latest
+    container_name: scheduler-service
+    ports:
+      - "8083:8083"
+      - "9093:9093"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  student-service:
+    image: student-service:latest
+    container_name: student-server
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  notification-service:
+    image: notification-service:latest
+    container_name: notification-server
+    ports:
+      - "9092:9092"
+      - "8085:8085"
+
+  gateway-service:
+    image: gateway-service:latest
+    container_name: gateway-server
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/

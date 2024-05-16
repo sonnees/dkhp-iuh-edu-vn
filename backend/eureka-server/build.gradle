@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.zalolite'
+group = 'edu.iuh'
 version = '1.0.0'
 
 java {
@@ -41,3 +41,5 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+jar.enabled=false
