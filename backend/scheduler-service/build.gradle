@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'edu.iuh'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     sourceCompatibility = '17'
@@ -81,3 +81,5 @@ protobuf {
         }
     }
 }
+
+jar.enabled=false

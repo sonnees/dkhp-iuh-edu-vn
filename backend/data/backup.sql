@@ -39,10 +39,10 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.student_auth (
-    id bigint NOT NULL,
-    password character varying(255),
-    role smallint,
-    CONSTRAINT student_auth_role_check CHECK (((role >= 0) AND (role <= 3)))
+                                     id bigint NOT NULL,
+                                     password character varying(255),
+                                     role smallint,
+                                     CONSTRAINT student_auth_role_check CHECK (((role >= 0) AND (role <= 3)))
 );
 
 

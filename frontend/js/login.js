@@ -15,7 +15,10 @@ function submitLoginForm() {
                 localStorage.setItem("token", data.token);
                 window.location.href = "dashboard.html";
             } else {
+<<<<<<< HEAD
                 alert("Tài khoản hoặc mật khẩu không chính xác!")
+=======
+>>>>>>> origin
                 console.error('Token not received');
                 // Xử lý trường hợp không nhận được token
             }

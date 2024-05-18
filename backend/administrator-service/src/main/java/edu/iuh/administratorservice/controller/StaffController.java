@@ -37,7 +37,7 @@ public class StaffController {
     public Mono<ResponseEntity<String>> create(@RequestBody StaffCreateDTO info){
         log.info("### enter api.v1.staff.create.staff  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090)
+        ManagedChannel channel = ManagedChannelBuilder.forTarget("viaduct.proxy.rlwy.net:9090")
                 .usePlaintext()
                 .build();
 

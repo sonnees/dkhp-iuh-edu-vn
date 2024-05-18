@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý khoa</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+    </head>
+    <body>
+        <div id="navbarPlaceholder"></div>
+        <div id="sidebarPlaceholder"></div>
+
+        <div class="container" id="mainContent">
+            <div class="d-flex align-items-center mb-3">
+                <h2 class="mr-auto">Quản lý khoa</h2>
+                <div class="form-inline">
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Tìm kiếm...">
+                    <button type="button" class="btn btn-primary" id="searchButton">Search</button>
+                </div>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="nganhName">Nhập tên Khoa:</label>
+                    <input type="text" class="form-control" id="nganhName" placeholder="Tên khoa">
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên Khoa</th>
+                            <th></th> <!-- Cột mới chứa nút sửa -->
+                            <th></th> <!-- Cột mới chứa nút xóa -->
+                        </tr>
+                    </thead>
+                    <tbody id="nganhBody">
+                        <!-- Dữ liệu của bảng ngành sẽ được thêm sau bằng JavaScript -->
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-primary" id="actionButton">Submit</button>
+                <button type="button" class="btn btn-warning" id="editButton" disabled>Cập nhật</button>
+                <input type="hidden" id="editIndex" value>
+            </form>
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="/js/quanLyKhoa.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $(function(){
+                $("#navbarPlaceholder").load("./navbar.html");
+                // Load sidebar content using jQuery
+                $("#sidebarPlaceholder").load("./sidebar.html");
+            });
+        </script>
+    </body>
+</html>

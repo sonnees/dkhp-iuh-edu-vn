@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng thông tin nhân viên</title>
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet"
+        href="/css/dashboard_NhanVien.css">
+</head>
+<body>
+    <div id="navbarPlaceholder"></div>
+    <div id="sidebarPlaceholder"></div>
+
+    <div class="container" id="mainContent">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Quản lý lớp học</h2>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form id="classForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="classNameInput">Tên lớp:</label>
+                    <input type="text" class="form-control"
+                        id="classNameInput" placeholder="Nhập tên lớp">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="educationLevelInput">Bậc đào tạo:</label>
+                    <select class="form-control" id="educationLevelInput">
+                        <option value="COLLEGE">Cao đẳng</option>
+                        <option value="UNIVERSITY">Đại học</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="trainingTypeInput">Loại đào tạo:</label>
+                    <select class="form-control" id="trainingTypeInput">
+                        <option value="REGULAR">Chính quy</option>
+                        <option value="NON_REGULAR">Không chính quy</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="departmentInput">Khoa:</label>
+                    <select class="form-control" id="departmentInput">
+                        <!-- JavaScript sẽ thêm các tùy chọn khoa vào đây -->
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="classInput">Lớp học phần:</label>
+                    <select class="form-control" id="classInput">
+                        <!-- JavaScript sẽ thêm các tùy chọn lớp học phần vào đây -->
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" id="updateButton"
+                class="btn btn-success">Cập nhật</button>
+
+        </form>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên lớp</th>
+                    <th>Lớp học phần</th>
+                    <th>Bậc đào tạo</th>
+                    <th>Loại đào tạo</th>
+                    <th>Lớp học phần</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="classList">
+                <!-- Danh sách sinh viên sẽ được thêm vào đây -->
+            </tbody>
+        </table>
+    </div>
+    <script src="/js/quanLyLop.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $("#navbarPlaceholder").load("./navbar.html");
+            $("#sidebarPlaceholder").load("./sidebar.html");
+        });
+    </script>
+
+</body>
+</html>
