@@ -15,14 +15,14 @@ function submitLoginForm() {
                 localStorage.setItem("token", data.token);
                 window.location.href = "dashboard.html";
             } else {
-                
+                alert("Tài khoản hoặc mật khẩu không chính xác!")
                 console.error('Token not received');
                 // Xử lý trường hợp không nhận được token
             }
         })
         .catch(error => {
             // Xử lý lỗi nếu có
-            
+            alert("Tài khoản hoặc mật khẩu không chính xác!")
             console.error('Error:', error);
         });
 }
