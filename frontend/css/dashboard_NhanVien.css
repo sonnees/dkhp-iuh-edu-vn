@@ -1,0 +1,22 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 50px; /* height of navbar */
+    height: 100%;
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+.sidebar a {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+}
+/* Add shadow to navbar */
+.navbar {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+#mainContent {
+    margin-top: 100px;
+    margin-left: 300px; /* Change this value as needed */
+}
