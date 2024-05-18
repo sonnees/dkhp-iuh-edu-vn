@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng thông tin sinh viên</title>
+    <title>Kết quả học tập</title>
 
 
     <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/ket-qua-hoc-tap.css">
     <script src="https://kit.fontawesome.com/ba77084f0d.js" crossorigin="anonymous"></script>
+    <script src="/js/ket-qua-hoc-tap.js"></script>
     <script src="/js/dashboard.js"></script>
 
 </head>
@@ -58,14 +59,46 @@
             </div>
             <div class="col-md-9 bg-white" >
                 <div class="mt-3">
-                    <h4>Thông tin sinh viên</h4>
+                    <h4>Kết quả học tập</h4>
                     <hr>
-                    <p>MSSV: <span id="mssv"> </span></p>
-                    <p>Tên: <span id="name"> </span></p>
-                    <p>Giới tính: <span id="sex"> </span></p>
-                    <p>Địa chỉ: <span id="address"> </span></p>
-                    <p>SĐT: <span id="sdt"> </span></p>
-                    <p>Email: <span id="email"> </span></p>
+                    <div>
+                        <table id="scoreTable" class="fl-table table table-hover table-bordered text-center no-footer">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">STT</th>
+                                    <th rowspan="2">Mã lớp học phần</th>
+                                    <th rowspan="2">Tên môn học</th>
+                                    <th rowspan="2">Tín chỉ</th>
+                                    <th colspan="2">Giữa kỳ</th>
+                                    <th colspan="5">Thường xuyên(LT Hệ 1)</th>
+                                    <th colspan="3">Thực hành</th>
+                                    <th rowspan="2">Cuối kỳ</th>
+                                    <th rowspan="2">Điểm tổng kết</th>
+                                    <th rowspan="2">Thang điểm 4</th>
+                                    <th rowspan="2">Điểm chữ</th>
+                                    <th rowspan="2">Xếp loại</th>
+                                </tr>
+                                <tr>
+                                    <th>1</th>
+                                    <th>CC</th>
+                                    <!-- <th>LT Hệ số 1</th> -->
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Add your data rows here -->
+
+                            </tbody>
+                        </table>
+                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -21,14 +21,17 @@ function fetchCourseAll(semester) {
             case "semester1":
                 clearTable();
                 fetchCourse(json[0].id);
+                localStorage.setItem("semes", json[0].id);
                 break;
             case "semester2":
                 clearTable();
                 fetchCourse(json[1].id);
+                localStorage.setItem("semes", json[1].id);
                 break;
             case "semester3":
                 clearTable();
                 fetchCourse(json[2].id);
+                localStorage.setItem("semes", json[2].id);
                 break;
             default:
                 break;
@@ -40,14 +43,14 @@ function fetchCourseAll(semester) {
 }
 
 
-
 document.addEventListener("DOMContentLoaded", async () => {
     const semester = document.getElementById('semester');
     fetchCourseAll(semester.value);
-
     semester.addEventListener('change', (event) => {
         const selectedSemester = event.target.value;
+        console.log(selectedSemester);
         // console.log('Học kỳ đã chọn:', selectedSemester);
+        // localStorage.setItem("semes", selectedSemester);
         fetchCourseAll(selectedSemester);
         // Bạn có thể thực hiện các hành động khác ở đây
     });
@@ -157,23 +160,28 @@ const fetchCourse = async (semesterID) =>  {
         console.log(json);
 
         const ids = await fetchCourseIDs(localStorage.getItem("studentID"));
-        console.log(ids.semesters);
+        console.log(ids);
         const dataHp = ids.semesters;
 
         const tableBody = document.querySelector('#subjectTable tbody');
+        let listSubj = [];
+        listSubj = listArray(dataHp, semesterID);
+        // console.log(listSubj);
         let count = 0;
         json.forEach((data, index) => {
-        
-            if (ids.subjectIDs.includes(data.subject.id)) {
+            
+            if (ids.subjectIDs.includes(data.subject.id) && !listSubj.includes(data.subject.id)) {
                 let subject = data.subject;
                 const row = document.createElement('tr');
                 count+=1;
+                // <td>${data.status}</td>
                 row.innerHTML = `
                     <td>${count}</td>
                     <td>${data.id}</td>
+                    <td>${subject.id}</td>
                     <td>${subject.name}</td>
                     <td>${subject.creditUnits}</td>
-                    <td></td>
+                    <td>${subject.prerequisites!=null?JSON.stringify(subject.prerequisites):""}</td>
                     <td></td>
                 `;
 
@@ -203,7 +211,8 @@ const fetchCourse = async (semesterID) =>  {
         
             if (data.id==semesterID) {
                 let subjects = data.subjects;
-                
+
+                console.log(data);
 
                 subjects.forEach((subject, index) => {
                     const row = document.createElement('tr');
@@ -214,6 +223,9 @@ const fetchCourse = async (semesterID) =>  {
                         <td>${subject.creditUnits}</td>
                         <td></td>
                         <td></td>
+                        <td>
+                            <button type="button" onclick="deletaHP('${subject.id}', '${subject.registrationFormID}')" class="text-white rounded-2" style="background-color: #1da1f2;">Hủy</button>
+                        </td>
                     `;
 
                     row.addEventListener('click', (event) => {
@@ -241,13 +253,30 @@ const fetchCourse = async (semesterID) =>  {
     .catch(error => {
         console.error('There was a problem with the request:', error);
     });
-
-    
 }
+
+
 
 function clearTable() {
     const tbody = document.querySelector('#subjectTable tbody');
     tbody.innerHTML = '';
+}
+
+function listArray(array, semesterID)  {
+    let list = []
+    array.forEach((data) => {
+        if (data.id==semesterID) {
+            
+            data.subjects.forEach((data) => {
+                list.push(data.id)
+
+            })
+            // console.log(list);
+            return list;
+        }
+        return list;
+    })
+    return list;
 }
 
 
@@ -304,10 +333,7 @@ function submitDKMH() {
         return;
     }
 
-    
 
-
-    
     let data = {
         "gmail":"hieudong.dongthanh.02@gmail.com",
         // "gmail":localStorage.getItem("email"),
@@ -315,9 +341,6 @@ function submitDKMH() {
         "detailCourseIDs":groups,
         "groupNumber":nhom
     }
-
-
-    
 
     console.log(JSON.stringify(data));
 
@@ -344,4 +367,40 @@ function submitDKMH() {
         return ;
     })
     
+}
+
+const deletaHP = (subjID, formID) => {
+    let semester = localStorage.getItem("semes");
+
+    let data = {
+        "id":localStorage.getItem("studentID"),
+        "semesterID":semester,
+        "subjectID":subjID,
+        "registrationFormID":formID
+    }
+
+    console.log(JSON.stringify(data));
+
+    const url = 'http://localhost:8080/api/v1/registration-form/delete';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.status==409) {
+            alert('Hủy học phần không thành công')
+        }
+        if (response.status==400) {
+            alert('Hủy học phần không thành công')
+        }
+        if (response.status!=200) {
+            throw new Error('Network response was not ok');  
+        }
+        window.location.href = "DangKyHocPhan.html";
+        return ;
+    })
 }
