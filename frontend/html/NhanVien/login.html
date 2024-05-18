@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Cổng thông tin nhân viên</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/login_NhanVien.css">
+    <script src="/js/login_NhanVien.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container d-flex justify-content-center">
+        <a class="navbar-brand" href="login.html">
+            <img src="/img/band.png" alt="Banner" width="100" height="50" class="rounded-circle">
+            <div class="text-center">
+                <!-- Thêm class cho hai phần tử h5 -->
+                <h5 class="first-heading">TRƯỜNG ĐẠI HỌC CÔNG NGHIỆP TP. HỒ CHÍ MINH</h5>
+                <h5 class="second-heading">CỔNG THÔNG TIN NHÂN VIÊN</h5>
+            </div>
+        </a>
+    </div>
+</nav>
+  
+  <div class="login-container">
+    <div class="additional-info" style="margin-right: 30px;"> 
+      <div class="alert alert-info" role="alert">
+          <strong>Thông báo quan trọng!</strong> Để bảo mật thông tin cá nhân, vui lòng không chia sẻ tài khoản của bạn với bất kỳ ai. Ngoài ra, hãy đảm bảo rằng mật khẩu của bạn là mạnh và không dễ dàng đoán được.
+      </div>
+    </div>
+      <div class="login-form">
+          <h2 class="text-center">Đăng nhập</h2>
+          <form id="loginForm">
+              <div class="form-group">
+                  <label for="username">Tên đăng nhập</label>
+                  <input type="text" class="form-control" id="UserName" name="UserName" placeholder="Nhập mã nhân viên" required="required">
+                </div>
+              <div class="form-group">
+                  <label for="password">Mật khẩu</label>
+                  <input type="password" class="form-control" id="Password" name="Password" required placeholder="Nhập mật khẩu" required="required">
+              </div>
+              <button type="button" class="btn btn-primary btn-block" onclick="submitLoginForm()" value="Đăng nhập">Đăng nhập</button>
+          </form>
+      </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
