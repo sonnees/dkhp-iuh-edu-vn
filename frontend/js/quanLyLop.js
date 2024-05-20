@@ -83,9 +83,9 @@ function displayClasses() {
     classList.innerHTML = "";
     classes.forEach(function(classItem, index) {
         var department = departments.find(function(department) {
-            return department.id === classItem.departmentID;
+            return department.id === classItem.majorsID;
         });
-        var departmentName = department ? department.name : "N/A"; // Kiểm tra xem phần tử được tìm thấy hay không
+        var departmentName = department ? department.name : classItem.majorsID; // Kiểm tra xem phần tử được tìm thấy hay không
         var { type, mode } = getEducationType(classItem.typeOfEducation, classItem.modeOfEducation);
         var row = `
             <tr>
@@ -94,30 +94,27 @@ function displayClasses() {
                 <td>${departmentName}</td>
                 <td>${type}</td>
                 <td>${mode}</td>
-                <td>
-                    <button class="btn btn-info btn-edit" data-id="${classItem.id}">Sửa</button>
-                    <button class="btn btn-danger btn-delete" data-id="${classItem.id}">Xóa</button>
-                </td>
+                
             </tr>
         `;
         classList.insertAdjacentHTML("beforeend", row);
     });
 
-    var deleteButtons = document.querySelectorAll(".btn-delete");
-    deleteButtons.forEach(function(button) {
-        button.addEventListener("click", function() {
-            var classId = button.getAttribute("data-id");
-            deleteClass(classId);
-        });
-    });
+    // var deleteButtons = document.querySelectorAll(".btn-delete");
+    // deleteButtons.forEach(function(button) {
+    //     button.addEventListener("click", function() {
+    //         var classId = button.getAttribute("data-id");
+    //         deleteClass(classId);
+    //     });
+    // });
 
-    var editButtons = document.querySelectorAll(".btn-edit");
-    editButtons.forEach(function(button) {
-        button.addEventListener("click", function() {
-            var classId = button.getAttribute("data-id");
-            fillClassForm(classId);
-        });
-    });
+    // var editButtons = document.querySelectorAll(".btn-edit");
+    // editButtons.forEach(function(button) {
+    //     button.addEventListener("click", function() {
+    //         var classId = button.getAttribute("data-id");
+    //         fillClassForm(classId);
+    //     });
+    // });
 }
 
 function deleteClass(classId) {
@@ -143,31 +140,13 @@ document.addEventListener("DOMContentLoaded", fetchClasses);
 document.getElementById("classForm").addEventListener("submit", function(event) {
     event.preventDefault();
     var className = document.getElementById("classNameInput").value;
-    var majorID = document.getElementById("departmentInput").value;
-    var educationLevel = document.getElementById("educationLevelInput").value;
-    var trainingType = document.getElementById("trainingTypeInput").value;
+    var majorID = document.getElementById("majorInput").value;
+    // var educationLevel = document.getElementById("educationLevelInput").value;
+    // var trainingType = document.getElementById("trainingTypeInput").value;
     createClass(className, majorID);
     displayClasses();
     document.getElementById("classForm").reset();
 });
-
-document.getElementById("updateButton").addEventListener("click", function() {
-    var className = document.getElementById("classNameInput").value;
-    var majorID = document.getElementById("departmentInput").value;
-    var educationLevel = document.getElementById("educationLevelInput").value;
-    var trainingType = document.getElementById("trainingTypeInput").value;
-    var classIdToUpdate = document.getElementById("updateButton").getAttribute("data-id");
-    var classToUpdateIndex = classes.findIndex(function(classItem) {
-        return classItem.id === classIdToUpdate;
-    });
-    classes[classToUpdateIndex].name = className;
-    classes[classToUpdateIndex].majorsID = majorID;
-    classes[classToUpdateIndex].typeOfEducation = educationLevel;
-    classes[classToUpdateIndex].modeOfEducation = trainingType;
-    displayClasses();
-    document.getElementById("classForm").reset();
-});
-
 function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0,
@@ -202,5 +181,40 @@ function createClass(className, majorID) {
     })
     .catch(error => {
         console.error('Error creating class:', error);
+    });
+}
+document.getElementById("departmentInput").addEventListener("change", async function() {
+    var departmentID = this.value;
+    await fetchMajorsByDepartment(departmentID); // Sử dụng await để đảm bảo fetch hoàn tất trước khi tiếp tục
+});
+
+async function fetchMajorsByDepartment(departmentID) {
+    const url = 'http://localhost:8080/api/v1/majors/search-by-department-id?departmentID=' + departmentID;
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        populateMajorSelect(data);
+    } catch (error) {
+        console.error('There was a problem with the request:', error);
+    }
+}
+
+function populateMajorSelect(majors) {
+    const majorSelect = document.getElementById("majorInput");
+    majorSelect.innerHTML = ""; // Xóa tất cả các tùy chọn hiện có
+    majors.forEach(major => {
+        const option = document.createElement("option");
+        option.value = major.id;
+        option.text = major.name;
+        majorSelect.appendChild(option);
     });
 }

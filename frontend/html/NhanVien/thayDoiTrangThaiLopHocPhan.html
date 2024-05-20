@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng thông tin nhân viên</title>
+    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+</head>
+<body>
+    <div id="navbarPlaceholder"></div>
+    <div id="sidebarPlaceholder"></div>
+
+    <div class="container" id="mainContent">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Thay đổi trạng thái lớp học phần</h2>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm" id="searchInput">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="selectYear">Năm: </label>
+                <select class="form-control" id="selectYear">
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="semesterInput">Học kì: </label>
+                <select class="form-control" id="semesterInput"></select>
+            </div>
+            <div class="form-group col-md-6 ">
+                <label for="statusInput">Chọn ngày kết thúc đăng ký học phần: </label>
+            </div>
+        </div>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên lớp</th>
+                    <th>Số tín chỉ</th>
+                    <th>Học phí</th>
+                    <th>Học kì</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody id="courseList">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/thayDoiTrangThaiLopHocPhan.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script>
+        $(function(){
+            $("#navbarPlaceholder").load("./navbar.html");
+            $("#sidebarPlaceholder").load("./sidebar.html");
+        });
+    </script>
+</body>
+</html>
