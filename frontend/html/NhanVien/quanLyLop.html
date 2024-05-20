@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng thông tin nhân viên</title>
+    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
     <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet"
@@ -22,7 +23,7 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm" id="input">
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="button">Tìm kiếm</button>
                     </div>
@@ -36,7 +37,7 @@
                     <input type="text" class="form-control"
                         id="classNameInput" placeholder="Nhập tên lớp">
                 </div>
-                <div class="form-group col-md-3">
+                <!-- <div class="form-group col-md-3">
                     <label for="educationLevelInput">Bậc đào tạo:</label>
                     <select class="form-control" id="educationLevelInput">
                         <option value="COLLEGE">Cao đẳng</option>
@@ -49,7 +50,7 @@
                         <option value="REGULAR">Chính quy</option>
                         <option value="NON_REGULAR">Không chính quy</option>
                     </select>
-                </div>
+                </div> -->
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -59,16 +60,13 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="classInput">Lớp học phần:</label>
-                    <select class="form-control" id="classInput">
+                    <label for="majorInput">Ngành :</label>
+                    <select class="form-control" id="majorInput">
                         <!-- JavaScript sẽ thêm các tùy chọn lớp học phần vào đây -->
                     </select>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" id="updateButton"
-                class="btn btn-success">Cập nhật</button>
-
         </form>
         <br>
         <table class="table">
@@ -76,11 +74,10 @@
                 <tr>
                     <th>STT</th>
                     <th>Tên lớp</th>
-                    <th>Lớp học phần</th>
+                    <th>Mã Ngành</th>
                     <th>Bậc đào tạo</th>
                     <th>Loại đào tạo</th>
-                    <th>Lớp học phần</th>
-                    <th>Hành động</th>
+                    <!-- <th>Hành động</th> -->
                 </tr>
             </thead>
             <tbody id="classList">
