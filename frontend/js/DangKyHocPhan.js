@@ -414,8 +414,8 @@ function submitDKMH() {
 
 
     let data = {
-        "gmail":"hieudong.dongthanh.02@gmail.com",
-        // "gmail":localStorage.getItem("email"),
+        // "gmail":"hieudong.dongthanh.02@gmail.com",
+        "gmail":localStorage.getItem("email"),
         "studentID":localStorage.getItem("studentID"),
         "detailCourseIDs":groups,
         "groupNumber":nhom
