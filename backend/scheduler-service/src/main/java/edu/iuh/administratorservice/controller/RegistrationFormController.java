@@ -200,6 +200,20 @@ public class RegistrationFormController {
                 });
     }
 
+    @PostMapping("/search")
+    public Mono<ResponseEntity<String>> search(@RequestParam UUID id){
+        log.info("### enter api.v1.search ###");
+        log.info("# id: {} #", id);
+        return registrationFormRepository.findById(id)
+                .flatMap(registrationForm -> {
+                    return Mono.just(ResponseEntity.ok(jsonConverter.objToString(registrationForm)));
+                })
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
 
 
 }
