@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng thông tin nhân viên</title>
+    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet"
+        href="/css/dashboard_NhanVien.css">
+</head>
+<body>
+    <div id="navbarPlaceholder"></div>
+    <div id="sidebarPlaceholder"></div>
+    <div class="container" id="mainContent">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Quản lý nhân viên</h2>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm tên nhân viên" id="searchInput">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employeeName">Tên nhân viên:</label>
+                    <input type="text" class="form-control" id="employeeName" placeholder="Nhập tên nhân viên" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="departmentInput">Khoa:</label>
+                    <select class="form-control" id="departmentInput">
+                        <!-- Thêm các options vào đây -->
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên nhân viên</th>
+                    <th>Khoa</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="staffTable">
+                <!-- Dữ liệu của bảng môn học bắt buộc sẽ được thêm sau bằng JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <script src="/js/quanLyNhanVien.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $("#navbarPlaceholder").load("./navbar.html");
+            $("#sidebarPlaceholder").load("./sidebar.html");
+        });
+    </script>
+</body>
+</html>

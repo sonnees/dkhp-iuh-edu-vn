@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng thông tin nhân viên</title>
+    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbarPlaceholder"></div>
+    <div id="sidebarPlaceholder"></div>
+
+    <div class="container" id="mainContent">
+        <div class="container mt-5">
+            <h2>Thêm sinh viên vào lớp học</h2>
+            <br>
+            <h3>Danh sách sinh viên</h3>
+            <input type="file" id="importBtn" accept=".xlsx">
+            <p id="filePath" style="margin-top: 10px;"></p> <!-- Thêm phần tử để hiển thị đường dẫn -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <div id="tableContainer"></div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+    <script>
+        $(function(){
+            var selectedFile = null;
+
+            $("#navbarPlaceholder").load("./navbar.html");
+            $("#sidebarPlaceholder").load("./sidebar.html");
+
+            $("#importBtn").change(function() {
+                var file = this.files[0];
+                selectedFile = file; // Lưu tệp tin đã chọn
+                var reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    var data = new Uint8Array(event.target.result);
+                    var workbook = XLSX.read(data, {type: 'array'});
+                    var sheet_name_list = workbook.SheetNames;
+                    var sheet_name = sheet_name_list[0];
+                    var worksheet = workbook.Sheets[sheet_name];
+                    var html = XLSX.utils.sheet_to_html(worksheet);
+                    $('#tableContainer').html(html);
+                };
+
+                reader.readAsArrayBuffer(file);
+
+                // Cập nhật phần tử hiển thị đường dẫn
+                var filePath = $(this).val(); // Lấy đường dẫn tệp tin đã chọn
+                var modifiedFilePath = filePath.replace(/\\/g, '\\\\'); // Thay thế ký tự '\'
+                // $("#filePath").text("Đường dẫn tệp tin: " + modifiedFilePath);// Lấy đường dẫn tệp tin đã chọn
+                console.log('>>>>>',selectedFile);
+                // $("#filePath").text("Đường dẫn tệp tin: " + filePath);
+            });
+
+            $("button.btn-primary").click(function() {
+                if (!selectedFile) {
+                    alert('Vui lòng chọn một file.');
+                    return;
+                }
+
+                fetch('http://localhost:8080/api/v1/classes/create-students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({ fileName: 'D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\data\\student_k16.xlsx' })
+                    // body: JSON.stringify({ fileName: modifiedFilePath })
+
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Thêm danh sách sinh viên Thất bại');
+                    }
+                    // return response.json();
+                })
+                .then(data => {
+                    alert('Thêm danh sách sinh viên thành công!');
+                })
+                .catch(error => {
+                    console.error('Error creating course:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

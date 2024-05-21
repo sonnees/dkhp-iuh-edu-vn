@@ -75,28 +75,26 @@ public class AcademicResultsController {
         log.info("### enter api.v1.academic-results.update-score  ###");
         log.info("# infos: {} #", infos);
         return Flux.fromIterable(infos)
-                .flatMap(dto -> {
-                    return academicResultsRepository.findBySemesterIDAndSubjectID(dto.getId(),dto.getSemesterID(),dto.getSubjectID())
-                            .flatMap(academicResults -> {
-                                AtomicReference<List<Subject>> list = new AtomicReference<>(new ArrayList<>());
-                                academicResults.getSemesters().forEach(semester -> {
-                                    if (semester.getId().equals(dto.getSemesterID())){
-                                        List<Subject> subjects = semester.getSubjects();
-                                        subjects.forEach(subject -> {
-                                            if(subject.getId().equals(dto.getSubjectID())){
-                                                subject.setTheoryScore(dto.getTheoryScore());
-                                                subject.setPracticalScore(dto.getPracticalScore());
-                                                subject.setMidtermScore(dto.getMidtermScore());
-                                                subject.setFinalScore(dto.getFinalScore());
-                                                list.set(subjects);
-                                            }
-                                        });
-                                    }
-                                });
-                                return academicResultsRepository.updateScore(dto.getId(), dto.getSemesterID(), dto.getSubjectID(), list.get())
-                                        .flatMap(aLong -> Mono.empty());
+                .flatMap(dto -> academicResultsRepository.findBySemesterIDAndSubjectID(dto.getId(),dto.getSemesterID(),dto.getSubjectID())
+                        .flatMap(academicResults -> {
+                            AtomicReference<List<Subject>> list = new AtomicReference<>(new ArrayList<>());
+                            academicResults.getSemesters().forEach(semester -> {
+                                if (semester.getId().equals(dto.getSemesterID())){
+                                    List<Subject> subjects = semester.getSubjects();
+                                    subjects.forEach(subject -> {
+                                        if(subject.getId().equals(dto.getSubjectID())){
+                                            subject.setTheoryScore(dto.getTheoryScore());
+                                            subject.setPracticalScore(dto.getPracticalScore());
+                                            subject.setMidtermScore(dto.getMidtermScore());
+                                            subject.setFinalScore(dto.getFinalScore());
+                                            list.set(subjects);
+                                        }
+                                    });
+                                }
                             });
-                }).then(Mono.just(ResponseEntity.ok("Success")))
+                            return academicResultsRepository.updateScore(dto.getId(), dto.getSemesterID(), dto.getSubjectID(), list.get())
+                                    .flatMap(aLong -> Mono.empty());
+                        })).then(Mono.just(ResponseEntity.ok("Success")))
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));
