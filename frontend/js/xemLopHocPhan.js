@@ -110,7 +110,25 @@ function updateCourseTable(courses) {
         courseList.appendChild(row);
     });
 }
-
+// function updateCourseTable(courses) {
+//     const courseList = document.getElementById('courseList');
+//     courseList.innerHTML = '';
+//     courses.forEach((course, index) => {
+//         const row = document.createElement('tr');
+//         row.innerHTML = `
+//             <td>${index + 1}</td>
+//             <td>${course.subject.name}</td>
+//             <td>${course.subject.creditUnits}</td>
+//             <td>${course.tuitionFee}</td>
+//             <td>Học kì ${course.semester.semesterNumber} năm ${course.semester.year}</td>
+//             <td>${mapStatus(course.status)}</td>
+//             <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
+//             <td><button class="btn btn-primary" onclick="openChangeStatus('${course.id}')">Đổi trạng thái</button></td>
+//             <td><button class="btn btn-primary" onclick="openGradeModal('${course.id}','${course.subject.name}')">Nhập điểm</button></td>
+//         `;
+//         courseList.appendChild(row);
+//     });
+// }
 document.getElementById('selectYear').addEventListener('change', function() {
     var selectedYear = this.value;
     fetchSemestersByYear(selectedYear);
@@ -295,9 +313,85 @@ function displayCourseDetailModal(courseDetail) {
     // Hiển thị modal
     $('#detailModal').modal('show');
 }
+document.getElementById('btnStatus').addEventListener('click', function() {
+    var selectedSemester = document.getElementById('semesterInput');
+    var selectedSemesterText = selectedSemester.options[selectedSemester.selectedIndex].text;
+    var selectedStatus = document.getElementById('statusInput');
+    var selectedStatusText = selectedStatus.options[selectedStatus.selectedIndex].text;
 
+    var modalMessage = `Bạn có chắc muốn đổi các lớp học phần của ${selectedSemesterText} sang trạng thái ${selectedStatusText}?`;
+    document.getElementById('statusModalMessage').textContent = modalMessage;
 
+    $('#statusModal').modal('show');
+});
+document.getElementById('confirmStatusButton').addEventListener('click', function() {
+    var selectedSemester = document.getElementById('semesterInput').value;
+    var selectedStatus = document.getElementById('statusInput').value;
 
+    const url = `http://localhost:8080/api/v1/course/change-status-by-semester-id?semesterID=${selectedSemester}&status=${selectedStatus}`;
 
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Không thể cập nhật trạng thái.');
+        }
+        // return response.json();
+    })
+    .then(data => {
+        alert('Đổi trạng thái thành công!');
+        $('#statusModal').modal('hide');
+        // Cập nhật lại danh sách các khóa học nếu cần
+        fetchCoursesBySemesterId(selectedSemester);
+    })
+    .catch(error => {
+        console.error('Lỗi khi cập nhật trạng thái:', error);
+    });
+});
+selectedCourseToChangeStatus=null
+function openChangeStatus(courseID) {
+    selectedCourseToChangeStatus = courseID;
+    $('#changeStatusModal').modal('show');
+}
+document.getElementById('confirmChangeStatusButton').addEventListener('click', function() {
+    var selectedStatus = document.querySelector('input[name="statusOptions"]:checked');
+    if (!selectedStatus) {
+        alert('Vui lòng chọn một trạng thái.');
+        return;
+    }
 
+    var statusValue = selectedStatus.value;
+    console.log("status>>",statusValue);
+    console.log("couseID >>",selectedCourseToChangeStatus);
 
+    const url = `http://localhost:8080/api/v1/course/change-status-by-id?id=${selectedCourseToChangeStatus}&status=${statusValue}`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Không thể cập nhật trạng thái.');
+        }
+        // return response.json();
+    })
+    .then(data => {
+        alert('Đổi trạng thái thành công!');
+        $('#changeStatusModal').modal('hide');
+        // Cập nhật lại danh sách các khóa học nếu cần
+        var selectedSemesterId = document.getElementById('semesterInput').value;
+        fetchCoursesBySemesterId(selectedSemesterId);
+    })
+    .catch(error => {
+        console.error('Lỗi khi cập nhật trạng thái:', error);
+    });
+});
