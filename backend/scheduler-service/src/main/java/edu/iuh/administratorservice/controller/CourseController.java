@@ -6,12 +6,14 @@ import edu.iuh.administratorservice.enums.Status;
 import edu.iuh.administratorservice.repository.*;
 import edu.iuh.administratorservice.serialization.ExcelFileHandle;
 import edu.iuh.administratorservice.serialization.JsonConverter;
+import edu.iuh.administratorservice.serialization.SaveFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -34,8 +36,9 @@ public class CourseController {
     private final WebClient.Builder builder;
     private final ExcelFileHandle excelFileHandle;
     private final InsertDetailCourseAsync insertDetailCourseAsync;
+    private final SaveFile saveFile;
 
-    public CourseController(CourseRepository courseRepository, SemesterRepository semesterRepository, SubjectRepository subjectRepository, StudentRepository studentRepository, DetailCourseRepository detailCourseRepository, RegistrationFormRepository registrationFormRepository, JsonConverter jsonConverter, WebClient.Builder builder, ExcelFileHandle excelFileHandle, InsertDetailCourseAsync insertDetailCourseAsync) {
+    public CourseController(CourseRepository courseRepository, SemesterRepository semesterRepository, SubjectRepository subjectRepository, StudentRepository studentRepository, DetailCourseRepository detailCourseRepository, RegistrationFormRepository registrationFormRepository, JsonConverter jsonConverter, WebClient.Builder builder, ExcelFileHandle excelFileHandle, InsertDetailCourseAsync insertDetailCourseAsync, SaveFile saveFile) {
         this.courseRepository = courseRepository;
         this.semesterRepository = semesterRepository;
         this.subjectRepository = subjectRepository;
@@ -46,10 +49,15 @@ public class CourseController {
         this.builder = builder;
         this.excelFileHandle = excelFileHandle;
         this.insertDetailCourseAsync = insertDetailCourseAsync;
+        this.saveFile = saveFile;
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody FileNameDTO info) {
+    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestParam("file") MultipartFile file) {
+        String path = saveFile.saveFile(file);
+        if(path.isEmpty()) return Mono.just(ResponseEntity.status(500).body("Error file"));
+        FileNameDTO info = new FileNameDTO();
+        info.setFileName(path);
         log.info("### enter api.v1.course.create  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
         List<CourseCreateDTO> infos = excelFileHandle.toCourseCreate(info.getFileName());
@@ -238,8 +246,8 @@ public class CourseController {
     }
 
     @PostMapping("/update-score")
-    public Mono<ResponseEntity<String>> updateScore(ServerWebExchange exchange, @RequestBody CourseUpdateScoreDTO info){
-        log.info("### enter api.v1.course.update-score ###");
+    public Mono<ResponseEntity<String>> updateScoreURL(ServerWebExchange exchange, @RequestBody CourseUpdateScoreDTO info){
+        log.info("### enter api.v1.course.update-score.url ###");
         log.info("# info: {} #", info);
         WebClient webClient = builder.build();
         return  courseRepository.findById(info.getCourseID())
