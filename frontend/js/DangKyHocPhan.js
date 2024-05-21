@@ -43,6 +43,8 @@ function fetchCourseAll(semester) {
 }
 
 
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     const semester = document.getElementById('semester');
     fetchCourseAll(semester.value);
@@ -137,6 +139,7 @@ const fetchDetailCourse = async (id, name) => {
     });
 }
 
+var stc = 0;
 
 const fetchCourse = async (semesterID) =>  {
     const url = 'http://localhost:8080/api/v1/course/search-by-semester-id?semesterID='+semesterID;
@@ -161,7 +164,22 @@ const fetchCourse = async (semesterID) =>  {
 
         const ids = await fetchCourseIDs(localStorage.getItem("studentID"));
         console.log(ids);
+
         const dataHp = ids.semesters;
+
+        
+        dataHp.forEach((data) => {
+            // console.log(data);
+            if (data.id==semesterID) {
+                data.subjects.forEach((sub) => {
+                    stc += sub.creditUnits;
+                    // console.log(sub);
+                    console.log(stc);
+                })
+            }
+        })
+
+        
 
         const tableBody = document.querySelector('#subjectTable tbody');
         let listSubj = [];
@@ -212,7 +230,7 @@ const fetchCourse = async (semesterID) =>  {
             if (data.id==semesterID) {
                 let subjects = data.subjects;
 
-                console.log(data);
+                // console.log(data);
 
                 subjects.forEach((subject, index) => {
                     const row = document.createElement('tr');
@@ -311,11 +329,20 @@ const fetchCourseIDs = async (studentID) => {
 
 
 function submitDKMH() {
+    if (stc > 28) {
+        alert("Số tín chỉ đã đăng ký không quá 30");
+        return;
+    }
+    
     let nhom = Number(document.getElementById('NHOM').value);
 
     let groups = [];
     let table = document.querySelector('#detailTable tbody');
     const allRows = table.querySelectorAll('tr');
+
+    console.log(allRows.length);
+
+
 
 
     allRows.forEach((row, index) => {
@@ -328,10 +355,21 @@ function submitDKMH() {
         
     });
 
-    if (groups.length==0) {
-        alert('Chưa chọn môn hoặc nhóm thực hành!');
-        return;
+    if (allRows.length!=1) {
+        if (groups.length==0) {
+            alert('Chưa chọn môn hoặc nhóm thực hành!');
+            return;
+        }
+    } else if (allRows.length==1) {
+        if (groups.length==0) {
+            alert('Chưa chọn lớp!');
+            return;
+        }
     }
+
+    console.log(groups);
+
+    
 
 
     let data = {
