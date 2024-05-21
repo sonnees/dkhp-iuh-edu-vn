@@ -65,10 +65,12 @@ public class RegistrationFormController {
                 )
                 .collectList()
                 .flatMap(list -> {
-                    if(list.get(1)<=0 && list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
-                    if(list.get(1)<=0 && list.get(0)>0) {
+                    if(list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
+                    else if (list.size()>1) {
+                        if (list.get(1)<=0) {
                         return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[1])
                                 .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
+                        }
                     }
 
                     ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9092)
@@ -112,6 +114,7 @@ public class RegistrationFormController {
 
                 })
                 .flatMap(registrationForm -> {
+                    log.info("13");
                     StudentAppendSubjectDTO dto = new StudentAppendSubjectDTO(info.getStudentID(), registrationForm.getCourse().getSemester().getId(), new Subject2(registrationForm));
                     return studentRepository.findBySemesterID(dto.getId(), dto.getSemesterID())
                             .flatMap(student -> studentRepository.appendSubject(dto.getId(),dto.getSemesterID(),dto.getSubject())
