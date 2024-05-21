@@ -19,7 +19,6 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
@@ -68,7 +67,7 @@ public class RegistrationFormController {
                     if(list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
                     else if (list.size()>1) {
                         if (list.get(1)<=0) {
-                        return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[1])
+                        return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[0])
                                 .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
                         }
                     }
