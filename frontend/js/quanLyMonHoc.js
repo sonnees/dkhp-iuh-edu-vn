@@ -232,3 +232,8 @@ function spaceInput() {
     document.getElementById('prerequisiteCheckbox').checked = false;
     document.getElementById('majorSelect').style.display = "none";
 }
+document.getElementById('searchCourseInput').addEventListener('input', function(event) {
+    const keyword = event.target.value.toLowerCase();
+    const filteredSubjects = subjects.filter(subject => subject.name.toLowerCase().includes(keyword));
+    displayCourseList(filteredSubjects);
+});

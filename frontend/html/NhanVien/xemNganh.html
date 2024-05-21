@@ -4,18 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng thông tin nhân viên</title>
+    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
     <style>
+        /* CSS cho các thành phần */
         .search-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
+
         .search-container .form-control {
-            flex: 1;
             margin-right: 10px;
+        }
+
+        /* CSS cho nút Search */
+        #searchButton {
+            padding: 8px 20px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -24,27 +32,10 @@
     <div id="sidebarPlaceholder"></div>
 
     <div class="container" id="mainContent">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Quản lý Ngành</h2>
-            </div>
-            <div class="col-md-6">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex align-items-center mb-3">
+            <h2 class="mr-auto">Xem danh sách các ngành</h2>
         </div>
-
         <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="majorNameInput">Tên ngành:</label>
-                    <input type="text" class="form-control" id="majorNameInput" placeholder="Nhập tên ngành">
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="departmentInput">Khoa:</label>
@@ -54,136 +45,85 @@
                 </div>
             </div>
         </div>
-
-        <!-- Button để hiển thị modal -->
+        <!-- Nơi hiển thị danh sách các ngành -->
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-primary" id="showFormButton" data-toggle="modal" data-target="#monHocModal">Hiển thị Form Môn Học</button>
-            </div>
-        </div>
-        <!-- Bảng Môn học bắt buộc -->
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Môn học bắt buộc</h3>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm môn học bắt buộc">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
-                </div>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Tên môn học</th>
-                            <th>Số tín chỉ</th>
-                            <th>Số tiết lý thuyết</th>
-                            <th>Số tiết thực hành</th>
-                            <th>Môn tiên quyết</th>
+                            <th>Tên ngành</th>
+                            <th>Khoa</th>
+                            <th></th>
+
                         </tr>
                     </thead>
-                    <tbody id="monHocBatBuocTable">
-                        <!-- Thông tin về môn học bắt buộc sẽ được thêm vào đây -->
+                    <tbody id="majorList">
+                        <!-- Dữ liệu ngành sẽ được thêm bằng JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Bảng Môn học tự chọn -->
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Môn học tự chọn</h3>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm môn học tự chọn">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
+        <div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="subjectModalLabel">Thông tin Môn học</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên môn học</th>
-                            <th>Số tín chỉ</th>
-                            <th>Số tiết lý thuyết</th>
-                            <th>Số tiết thực hành</th>
-                            <th>Môn tiên quyết</th>
-                        </tr>
-                    </thead>
-                    <tbody id="monHocTuChonTable">
-                        <!-- Thông tin về môn học tự chọn sẽ được thêm vào đây -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal cho Form Môn học -->
-    <div class="modal fade" id="monHocModal" tabindex="-1" role="dialog" aria-labelledby="monHocModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="monHocModalLabel">Form Môn Học</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3 search-container">
-                        <input type="text" class="form-control" id="searchSubjectInput" placeholder="Tìm kiếm môn học">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">Tìm kiếm</button>
-                            <button class="btn btn-success ml-2" type="button" id="addSubjectButton" data-toggle="modal" data-target="#addToClassModal">Thêm</button>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="subjectName">Tên ngành:</label>
+                            <input type="text" class="form-control" id="subjectName" readonly>
                         </div>
+                        <div class="form-group">
+                            <label for="departmentName">Khoa:</label>
+                            <input type="text" class="form-control" id="departmentName" readonly>
+                        </div>
+                        <h5>Môn học bắt buộc</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên môn học</th>
+                                    <th>Số tín chỉ</th>
+                                    <th>Số tiết lý thuyết</th>
+                                    <th>Số tiết thực hành</th>
+                                    <th>Môn tiên quyết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requiredSubjectsTable">
+                                <!-- Thông tin về môn học bắt buộc sẽ được thêm vào đây -->
+                            </tbody>
+                        </table>
+                        <h5>Môn học tự chọn</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên môn học</th>
+                                    <th>Số tín chỉ</th>
+                                    <th>Số tiết lý thuyết</th>
+                                    <th>Số tiết thực hành</th>
+                                    <th>Môn tiên quyết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="optionalSubjectsTable">
+                                <!-- Thông tin về môn học tự chọn sẽ được thêm vào đây -->
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="selectedSubjectsContainer" class="mb-3">
-                        <!-- Các nút chứa tên môn học được chọn sẽ hiển thị ở đây -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>STT</th>
-                                <th>Tên môn học</th>
-                                <th>Số tín chỉ</th>
-                                <th>Số tiết lý thuyết</th>
-                                <th>Số tiết thực hành</th>
-                                <th>Môn tiên quyết</th>
-                                <th>Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monHocTable">
-                            <!-- Thông tin về môn học sẽ được thêm vào đây -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
+        
     </div>
-
-    <!-- Modal xác nhận thêm môn học -->
-    <div class="modal fade" id="addToClassModal" tabindex="-1" role="dialog" aria-labelledby="addToClassModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addToClassModalLabel">Thêm vào lớp học</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Bạn muốn thêm các môn học đã chọn vào:</p>
-                    <button type="button" class="btn btn-primary" id="addToMandatory">Lớp học bắt buộc</button>
-                    <button type="button" class="btn btn-secondary" id="addToOptional">Lớp học tự chọn</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/js/quanLyNganh.js"></script>
+    <script src="/js/xemNganh.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -191,7 +131,9 @@
         $(function() {
             $("#navbarPlaceholder").load("./navbar.html");
             $("#sidebarPlaceholder").load("./sidebar.html");
+
         });
+
     </script>
 </body>
 </html>
