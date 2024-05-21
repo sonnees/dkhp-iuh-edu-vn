@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký học phần</title>
+    
 
 
-    <link rel="shortcut icon" href="https://media.iuh.edu.vn/Media/2_sviuh/Images/icon65d669c1-0-e.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   
     <link rel="stylesheet" href="/css/DangKyHocPhan.css">
+    <link rel="stylesheet" href="/css/toast.css">
+
     <script src="https://kit.fontawesome.com/ba77084f0d.js" crossorigin="anonymous"></script>
     <script src="/js/DangKyHocPhan.js"></script>
     <script src="/js/dashboard.js"></script>
 
 </head>
 <body style="background-color: #e8ecf4;">
+    <div id="toast"></div>
     <header class="bg-white border-bottom border-2 shadow-sm">
         <div class="container">
             <div class="row align-items-center py-1">
@@ -82,13 +87,13 @@
                     <table id="subjectTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                         <thead>
                           <tr>
-                            <th>STT</th>
-                            <th>Mã lớp học</th>
-                            <th>Mã môn học</th>
-                            <th>Tên môn học</th>
-                            <th>Số tín chỉ</th>
-                            <th>Tiên quyết</th>
-                            <th>Trạng thái</th>
+                            <th class="center-content">STT</th>
+                            <th class="center-content">Mã lớp học</th>
+                            <th class="center-content">Tên môn học</th>
+                            <th class="center-content">Số tín chỉ</th>
+                            <th class="center-content">Sĩ số</th>
+                            <th class="center-content">Tiên quyết</th>
+                            <th class="center-content">Trạng thái</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -132,12 +137,12 @@
                     <table id="detailTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                         <thead>
                             <tr>
-                                <th>STT</th>
-                                <th>Mã lớp học</th>
-                                <th>Tên môn học</th>
-                                <th>Sĩ số</th>
-                                <th>Đã đăng ký</th>
-                                <th>Trạng thái</th>
+                                <th class="center-content">STT</th>
+                                <th class="center-content">Lịch học</th>
+                                <th class="center-content">Nhóm</th>
+                                <th class="center-content">Phòng</th>
+                                <th class="center-content">Giảng viên</th>
+                                <th class="center-content">Thời gian</th>
                             </tr>
                         </thead>
 
@@ -148,7 +153,7 @@
                 </div>
 
                 <div class="row justify-content-center" >
-                    <button class="py-1 rounded-2" style="background-color: #e3af5b; width: 25%;" onclick="submitDKMH()">Đăng ký môn học</button>
+                    <button class="py-1 rounded-2" style="background-color: #e3af5b; width: 25%; " onclick="submitDKMH()">Đăng Ký Môn Học</button>
                 </div>
 
 
@@ -157,13 +162,12 @@
                     <table id="hpTable" class="fl-table table table-hover table-bordered text-center no-footer dtr-inline" width="100%" role="grid">
                         <thead>
                             <tr>
-                                <th>STT</th>
-                                <th>Mã môn học</th>
-                                <th>Tên môn học</th>
-                                <th>Số tín chỉ</th>
-                                <th>Học Phí</th>
-                                <th>Trạng thái</th>
-                                <th>Hủy HP</th>
+                                <th class="center-content">Mã DKLHP</th>
+                                <th class="center-content">Tên môn học</th>
+                                <th class="center-content">Số tín chỉ</th>
+                                <th class="center-content">Học Phí</th>
+                                <th class="center-content">Trạng thái</th>
+                                <th class="center-content">Tùy chọn</th>
                             </tr>
                         </thead>
 
