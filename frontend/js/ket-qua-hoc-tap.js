@@ -38,25 +38,59 @@ const fetchAcademicResults = async () => {
 
             subj.forEach((data, index)=> {
                 const row = document.createElement('tr');
+                let kq = 0;
+                let score4=0;
+                let score = "";
+                if (data.theoryScore != null) {
+                    let TBC = data.midtermScore * 0.3 + data.finalScore*0.5  + (data.theoryScore[0] + data.theoryScore[1] + data.theoryScore[2])/3*0.2;
+                    if (data.theoryScore != null && data.practicalScore == null) {
+                        kq = TBC
+                    } else if (data.theoryScore != null && data.practicalScore != null) {
+                        kq = (TBC*2 + (data.practicalScore[0] + data.practicalScore[1] + data.practicalScore[2])/3*1)/3
+                    }
+
+                    
+                    if (kq >= 9 && kq <= 10) {
+                        score4 = 4.0;
+                        score = "A+";
+                    } else if (kq >= 8 && kq < 9) {
+                        score4 = 3.5;
+                        score = "A";
+                    } else if (kq >= 7 && kq < 8) {
+                        score4 = 3.0;
+                        score = "B+";
+                    } else if (kq >= 6 && kq < 7) {
+                        score4 = 2.5;
+                        score = "B";
+                    } else if (kq >= 5 && kq < 6) {
+                        score4 = 2.0;
+                        score = "C";
+                    } else if (kq >= 4 && kq < 5) {
+                        score4 = 1.5;
+                        score = "D";
+                    } else if (kq >= 0 && kq < 4) {
+                        score4 = 0;
+                        score = "F";
+                    } else {
+                        score4 = 'Điểm không hợp lệ';
+                    }
+                }
                 row.innerHTML = `
                     <td>${index+1}</td>
                     <td >${data.id}</td>
                     <td>${data.subjectName}</td>
                     <td>${data.creditUnits}</td>
                     <td>${data.midtermScore}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>${data.theoryScore != null ? data.theoryScore[0] : ""}</td>
+                    <td>${data.theoryScore != null ? data.theoryScore[1] : ""}</td>
+                    <td>${data.theoryScore != null ? data.theoryScore[2] : ""}</td>
+                    <td>${data.practicalScore != null ? data.practicalScore[0] : ""}</td>
+                    <td>${data.practicalScore != null ? data.practicalScore[1] : ""}</td>
+                    <td>${data.practicalScore != null ? data.practicalScore[2] : ""}</td>
                     <td>${data.finalScore}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>${data.theoryScore != null ? kq.toFixed(2) : ""}</td>
+                    <td>${data.theoryScore != null ? score4 : ""}</td>
+                    <td>${data.theoryScore != null ? score : ""}</td>
                     <td></td>
                 `;
 
