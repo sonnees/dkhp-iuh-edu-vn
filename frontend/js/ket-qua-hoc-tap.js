@@ -45,7 +45,9 @@ const fetchAcademicResults = async () => {
                     let TBC = data.midtermScore * 0.3 + data.finalScore*0.5  + (data.theoryScore[0] + data.theoryScore[1] + data.theoryScore[2])/3*0.2;
                     if (data.theoryScore != null && data.practicalScore == null) {
                         kq = TBC
-                    } else if (data.theoryScore != null && data.practicalScore != null) {
+                    } else if (data.theoryScore != null && data.practicalScore[0] == undefined ) {
+                        kq = TBC
+                    }   else if (data.theoryScore != null && data.practicalScore != null ) {
                         kq = (TBC*2 + (data.practicalScore[0] + data.practicalScore[1] + data.practicalScore[2])/3*1)/3
                     }
 
@@ -84,9 +86,9 @@ const fetchAcademicResults = async () => {
                     <td>${data.theoryScore != null ? data.theoryScore[0] : ""}</td>
                     <td>${data.theoryScore != null ? data.theoryScore[1] : ""}</td>
                     <td>${data.theoryScore != null ? data.theoryScore[2] : ""}</td>
-                    <td>${data.practicalScore != null ? data.practicalScore[0] : ""}</td>
-                    <td>${data.practicalScore != null ? data.practicalScore[1] : ""}</td>
-                    <td>${data.practicalScore != null ? data.practicalScore[2] : ""}</td>
+                    <td>${data.practicalScore != null && data.practicalScore[0] != undefined? data.practicalScore[0] : ""}</td>
+                    <td>${data.practicalScore != null && data.practicalScore[1] != undefined? data.practicalScore[1] : ""}</td>
+                    <td>${data.practicalScore != null && data.practicalScore[2] != undefined? data.practicalScore[2] : ""}</td>
                     <td>${data.finalScore}</td>
                     <td>${data.theoryScore != null ? kq.toFixed(2) : ""}</td>
                     <td>${data.theoryScore != null ? score4 : ""}</td>
@@ -103,3 +105,4 @@ const fetchAcademicResults = async () => {
 
     });
 }
+
