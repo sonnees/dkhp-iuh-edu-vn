@@ -33,15 +33,19 @@ public class AcademicResultsController {
     public Mono<ResponseEntity<String>> create(@RequestBody AcademicResultsDTO info){
         log.info("### enter api.v1.academic-results.append  ###");
         log.info("# info: {} #", info);
-        return academicResultsRepository.findBySemesterID(info.getId(),info.getSemesterID())
+        return
+                academicResultsRepository.findBySemesterID(info.getId(),info.getSemesterID())
                 .flatMap(academicResults -> {
+                    log.info("1");
                     return academicResultsRepository.findBySemesterIDAndSubjectID(info.getId(),info.getSemesterID(), info.getSubjectID())
                             .flatMap(academicResults1 -> {
+                                log.info("1.1");
                                 return Mono.just(ResponseEntity.ok("Success"));
                             })
                             .switchIfEmpty(Mono.defer(() -> {
                                 return academicResultsRepository.appendSubject(info.getId(),info.getSemesterID(),new Subject(info))
                                         .flatMap(aLong -> {
+                                            log.info("1.2");
                                             return Mono.just(ResponseEntity.ok("Success"));
                                         });
                             }));
@@ -49,6 +53,7 @@ public class AcademicResultsController {
                 .switchIfEmpty(Mono.defer(() -> {
                     return academicResultsRepository.appendSubjectNotExistSemesterID(info.getId(),new Semester(info))
                             .flatMap(aLong -> {
+                                log.info("2");
                                 return Mono.just(ResponseEntity.ok("Success"));
                             });
                 }))
