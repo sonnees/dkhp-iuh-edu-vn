@@ -234,7 +234,12 @@ const fetchCourse = async (semesterID) =>  {
                             row.classList.remove('table-active');
                         });
 
-                        fetchDetailCourse(data.id, subject.name)
+                        if ( data.status == "WAITING_FOR_STUDENT_REGISTRATION") {
+                            fetchDetailCourse(data.id, subject.name)
+                        } else {
+                            const tableBody = document.querySelector('#detailTable tbody');
+                            tableBody.innerHTML=""
+                        }
 
                         // Thêm lớp 'table-active' cho hàng được click
                         document.getElementById('NHOM').value = "0"
@@ -402,7 +407,10 @@ function submitDKMH() {
         if (groups.length==0) {
             showWarnToast('Chưa chọn môn hoặc nhóm thực hành!');
             return;
-        }
+        } else if (groups.length==1) {
+            showWarnToast('Chưa chọn nhóm thực hành!');
+            return;
+        } 
     } else if (allRows.length==1) {
         if (groups.length==0) {
             showWarnToast('Xin mời bạn chọn lớp học phần!');

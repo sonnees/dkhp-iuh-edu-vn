@@ -221,7 +221,7 @@ function fetchDate(start, end) {
                 document.getElementById(temp).innerHTML = `
                 <div class="d-inline-block border px-2" style="width: 120px; background-color: #fffccc;">
                     <p>${lich.subjectName}</p>
-                    <p>Tiết: ${lich.classHour}</p>
+                    <p>Tiết: ${getDayOfWeek(lich.classHour)}</p>
                     <p>Phòng: ${lich.classRoom}</p>
                     <p>GV: ${lich.staffName}</p>  
                 </div>
@@ -238,4 +238,30 @@ function fetchDate(start, end) {
     .catch(error => {
         console.error('There was a problem with the request:', error);
     });
+}
+
+function getDayOfWeek(timeRangeString) {
+
+    switch (timeRangeString) {
+        case "HOUR_1_TO_3":
+            startTime = "T1";
+            endTime = "T3";
+            break;
+        case "HOUR_4_TO_6":
+            startTime = "T4";
+            endTime = "T6";
+            break;
+        case "HOUR_7_TO_9":
+            startTime = "T7";
+            endTime = "T9";
+            break;
+        case "HOUR_10_TO_12":
+            startTime = "T10";
+            endTime = "T12";
+            break;
+        default:   
+            startTime = "T10";
+            endTime = "T12";
+    }
+    return `(${startTime}-${endTime})`;
 }
