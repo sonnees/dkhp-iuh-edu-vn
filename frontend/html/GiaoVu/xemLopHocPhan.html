@@ -50,10 +50,10 @@
                 <label for="statusInput">Trạng thái: </label>
                 <select class="form-control" id="statusInput">
                     <option value="PREPARING">Chuẩn bị mở</option>
-                    <option value="WAITING_FOR_STUDENT_REGISTRATION">Chờ sinh viên đăng kí</option>
+                    <!-- <option value="WAITING_FOR_STUDENT_REGISTRATION">Chờ sinh viên đăng kí</option> -->
                     <option value="REGISTRATION_DEADLINE_PASSED">Hết thời hạn đăng kí</option>
-                    <option value="ACCEPTANCE_TO_OPEN">Chấp nhận mở lớp</option>
-                    <option value="COURSE_CANCELLED">Hủy lớp</option>
+                    <!-- <option value="ACCEPTANCE_TO_OPEN">Chấp nhận mở lớp</option>
+                    <option value="COURSE_CANCELLED">Hủy lớp</option> -->
                 </select>
             </div>
 
@@ -72,8 +72,8 @@
                     <th>Học kì</th>
                     <th>Trạng thái</th>
                     <th>Xem chi tiết</th>
-                    <!-- <th>Đổi trạng thái</th> -->
                     <th>Nhập điểm</th>
+                    <th>Xuất điểm</th>
                 </tr>
             </thead>
             <tbody id="courseList">
@@ -141,6 +141,24 @@
             </div>
         </div>
     </div>
+    <!-- Modal xác nhận xuất điểm -->
+    <div class="modal fade" id="exportScoreModal" tabindex="-1" aria-labelledby="exportScoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportScoreModalLabel">Xuất điểm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xuất điểm cho khóa học này?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="confirmExportScoreButton">Xuất điểm</button>
+                </div>
+            </div>
+        </div>
+    </div>    
     <!-- Modal Đổi Trạng Thái Cho Một Lớp Học Phần -->
 <div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="changeStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

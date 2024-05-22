@@ -106,29 +106,12 @@ function updateCourseTable(courses) {
             <td>${mapStatus(course.status)}</td>
             <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
             <td><button class="btn btn-primary" onclick="openGradeModal('${course.id}','${course.subject.name}')">Nhập điểm</button></td>
+            <td><button class="btn btn-primary" onclick="exportScore('${course.id}')">Xuất điểm</button></td>
         `;
         courseList.appendChild(row);
     });
 }
-// function updateCourseTable(courses) {
-//     const courseList = document.getElementById('courseList');
-//     courseList.innerHTML = '';
-//     courses.forEach((course, index) => {
-//         const row = document.createElement('tr');
-//         row.innerHTML = `
-//             <td>${index + 1}</td>
-//             <td>${course.subject.name}</td>
-//             <td>${course.subject.creditUnits}</td>
-//             <td>${course.tuitionFee}</td>
-//             <td>Học kì ${course.semester.semesterNumber} năm ${course.semester.year}</td>
-//             <td>${mapStatus(course.status)}</td>
-//             <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
-//             <td><button class="btn btn-primary" onclick="openChangeStatus('${course.id}')">Đổi trạng thái</button></td>
-//             <td><button class="btn btn-primary" onclick="openGradeModal('${course.id}','${course.subject.name}')">Nhập điểm</button></td>
-//         `;
-//         courseList.appendChild(row);
-//     });
-// }
+
 document.getElementById('selectYear').addEventListener('change', function() {
     var selectedYear = this.value;
     fetchSemestersByYear(selectedYear);
@@ -395,3 +378,43 @@ document.getElementById('confirmChangeStatusButton').addEventListener('click', f
         console.error('Lỗi khi cập nhật trạng thái:', error);
     });
 });
+let courseIdToExport = null;
+
+function exportScore(courseID) {
+    courseIdToExport = courseID;
+    $('#exportScoreModal').modal('show');
+}
+
+document.getElementById('confirmExportScoreButton').addEventListener('click', function() {
+    if (courseIdToExport) {
+        const url = 'http://localhost:8080/api/v1/registration-form/gen-file-update-score';
+        const body = {
+            "courseID": courseIdToExport,
+            "fileName": "D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\datascorehihi.xlsx"
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            },
+            body: JSON.stringify(body)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Không thể xuất điểm.');
+            }
+            // return response.json();
+        })
+        .then(data => {
+            alert('Xuất điểm thành công!');
+            $('#exportScoreModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Lỗi khi xuất điểm:', error);
+            alert('Có lỗi xảy ra khi xuất điểm.');
+        });
+    }
+});
+

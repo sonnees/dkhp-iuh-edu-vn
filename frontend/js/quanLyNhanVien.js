@@ -69,14 +69,8 @@ function populateStaffTable() {
             <td>${index + 1}</td>
             <td>${staff.fullName}</td>
             <td>${getDepartmentNameById(staff.departmentID)}</td>
-            <td><button class='btn btn-warning grant-button'>Gán quyền Administrator</button></td>
         `;
         staffTable.appendChild(row);
-
-        // Thêm sự kiện click cho nút Gán quyền Administrator
-        row.querySelector('.grant-button').addEventListener('click', () => {
-            grantAdministrator(staff.fullName, staff.departmentID);
-        });
     });
 }
 
@@ -89,14 +83,8 @@ function populateStaffFilteredTable(filteredStaffs) {
             <td>${index + 1}</td>
             <td>${staff.fullName}</td>
             <td>${getDepartmentNameById(staff.departmentID)}</td>
-            <td><button class='btn btn-warning grant-button'>Gán quyền Administrator</button></td>
         `;
         staffTable.appendChild(row);
-
-        // Thêm sự kiện click cho nút Gán quyền Administrator
-        row.querySelector('.grant-button').addEventListener('click', () => {
-            grantAdministrator(staff.fullName, staff.departmentID);
-        });
     });
 }
 
@@ -118,8 +106,10 @@ document.addEventListener("DOMContentLoaded", function() {
         
         const fullName = employeeNameInput.value;
         const departmentID = departmentInput.value;
-
-        createStaff(fullName, departmentID); // Gọi hàm để tạo nhân viên
+        if(typeStaff.value==="staff")
+            createStaff(fullName, departmentID);
+        else if(typeStaff.value==="administrator") 
+            createAdministrator(fullName, departmentID);
     });
 
     document.getElementById('searchInput').addEventListener('input', function() {
@@ -166,7 +156,9 @@ function createStaff(fullName, departmentID) {
     });
 }
 
-function grantAdministrator(fullName, departmentID) {
+function createAdministrator(fullName, departmentID) {
+    console.log('>>>>>>>>>>>.');
+    
     const url = 'http://localhost:8080/api/v1/staff/create-administrator';
     const data = {
         fullName: fullName,
@@ -189,7 +181,8 @@ function grantAdministrator(fullName, departmentID) {
     })
     .then(data => {
         console.log('Administrator rights granted:', data);
-        alert(`Đã gán quyền Administrator cho ${fullName}`);
+        alert(`Đã tạo Administrator cho ${fullName}`);
+        fetchAllStafff();
     })
     .catch(error => {
         console.error('There was a problem with the request:', error);
