@@ -163,7 +163,7 @@ public class RegistrationFormController {
                                         log.info("** {}", jsonConverter.objToString(detailCourses));
                                         List<UUID> uuids = new ArrayList<>();
                                         uuids.add(detailCourses.get(0).getId());
-                                        if(detailCourses.size()==2){
+                                        if(detailCourses.size()>1){
                                             uuids.add(detailCourses.get(registrationForm.getGroupNumber()).getId());
                                         }
                                         log.info("** {}", jsonConverter.objToString(uuids));
