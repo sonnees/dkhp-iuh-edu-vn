@@ -1,4 +1,6 @@
+
 document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById('nameUser').innerHTML = localStorage.getItem("name");
     const semester = document.getElementById('semester');
     fetchAcademicResults();
 });
@@ -78,22 +80,20 @@ const fetchAcademicResults = async () => {
                     }
                 }
                 row.innerHTML = `
-                    <td>${index+1}</td>
-                    <td >${data.id}</td>
-                    <td>${data.subjectName}</td>
-                    <td>${data.creditUnits}</td>
-                    <td>${data.midtermScore}</td>
-                    <td>${data.theoryScore != null ? data.theoryScore[0] : ""}</td>
-                    <td>${data.theoryScore != null ? data.theoryScore[1] : ""}</td>
-                    <td>${data.theoryScore != null ? data.theoryScore[2] : ""}</td>
-                    <td>${data.practicalScore != null && data.practicalScore[0] != undefined? data.practicalScore[0] : ""}</td>
-                    <td>${data.practicalScore != null && data.practicalScore[1] != undefined? data.practicalScore[1] : ""}</td>
-                    <td>${data.practicalScore != null && data.practicalScore[2] != undefined? data.practicalScore[2] : ""}</td>
-                    <td>${data.finalScore}</td>
-                    <td>${data.theoryScore != null ? kq.toFixed(2) : ""}</td>
-                    <td>${data.theoryScore != null ? score4 : ""}</td>
-                    <td>${data.theoryScore != null ? score : ""}</td>
-                    <td></td>
+                    <td class='center-content'>${index+1} </td>
+
+                    <td title='${data.subjectName}'>${data.subjectName}</td>
+                    <td class='center-content'>${data.midtermScore}</td>
+                    <td class='center-content'>${data.theoryScore != null ? data.theoryScore[0] : ""}</td>
+                    <td class='center-content'>${data.theoryScore != null ? data.theoryScore[1] : ""}</td>
+                    <td class='center-content'>${data.theoryScore != null ? data.theoryScore[2] : ""}</td>
+                    <td class='center-content'>${data.practicalScore != null && data.practicalScore[0] != undefined? data.practicalScore[0] : ""}</td>
+                    <td class='center-content'>${data.practicalScore != null && data.practicalScore[1] != undefined? data.practicalScore[1] : ""}</td>
+                    <td class='center-content'>${data.practicalScore != null && data.practicalScore[2] != undefined? data.practicalScore[2] : ""}</td>
+                    <td class='center-content'>${data.finalScore}</td>
+                    <td class='center-content'>${data.theoryScore != null ? kq.toFixed(2) : ""}</td>
+                    <td class='center-content'>${data.theoryScore != null ? score4 : ""}</td>
+                    <td class='center-content'>${data.theoryScore != null ? score : ""}</td>
                 `;
 
                 tableBody.appendChild(row);

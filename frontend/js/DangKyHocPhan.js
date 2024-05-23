@@ -46,10 +46,13 @@ function fetchCourseAll(semester) {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById('nameUser').innerHTML = localStorage.getItem("name");
+
     const semester = document.getElementById('semester');
     semester.value = localStorage.getItem("semester");
     notify()
     fetchCourseAll(localStorage.getItem("semester"));
+
     semester.addEventListener('change', (event) => {
         const selectedSemester = event.target.value;
         console.log(selectedSemester);
@@ -233,10 +236,11 @@ const fetchCourse = async (semesterID) =>  {
                         allRows.forEach(row => {
                             row.classList.remove('table-active');
                         });
-
+                        
                         if ( data.status == "WAITING_FOR_STUDENT_REGISTRATION") {
                             fetchDetailCourse(data.id, subject.name)
                         } else {
+                            showInfoToast('Môn học không thể đăng ký!');
                             const tableBody = document.querySelector('#detailTable tbody');
                             tableBody.innerHTML=""
                         }
@@ -687,7 +691,7 @@ function notify() {
     if (localStorage.getItem("notify") != null) {
         switch (localStorage.getItem("notify")) {
             case "create_dkhp_ss":
-                showSuccessToast("Đăng ký học phần thành công!");
+                showSuccessToast("Đăng ký học phần thành công! Kiểm tra gmail của bạn để nhận thông báo đóng học phí!");
                 break;
             case "delete_dkhp_ss":
                 showSuccessToast("Hủy Đơn đăng ký học phần thành công!");

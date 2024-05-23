@@ -8,12 +8,27 @@ function submitLoginForm() {
         .then(data => {
             // Xử lý dữ liệu nhận được từ endpoint
             if (data.token) {
-                // Nếu nhận được token, chuyển hướng đến trang khác và gửi token qua query params
+
+                // http://localhost:8082/api/v1/check-administrator
+                fetch(`http://localhost:8080/api/v1/check-administrator`,{
+                    method: 'Post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${data.token}`
+                    }
+                }).then(response => {
+                    if(response.status === 200){
+                        localStorage.setItem("studentID", id);
+                        localStorage.setItem("token", data.token);
+                        window.location.href = "dashboard.html";
+                    }
+                    else if(response.status === 401 || response.status === 403)
+                        alert("Bạn không phải là nhân viên")
+                    else
+                        alert("oops! Có lỗi xảy ra!")
                 
-                // console.log(data);
-                localStorage.setItem("studentID", id);
-                localStorage.setItem("token", data.token);
-                window.location.href = "dashboard.html";
+                });
+                
             } else {
                 console.error('Token not received');
                 // Xử lý trường hợp không nhận được token

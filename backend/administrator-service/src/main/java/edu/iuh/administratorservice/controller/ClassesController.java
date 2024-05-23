@@ -20,10 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -76,6 +73,17 @@ public class ClassesController {
                 });
     }
 
+    @PostMapping("/search")
+    public Mono<ResponseEntity<String>> search(@RequestParam UUID id){
+        log.info("### enter api.v1.classes.search ###");
+        return classesRepository.findById(id)
+                .flatMap(classes -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(classes))))
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
     @PostMapping("/create-students")
     public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody FileNameDTO info){
         log.info("### enter api.v1.classes.create-students  ###");
@@ -102,7 +110,7 @@ public class ClassesController {
 
                                                 @Override
                                                 public void onError(Throwable t) {
-                                                    log.error("# {} #", "Fail stub");
+                                                    log.error("# {} {}#", "Fail stub");
                                                     sink.error(t);
                                                 }
                                                 @Override
@@ -112,6 +120,7 @@ public class ClassesController {
                                             });
                                         })
                                         .flatMap(o -> {
+                                            log.info("studentCreateDTO {}", (((AuthInfo) o).getId()));
                                             studentCreateDTO.setId(String.valueOf(((AuthInfo) o).getId()));
                                             return Mono.empty();
                                         })

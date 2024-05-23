@@ -35,6 +35,7 @@ function getCurrentDate() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('nameUser').innerHTML = localStorage.getItem("name");
     setDay(getCurrentDate());
 }); 
 
@@ -219,11 +220,12 @@ function fetchDate(start, end) {
                 // console.log(temp);
                 // <p>Course ID: ${lich.courseID}</p>
                 document.getElementById(temp).innerHTML = `
-                <div class="d-inline-block border px-2" style="width: 120px; background-color: #fffccc;">
-                    <p>${lich.subjectName}</p>
-                    <p>Tiết: ${getDayOfWeek(lich.classHour)}</p>
-                    <p>Phòng: ${lich.classRoom}</p>
-                    <p>GV: ${lich.staffName}</p>  
+                <div class="d-inline-block border px-2 changeType" style="width: 120px; background-color: #fdff9a">
+                    <b >${lich.subjectName}</b>
+                    <p style='padding-top: 10px;  margin-bottom: 0px;'>Tiết: ${getDayOfWeek(lich.classHour)}</p>
+                    <p style='margin-bottom: 0px;'>Phòng: ${lich.classRoom}</p>
+                    <p style='margin-bottom: 0px;'>GV: ${lich.staffName}</p>  
+                    <p></p>
                 </div>
                 `;
 
@@ -244,24 +246,24 @@ function getDayOfWeek(timeRangeString) {
 
     switch (timeRangeString) {
         case "HOUR_1_TO_3":
-            startTime = "T1";
-            endTime = "T3";
+            startTime = "1";
+            endTime = "3";
             break;
         case "HOUR_4_TO_6":
-            startTime = "T4";
-            endTime = "T6";
+            startTime = "4";
+            endTime = "6";
             break;
         case "HOUR_7_TO_9":
-            startTime = "T7";
-            endTime = "T9";
+            startTime = "7";
+            endTime = "9";
             break;
         case "HOUR_10_TO_12":
-            startTime = "T10";
-            endTime = "T12";
+            startTime = "10";
+            endTime = "12";
             break;
         default:   
-            startTime = "T10";
-            endTime = "T12";
+            startTime = "10";
+            endTime = "12";
     }
-    return `(${startTime}-${endTime})`;
+    return `${startTime}-${endTime}`;
 }
