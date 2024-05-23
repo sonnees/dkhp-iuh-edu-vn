@@ -176,7 +176,6 @@ const fetchCourse = async (semesterID) =>  {
         console.log(ids);
 
         const dataHp = ids.semesters;
-
         
         dataHp.forEach((data) => {
             // console.log(data);
@@ -193,8 +192,13 @@ const fetchCourse = async (semesterID) =>  {
 
         const tableBody = document.querySelector('#subjectTable tbody');
         let listSubj = [];
+        let listSubjED = [];
         listSubj = listArray(dataHp, semesterID);
-        // console.log(listSubj);
+        listSubjED = listArrayED(dataHp, semesterID);
+
+        
+
+
         let count = 0;
         json.forEach((data, index) => {
             const url = 'http://localhost:8080/api/v1/detail_course/search-by-course-id?courseID=' + data.id;
@@ -214,6 +218,7 @@ const fetchCourse = async (semesterID) =>  {
             .then(async (courses) => {
                 courses = JSON.parse(courses);
                 let siSo = getSiSo(courses);
+                
                 if (ids.subjectIDs.includes(data.subject.id) && !listSubj.includes(data.subject.id)) {
                     let subject = data.subject;
                     const row = document.createElement('tr');
@@ -238,7 +243,32 @@ const fetchCourse = async (semesterID) =>  {
                         });
                         
                         if ( data.status == "WAITING_FOR_STUDENT_REGISTRATION") {
-                            fetchDetailCourse(data.id, subject.name)
+                            let check = true;
+                            // if  (true) {
+                            //     fetchDetailCourse(data.id, subject.name)
+                            // }
+                            // listSubjED
+                            
+                            if (subject.prerequisites != null) {
+                                subject.prerequisites.forEach((data) => {
+                                    if (!listSubjED.includes(data)) {
+                                        check = false;
+                                        showWarnToast(`Môn tiên quyết ${data} chưa được đáp ứng!`);
+                                        const tableBody = document.querySelector('#detailTable tbody');
+                                        tableBody.innerHTML=""
+                                    }
+                                })
+                            }
+
+                            if  (check) {
+                                fetchDetailCourse(data.id, subject.name)
+                            } else {
+                                // showInfoToast('Môn tiên quyết chưa được đáp ứng!');
+                                // const tableBody = document.querySelector('#detailTable tbody');
+                                // tableBody.innerHTML=""
+                            }
+                            
+
                         } else {
                             showInfoToast('Môn học không thể đăng ký!');
                             const tableBody = document.querySelector('#detailTable tbody');
@@ -349,6 +379,23 @@ function listArray(array, semesterID)  {
     return list;
 }
 
+function listArrayED(array, semesterID)  {
+    let list = []
+    array.forEach((data) => {
+        if (data.id!=semesterID) {
+            
+            data.subjects.forEach((data) => {
+                list.push(data.id)
+
+            })
+            // console.log(list);
+            return list;
+        }
+        return list;
+    })
+    return list;
+}
+
 
 
 const fetchCourseIDs = async (studentID) => {
@@ -369,7 +416,7 @@ const fetchCourseIDs = async (studentID) => {
         }
 
         const data = await response.text();
-        console.log(data);
+        console.log(JSON.parse(data));
         return JSON.parse(data);
     
         
