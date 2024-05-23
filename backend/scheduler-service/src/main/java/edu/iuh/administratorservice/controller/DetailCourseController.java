@@ -37,8 +37,8 @@ public class DetailCourseController {
 
     @PostMapping("/create")
     public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody DetailCourseCreateDTO info){
-        log.info("### enter api.v1.detail_course.create  ###");
-        log.info("# info: {} #", jsonConverter.objToString(info));
+//        log.info("### enter api.v1.detail_course.create  ###");
+//        log.info("# info: {} #", jsonConverter.objToString(info));
         WebClient webClient = builder.build();
         String token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         return courseRepository.findById(info.getCourseID())
