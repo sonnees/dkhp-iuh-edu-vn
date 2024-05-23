@@ -318,7 +318,9 @@ const fetchCourse = async (semesterID) =>  {
                             let status = changeStatus(registrationForm.course.status) 
                             let money = formatCurrency(registrationForm.course.tuitionFee);
                             const row = document.createElement('tr');
-                            row.innerHTML = `
+
+                            if (registrationForm.course.status=='WAITING_FOR_STUDENT_REGISTRATION') {
+                                row.innerHTML = `
                                 <td>${subject.registrationFormID}</td>
                                 <td class='size_full'>${subject.name}</td>
                                 <td class='size_midi center-content'>${subject.creditUnits}</td>
@@ -327,7 +329,21 @@ const fetchCourse = async (semesterID) =>  {
                                 <td>
                                     <button type="button" onclick="deletaHP('${subject.id}', '${subject.registrationFormID}')" class="btn btn-danger" style='font-size: 13px'>Hủy</button>
                                 </td>
-                            `;
+                                `;
+                            } else {
+                                row.innerHTML = `
+                                <td>${subject.registrationFormID}</td>
+                                <td class='size_full'>${subject.name}</td>
+                                <td class='size_midi center-content'>${subject.creditUnits}</td>
+                                <td class='size_midi'>${money}</td>
+                                <td title='${status}' class='size_midi'>${status}</td>
+                                <td>
+                                    
+                                </td>
+                                `;
+                            }
+
+                            
 
                             row.addEventListener('click', (event) => {
                                 // const clickedRow = event.target.closest('tr');
