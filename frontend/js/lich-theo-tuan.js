@@ -19,9 +19,41 @@ function getCurrentDate() {
     // Tạo một đối tượng Date mới cho ngày thứ hai của tuần này
     let monday = new Date(today);
     monday.setDate(today.getDate() + daysToMonday);
+
+    // Trả về ngày đã được định dạng
+    monday.setDate(today.getDate() + daysToMonday)
+    // Lấy các thành phần của ngày thứ hai
+    let day = monday.getDate();
+    let month = monday.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    let year = monday.getFullYear();
     
+    // // Hiển thị ngày thứ hai trong định dạng dd-mm-yyyy
+    // var formattedDate = day + '-' + month + '-' + year;
+    return year + '-' + month + '-' + day;
+}
+
+function getDate(date) {
+    // Tạo một đối tượng ngày mới
+    let today = new Date(date);
     
+    // Lấy ngày hiện tại trong tuần (0 là Chủ nhật, 1 là Thứ hai, ..., 6 là Thứ bảy)
+    let currentDayOfWeek = today.getDay(); 
     
+    // Tính toán sự chênh lệch giữa ngày hiện tại và ngày thứ hai của tuần này
+    let daysToMonday = 1 - currentDayOfWeek; // 1 để lấy ngày thứ hai
+    
+    // Nếu ngày hiện tại là chủ nhật, chúng ta cần lấy ngày thứ hai của tuần tiếp theo
+    if (currentDayOfWeek === 0) {
+        daysToMonday = -5;
+    } else if (currentDayOfWeek < 0) {
+        // Nếu ngày hiện tại là thứ hai, chúng ta cần lấy ngày thứ hai của tuần này
+        daysToMonday = 1 + currentDayOfWeek;
+    }
+    
+    // Tạo một đối tượng Date mới cho ngày thứ hai của tuần này
+    let monday = new Date(today);
+    monday.setDate(today.getDate() + daysToMonday);
+
     // Trả về ngày đã được định dạng
     monday.setDate(today.getDate() + daysToMonday)
     // Lấy các thành phần của ngày thứ hai
@@ -37,7 +69,27 @@ function getCurrentDate() {
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('nameUser').innerHTML = localStorage.getItem("name");
     setDay(getCurrentDate());
+
+    document.getElementById('dateInput').addEventListener('change', function() {
+        const selectedDate = this.value;
+        handleSetDay(selectedDate);
+    });
 }); 
+
+function handleButtonToday() {
+    clearData();
+    setDay(getCurrentDate());
+}
+
+
+
+function handleSetDay(date) {
+    console.log('Selected date:', date);
+    clearData();
+    setDay(getDate(date));
+    // Thực hiện các hành động cần thiết với giá trị date
+}
+
 
 function handleButtonPrevious () {
     clearData();

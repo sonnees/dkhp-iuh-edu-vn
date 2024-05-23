@@ -106,6 +106,7 @@ function updateCourseTable(courses) {
             <td>${mapStatus(course.status)}</td>
             <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
             <td><button class="btn btn-primary" onclick="openGradeModal('${course.id}','${course.subject.name}')">Nhập điểm</button></td>
+            <td><button class="btn btn-primary" onclick="exportScore('${course.id}')">Xuất điểm</button></td>
         `;
         courseList.appendChild(row);
     });
@@ -295,9 +296,125 @@ function displayCourseDetailModal(courseDetail) {
     // Hiển thị modal
     $('#detailModal').modal('show');
 }
+document.getElementById('btnStatus').addEventListener('click', function() {
+    var selectedSemester = document.getElementById('semesterInput');
+    var selectedSemesterText = selectedSemester.options[selectedSemester.selectedIndex].text;
+    var selectedStatus = document.getElementById('statusInput');
+    var selectedStatusText = selectedStatus.options[selectedStatus.selectedIndex].text;
 
+    var modalMessage = `Bạn có chắc muốn đổi các lớp học phần của ${selectedSemesterText} sang trạng thái ${selectedStatusText}?`;
+    document.getElementById('statusModalMessage').textContent = modalMessage;
 
+    $('#statusModal').modal('show');
+});
+document.getElementById('confirmStatusButton').addEventListener('click', function() {
+    var selectedSemester = document.getElementById('semesterInput').value;
+    var selectedStatus = document.getElementById('statusInput').value;
 
+    const url = `http://localhost:8080/api/v1/course/change-status-by-semester-id?semesterID=${selectedSemester}&status=${selectedStatus}`;
 
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Không thể cập nhật trạng thái.');
+        }
+        // return response.json();
+    })
+    .then(data => {
+        alert('Đổi trạng thái thành công!');
+        $('#statusModal').modal('hide');
+        // Cập nhật lại danh sách các khóa học nếu cần
+        fetchCoursesBySemesterId(selectedSemester);
+    })
+    .catch(error => {
+        console.error('Lỗi khi cập nhật trạng thái:', error);
+    });
+});
+selectedCourseToChangeStatus=null
+function openChangeStatus(courseID) {
+    selectedCourseToChangeStatus = courseID;
+    $('#changeStatusModal').modal('show');
+}
+document.getElementById('confirmChangeStatusButton').addEventListener('click', function() {
+    var selectedStatus = document.querySelector('input[name="statusOptions"]:checked');
+    if (!selectedStatus) {
+        alert('Vui lòng chọn một trạng thái.');
+        return;
+    }
 
+    var statusValue = selectedStatus.value;
+    console.log("status>>",statusValue);
+    console.log("couseID >>",selectedCourseToChangeStatus);
+
+    const url = `http://localhost:8080/api/v1/course/change-status-by-id?id=${selectedCourseToChangeStatus}&status=${statusValue}`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Không thể cập nhật trạng thái.');
+        }
+        // return response.json();
+    })
+    .then(data => {
+        alert('Đổi trạng thái thành công!');
+        $('#changeStatusModal').modal('hide');
+        // Cập nhật lại danh sách các khóa học nếu cần
+        var selectedSemesterId = document.getElementById('semesterInput').value;
+        fetchCoursesBySemesterId(selectedSemesterId);
+    })
+    .catch(error => {
+        console.error('Lỗi khi cập nhật trạng thái:', error);
+    });
+});
+let courseIdToExport = null;
+
+function exportScore(courseID) {
+    courseIdToExport = courseID;
+    $('#exportScoreModal').modal('show');
+}
+
+document.getElementById('confirmExportScoreButton').addEventListener('click', function() {
+    if (courseIdToExport) {
+        const url = 'http://localhost:8080/api/v1/registration-form/gen-file-update-score';
+        const body = {
+            "courseID": courseIdToExport,
+            "fileName": "D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\datascorehihi.xlsx"
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            },
+            body: JSON.stringify(body)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Không thể xuất điểm.');
+            }
+            // return response.json();
+        })
+        .then(data => {
+            alert('Xuất điểm thành công!');
+            $('#exportScoreModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Lỗi khi xuất điểm:', error);
+            alert('Có lỗi xảy ra khi xuất điểm.');
+        });
+    }
+});
 
