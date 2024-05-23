@@ -160,14 +160,13 @@ public class RegistrationFormController {
                             .flatMap(registrationForm -> detailCourseRepository.searchByCourseID(registrationForm.getCourse().getId())
                                     .collectList()
                                     .flatMap(detailCourses -> {
+                                        log.info("** {}", jsonConverter.objToString(detailCourses));
                                         List<UUID> uuids = new ArrayList<>();
-                                        DetailCourse detailCourse = detailCourses.get(0);
+                                        uuids.add(detailCourses.get(0).getId());
                                         if(detailCourses.size()==2){
-                                            DetailCourse detailCourse1 = detailCourses.get(registrationForm.getGroupNumber());
-                                            uuids.add(detailCourse1.getId());
+                                            uuids.add(detailCourses.get(registrationForm.getGroupNumber()).getId());
                                         }
-                                        uuids.add(detailCourse.getId());
-                                        log.info("** {} {}", uuids.get(0), uuids.get(1));
+                                        log.info("** {}", jsonConverter.objToString(uuids));
                                         return Flux.fromIterable(uuids)
                                                 .flatMap(detailCourseRepository::increaseClassSizeAvailable)
                                                 .flatMap(aLong1 -> {
