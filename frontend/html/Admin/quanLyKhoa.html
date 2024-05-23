@@ -23,8 +23,8 @@
             </div>
             <form>
                 <div class="form-group">
-                    <label for="nganhName">Nhập tên Khoa:</label>
-                    <input type="text" class="form-control" id="nganhName" placeholder="Tên khoa">
+                    <label for="khoaName">Nhập tên Khoa:</label>
+                    <input type="text" class="form-control" id="khoaName" placeholder="Tên khoa">
                 </div>
 
                 <table class="table">
@@ -32,18 +32,14 @@
                         <tr>
                             <th>STT</th>
                             <th>Tên Khoa</th>
-                            <th></th> <!-- Cột mới chứa nút sửa -->
-                            <th></th> <!-- Cột mới chứa nút xóa -->
                         </tr>
                     </thead>
-                    <tbody id="nganhBody">
+                    <tbody id="khoaBody">
                         <!-- Dữ liệu của bảng ngành sẽ được thêm sau bằng JavaScript -->
                     </tbody>
                 </table>
 
                 <button type="button" class="btn btn-primary" id="actionButton">Submit</button>
-                <button type="button" class="btn btn-warning" id="editButton" disabled>Cập nhật</button>
-                <input type="hidden" id="editIndex" value>
             </form>
         </div>
         

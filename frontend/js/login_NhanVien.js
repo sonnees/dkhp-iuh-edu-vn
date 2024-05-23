@@ -18,7 +18,7 @@ function submitLoginForm() {
                     }
                 }).then(response => {
                     if(response.status === 200){
-                        localStorage.setItem("studentID", id);
+                        localStorage.setItem("userID", id);
                         localStorage.setItem("token", data.token);
                         window.location.href = "dashboard.html";
                     }
