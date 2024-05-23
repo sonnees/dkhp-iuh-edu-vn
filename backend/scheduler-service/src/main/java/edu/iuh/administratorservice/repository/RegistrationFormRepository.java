@@ -4,7 +4,6 @@ import edu.iuh.administratorservice.dto.RegistrationSearch3FieldDTO;
 import edu.iuh.administratorservice.dto.RegistrationSearchByCourseIDDTO;
 import edu.iuh.administratorservice.entity.Course;
 import edu.iuh.administratorservice.entity.RegistrationForm;
-import edu.iuh.administratorservice.enums.Status;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

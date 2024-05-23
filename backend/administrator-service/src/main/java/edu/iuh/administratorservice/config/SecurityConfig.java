@@ -36,7 +36,11 @@ public class SecurityConfig {
         return http.authorizeExchange(
                         auth -> auth
                                 .pathMatchers("/api/v1/staff/create-administrator").hasAuthority("ADMIN")
-                                .pathMatchers("/v3/**","/swagger-ui/**", "/context-path/**","/webjars/**","/swagger-ui.html").permitAll()
+                                .pathMatchers(
+                                        "/v3/**","/swagger-ui/**", "/context-path/**","/webjars/**","/swagger-ui.html",
+                                        "/api/v1/classes/search"
+
+                                ).permitAll()
                                 .anyExchange().hasAnyAuthority("ADMIN", "ADMINISTRATOR")
                 )
                 .authenticationManager(authenticationManager)

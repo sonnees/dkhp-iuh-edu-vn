@@ -31,6 +31,18 @@ public interface AcademicResultsRepository extends ReactiveMongoRepository<Acade
     @Update(update = "{$push: {'semesters.$.subjects': ?2}}")
     Mono<Long> appendSubject(String id, UUID semesterID, Subject subject);
 
+//    @Query(value = "{'_id': ?0}")
+//    @Update(pipeline = {
+//            "{ $set: { " +
+//                    "semesters: { " +
+//                    "$cond: { " +
+//                    "if: { $gt: [ { $size: { $filter: { input: '$semesters', as: 'semester', cond: { $eq: ['$$semester._id', ?1] } } } }, 0 ] }, " +
+//                    "then: { $map: { input: '$semesters', as: 'semester', in: { $cond: { if: { $eq: ['$$semester._id', ?1] }, then: { $mergeObjects: ['$$semester', { subjects: { $concatArrays: ['$$semester.subjects', [?2]] } } ] }, else: '$$semester' } } } }, " +
+//                    "else: { $concatArrays: ['$semesters', [?3]] } " +
+//                    "} } } }"
+//    })
+//    Mono<Long> appendSubjectOrSemester(String id, UUID semesterId, Subject subject, Semester semester);
+
     @Query(value = "{'_id': ?0, 'semesters.id': ?1, 'semesters.subjects.id':?2}")
     @Update(update = "{$set: {'semesters.$.subjects': ?3}}")
     Mono<Long> updateScore(String id, UUID semesterID, UUID subjectID, List<Subject> subjects);

@@ -19,23 +19,40 @@
         <div class="container">
             <div class="row align-items-center py-1">
                 <div class="col-md-8">
-                    <a class="navbar-brand text-black" href="/html/SinhVien/dashboard.html"><img src="https://media.iuh.edu.vn/Media/2_sviuh/Images/iuh7313e0f8-4-e.png" style="max-height: 40px !important;"></a>
+                    <a class="navbar-brand text-black" href="/html/SinhVien/dashboard.html"><img
+                            src="https://media.iuh.edu.vn/Media/2_sviuh/Images/iuh7313e0f8-4-e.png"
+                            style="max-height: 40px !important;"></a>
                 </div>
                 <div class="col-md-4">
                     <nav class="navbar navbar-expand-lg">
                         <ul class="navbar-nav ml-auto">
-                            <li class="nav-item"><a class="nav-link" style="color: #667580; font-size: 12px;" href="#"><i class="fa-solid fa-house"></i>Trang chủ</a></li>
-                            <li class="nav-item"><a class="nav-link" style="color: #667580; font-size: 12px;" href="#"><i class="fa-solid fa-bell"></i>Tin tức</a></li>
+                            <li class="nav-item"><a class="nav-link" style="color: #667580; font-size: 12px;" href="#"><i
+                                        class="fa-solid fa-house" stu></i>Trang chủ</a></li>
+                            <li class="nav-item"><a class="nav-link" style="color: #667580; font-size: 12px;" href="#"><i
+                                        class="fa-solid fa-bell"></i>Tin tức</a></li>
                             <li class="nav-item dropdown">
-                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="color: #667580; font-size: 12px;">
+                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                                    style="color: #667580; font-size: 12px;">
                                     <span id="nameUser"></span>
                                 </button>
-                                <!-- Dropdown Menu -->
-                                <div class="dropdown-menu">
-                                    <!-- Dropdown Items -->
-                                    <button class="dropdown-item" onclick="handleLogout()">Đăng xuất</button>
-                                </div>
+                                <ul class="dropdown-menu">
+    
+                                    <li><a class="dropdown-item" href="/html/SinhVien/dashboard.html">
+                                            <i class="fa-solid fa-user"></i>&nbsp Trang cá nhân
+                                        </a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal">
+                                            <i class="fa-solid fa-key"></i>&nbsp Đổi mật khẩu
+                                        </a></li>
+                                    </a>
                             </li>
+    
+                            <hr class="dropdown-divider">
+                            <li><a class="dropdown-item" href="#" onclick="handleLogout()">
+                                    <i class="fa-solid fa-sign-out"></i>&nbsp Đăng xuất
+                                </a></li>
+                        </ul>
+                        </li>
                         </ul>
                     </nav>
                 </div>
@@ -58,7 +75,7 @@
             </div>
             <div class="col-md-9 bg-white">
                 <h4 class="row fw-bolder fs-4 ps-3 pt-3" style="color: #667580;">Lịch học, lịch thi theo tuần</h1>
-                
+                <hr>
                 <div class="d-flex flex-row justify-content-end mx-5 my-2">
                     <div class="">
                         <button type="button" class="border-white text-white" style="background-color: #1da1f2;" onclick="handleButtonPrevious()"> &lt; Trở về</button>

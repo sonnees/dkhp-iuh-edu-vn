@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,61 +13,79 @@
 
   <script src="/js/login.js"></script>
 </head>
+
 <body>
 
-<div class="container-fluid">
-  <!-- Phần đầu trang -->
-  <div class="row border-bottom border-2 shadow-sm">
-    <div class="col-lg-12 text-center">
-      <img src="/img/logo_iuh.png" alt="Logo" class="img-fluid w-50">
-    </div>
-    
-  </div>
-  <div class="row m-3">
-    <div class="col-lg-9 p-lg-3">
-        <!-- Phần thông báo -->
-        <div class="alert alert-info" role="alert">
-          Thông báo quan trọng!
-        </div>
-        <!-- Form đăng nhập -->
+  <div class="container-fluid">
+    <!-- Phần đầu trang -->
+    <div class="row border-bottom border-2 shadow-sm">
+      <div class="col-lg-12 text-center">
+        <img src="/img/logo_iuh.png" alt="Logo" class="img-fluid w-50">
       </div>
 
-      <div class="col-lg-3 rounded-lg border border-white border-3 shadow-lg p-3 background-div">
+    </div>
+    <div class="row m-3">
+      <div class="col-lg-9 p-lg-3" style="margin-top: -13px; ">
+        <div id="demo" class="carousel slide" data-bs-ride="carousel" style="display: flex;">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+          </div>
+          <div class="carousel-inner" style="height: 550px; border-radius: 5px;">
+            <div class="carousel-item active">
+              <img src="https://res.cloudinary.com/dj9ulywm8/image/upload/v1716419218/quorjkabbnlppg3de9or.jpg" class="d-block"
+                style="width:100%">
+            </div>
+            <div class="carousel-item">
+              <img src="https://res.cloudinary.com/dj9ulywm8/image/upload/v1716419218/m2fymxx3kchaasmzc89q.webp" class="d-block"
+                style="width:100%">
+            </div>
+            <div class="carousel-item">
+              <img src="https://res.cloudinary.com/dj9ulywm8/image/upload/v1716419219/bu6sg2zmlzv78lpqfjxb.jpg" class="d-block"
+                style="width:100%">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 rounded-lg border border-white border-3 shadow-lg p-3 background-div" style="height: 440px; ">
         <form class="m-3" id="loginForm">
           <div>
             <div class="text-center">
-              <img src="https://sv.iuh.edu.vn/Content/loginnews/images/congthongtinsinhvien.png" style="max-width: 100%;max-height: 95px;">
+              <img src="https://sv.iuh.edu.vn/Content/loginnews/images/congthongtinsinhvien.png"
+                style="max-width: 100%;max-height: 95px;">
             </div>
-            <h4 class="text-center" style="margin: 20px; font-size: 18px; font-weight: 500; color: #044eb7;">ĐĂNG NHẬP HỆ THỐNG</h4>
+            <h4 class="text-center" style="margin: 20px; font-size: 18px; font-weight: 500; color: #044eb7;">ĐĂNG NHẬP
+              HỆ THỐNG</h4>
 
-            <input class="user-input" id="UserName" name="UserName" placeholder="Nhập mã sinh viên" required="required" type="text">
-            <input class="password-input" id="Password" name="Password" placeholder="Nhập mật khẩu" required="required" type="password">
+            <input style="margin-left: 11px;" class="user-input" id="UserName" name="UserName" placeholder="Nhập mã sinh viên" required="required"
+              type="text">
+            <input style="margin-left: 11px;" class="password-input" id="Password" name="Password" placeholder="Nhập mật khẩu" required="required"
+              type="password">
 
-            <!-- <div style="text-align: right; margin-bottom: 10px;">
-              <label> <input name="IsSinhVienDaTotNghiep" type="checkbox" value="true">Đã tốt nghiệp</label>
-            </div> -->
-
-            <input type="button" class="button_login" value="Đăng nhập" onclick="submitLoginForm()">
-
+            <div id="passwordAlert" class="alert alert-danger" style="margin-left: 11px;display: none; width: 280px; text-align: center;"></div>
+            <input style="margin-left: 11px;" type="button" class="button_login" value="Đăng nhập" onclick="submitLoginForm()">
         </form>
       </div>
+    </div>
+
+
+
+
+
+
   </div>
 
-  
-
-
-
-
-</div>
-
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://unpkg.com/protobufjs@6/dist/protobuf.js"></script>
 <script src="https://unpkg.com/grpc-web/index.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/grpc-web@1.2.1/dist/grpc-web.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/grpc-web@1.2.1/dist/grpc-web.js"></script> -->
 
 
 
 </body>
+
 </html>
