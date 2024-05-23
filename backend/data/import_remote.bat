@@ -1,3 +1,4 @@
+sdads
 mongoimport --uri "mongodb+srv://sonnees:8ymAG8ia1s88DwXO@cluster0.m0vbmbu.mongodb.net/AdministratorService" --collection staff --file staff.json
 mongoimport --uri "mongodb+srv://sonnees:8ymAG8ia1s88DwXO@cluster0.m0vbmbu.mongodb.net/AdministratorService" --collection classes --file classes.json
 mongoimport --uri "mongodb+srv://sonnees:8ymAG8ia1s88DwXO@cluster0.m0vbmbu.mongodb.net/AdministratorService" --collection majors --file majors.json

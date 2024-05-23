@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
+const { log } = require('@grpc/grpc-js/build/src/logging');
 
 app.use(cors());
 
@@ -30,16 +31,34 @@ app.get('/authorize', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    const registerRequest = {}; // Your register request object here
+    const registerRequest = {}; 
     registerClient.registerStudent(registerRequest, (error, response) => {
         if (error) {
             console.error('Error:', error);
             res.status(500).send('Internal Server Error');
             return;
         }
-        res.json(response); // Return gRPC response to client
+        res.json(response); 
     });
 });
+
+app.post('/change-password', (req, res) => {
+    console.log(req.query);
+    const changePasswordRequest = {
+        id: req.query.id,
+        oldPass: req.query.oldPass,
+        newPass: req.query.newPass
+    };
+    authClient.changePassword(changePasswordRequest, (error, response) => {
+        if (error) {
+            console.error('Error:', error);
+            res.status(401).send('Authentication failed');
+            return;
+        }
+        res.json(response); 
+    });
+});
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

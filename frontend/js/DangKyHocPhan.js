@@ -20,18 +20,20 @@ function fetchCourseAll(semester) {
         switch (semester) {
             case "semester1":
                 clearTable();
-                fetchCourse(json[0].id);
                 localStorage.setItem("semes", json[0].id);
+                fetchCourse(localStorage.getItem("semes"));
+                
                 break;
             case "semester2":
                 clearTable();
-                fetchCourse(json[1].id);
                 localStorage.setItem("semes", json[1].id);
+                fetchCourse(localStorage.getItem("semes"));
+                
                 break;
             case "semester3":
                 clearTable();
-                fetchCourse(json[2].id);
                 localStorage.setItem("semes", json[2].id);
+                fetchCourse(localStorage.getItem("semes"));
                 break;
             default:
                 break;
@@ -43,18 +45,21 @@ function fetchCourseAll(semester) {
 }
 
 
-
-
 document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById('nameUser').innerHTML = localStorage.getItem("name");
+
     const semester = document.getElementById('semester');
-    fetchCourseAll(semester.value);
+    semester.value = localStorage.getItem("semester");
+    notify()
+    fetchCourseAll(localStorage.getItem("semester"));
+
     semester.addEventListener('change', (event) => {
         const selectedSemester = event.target.value;
         console.log(selectedSemester);
         // console.log('Học kỳ đã chọn:', selectedSemester);
         // localStorage.setItem("semes", selectedSemester);
+        localStorage.setItem("semester", selectedSemester);
         fetchCourseAll(selectedSemester);
-        // Bạn có thể thực hiện các hành động khác ở đây
     });
 
     const nhom = document.getElementById('NHOM');
@@ -231,10 +236,11 @@ const fetchCourse = async (semesterID) =>  {
                         allRows.forEach(row => {
                             row.classList.remove('table-active');
                         });
-
+                        
                         if ( data.status == "WAITING_FOR_STUDENT_REGISTRATION") {
                             fetchDetailCourse(data.id, subject.name)
                         } else {
+                            showInfoToast('Môn học không thể đăng ký!');
                             const tableBody = document.querySelector('#detailTable tbody');
                             tableBody.innerHTML=""
                         }
@@ -432,6 +438,7 @@ function submitDKMH() {
     console.log(JSON.stringify(data));
 
     const url = 'http://localhost:8080/api/v1/registration-form/create';
+    showInfoToast('Đang xử lý thao tác đăng ký học phần...');
     fetch(url, {
         method: 'POST',
         headers: {
@@ -453,6 +460,7 @@ function submitDKMH() {
             showErrorToast('Network response was not ok');
             return;
         }
+        localStorage.setItem("notify", "create_dkhp_ss");
         window.location.href = "DangKyHocPhan.html";
         return ;
     })
@@ -472,6 +480,7 @@ const deletaHP = (subjID, formID) => {
     console.log(JSON.stringify(data));
 
     const url = 'http://localhost:8080/api/v1/registration-form/delete';
+    showInfoToast('Đang xử lý thao tác hủy đơn đăng ký học phần...');
     fetch(url, {
         method: 'POST',
         headers: {
@@ -493,7 +502,7 @@ const deletaHP = (subjID, formID) => {
             showErrorToast('Network response was not ok');
             return;
         }
-        
+        localStorage.setItem("notify", "delete_dkhp_ss");
         window.location.href = "DangKyHocPhan.html";
         return ;
     })
@@ -669,4 +678,27 @@ function showWarnToast(desc) {
         title: 'Cảnh báo !',
         desc: desc
     })
+}
+
+
+function thing() {
+    if(localStorage.getItem("semester") == null) {
+        localStorage.setItem("semester", "semester");
+    } 
+}
+thing()
+function notify() {
+    if (localStorage.getItem("notify") != null) {
+        switch (localStorage.getItem("notify")) {
+            case "create_dkhp_ss":
+                showSuccessToast("Đăng ký học phần thành công! Kiểm tra gmail của bạn để nhận thông báo đóng học phí!");
+                break;
+            case "delete_dkhp_ss":
+                showSuccessToast("Hủy Đơn đăng ký học phần thành công!");
+                break;
+            default:
+                break;
+        }
+        localStorage.removeItem("notify");
+    }
 }

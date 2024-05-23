@@ -19,6 +19,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,11 +54,7 @@ public class CourseController {
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestParam("file") MultipartFile file) {
-        String path = saveFile.saveFile(file);
-        if(path.isEmpty()) return Mono.just(ResponseEntity.status(500).body("Error file"));
-        FileNameDTO info = new FileNameDTO();
-        info.setFileName(path);
+    public Mono<ResponseEntity<String>> create(ServerWebExchange exchange, @RequestBody FileNameDTO info) {
         log.info("### enter api.v1.course.create  ###");
         log.info("# info: {} #", jsonConverter.objToString(info));
         List<CourseCreateDTO> infos = excelFileHandle.toCourseCreate(info.getFileName());
@@ -150,6 +147,7 @@ public class CourseController {
                                                 .flatMap(registrationSearch3FieldDTO -> courseRepository.findById(registrationSearch3FieldDTO.getIdCourse())
                                                         .flatMap(course -> detailCourseRepository.searchByCourseID(registrationSearch3FieldDTO.getIdCourse())
                                                                 .collectList()
+                                                                .delayElement(Duration.ofMillis(500))
                                                                 .flatMap(detailCourses -> {
                                                                     List<TimetableCreateDTO> timetableCreateDTOS = new ArrayList<>();
 
@@ -172,6 +170,7 @@ public class CourseController {
                                                                             .retrieve()
                                                                             .bodyToMono(Void.class)
                                                                             .switchIfEmpty(Mono.defer(() -> Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
+                                                                                    .delayElements(Duration.ofMillis(1000))
                                                                                     .flatMap(s -> {
                                                                                         AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
                                                                                                 s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()
@@ -196,33 +195,6 @@ public class CourseController {
                         return Mono.error(new Throwable(e));
                     });
         }
-    }
-
-    @PostMapping("/change-status-by-id")
-    public Mono<ResponseEntity<String>> changeStatusByID(@RequestParam UUID id, @RequestParam Status status){
-        log.info("### enter api.v1.course.change-status-by-id ###");
-        log.info("# id: {} status: {} #", id, status);
-        return courseRepository.findById(id)
-                .flatMap(course -> courseRepository.changeStatusByID(id, status)
-                        .flatMap(aLong -> {
-                            course.setStatus(status);
-                            return registrationFormRepository.changeStatusByID(id, course);
-                        })
-                        .flatMap(aLong -> {
-                            if(aLong<=0) {
-                                log.error("# {} #", "Fail change status by semester id");
-                                return Mono.error(new RuntimeException());
-                            }
-                            if(status.equals(Status.COURSE_CANCELLED)){
-                                return studentRepository.removeSubjectBySemestersAndSubjectIDs(course.getSemester().getId(), course.getSubject().getId())
-                                        .flatMap(aLong1 ->Mono.empty());
-                            }
-                            return Mono.just(ResponseEntity.ok("Success"));
-                        })
-                        .onErrorResume(e -> {
-                            log.error("Error occurred: {}", e.getMessage());
-                            return Mono.just(ResponseEntity.status(500).body("fail"));
-                        }));
     }
 
     public Mono<Boolean> changeStatusByID2(UUID id, Status status){
