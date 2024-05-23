@@ -116,6 +116,7 @@ public class CourseController {
         else {
             List<UUID> courseList = new ArrayList<>();
             List<UUID> courseCancel = new ArrayList<>();
+            List<UUID> courseAccept = new ArrayList<>();
             return courseRepository.searchBySemesterID(semesterID)
                     .flatMap(course -> {
                         courseList.add(course.getId());
@@ -123,23 +124,29 @@ public class CourseController {
                     })
                     .then(Mono.defer(()->{ // find course cancel
                         return Flux.fromIterable(courseList)
+                                .delayElements(Duration.ofMillis(100))
                                 .flatMap(uuid -> detailCourseRepository.searchByCourseID(uuid)
                                         .collectList()
                                         .flatMap(detailCourses -> {
-                                            if (detailCourses.get(0).getClassSizeAvailable()==0 )return Mono.empty();
-                                            if(detailCourses.get(0).getClassSize()==detailCourses.get(0).getClassSizeAvailable()){
+                                            if (detailCourses.get(0).getClassSizeAvailable()==0 ){
+                                                courseAccept.add(uuid);
+                                                return Mono.empty();
+                                            } else if (detailCourses.get(0).getClassSize()==detailCourses.get(0).getClassSizeAvailable()) {
                                                 courseCancel.add(uuid);
                                                 return Mono.empty();
                                             }
-                                            if (detailCourses.get(0).getClassSize() % detailCourses.get(0).getClassSizeAvailable() > detailCourses.get(0).getClassSize() / 3)
+                                            else if (detailCourses.get(0).getClassSize() - detailCourses.get(0).getClassSizeAvailable() < Math.round((detailCourses.get(0).getClassSize() * 0.6667)))
                                                 courseCancel.add(uuid);
+                                            else {
+                                                courseAccept.add(uuid);
+                                                log.info("### {}", uuid);
+                                            }
                                             return Mono.empty();
                                         })
                                         .then(Mono.empty()))
                                 .then(Mono.empty());
                     }))
                     .then(Mono.defer(() -> {
-                                List<UUID> courseAccept = courseList.stream().filter(uuid -> !courseCancel.contains(uuid)).collect(Collectors.toList());
                                 return Flux.fromIterable(courseAccept)
                                         .flatMap(uuid -> changeStatusByID2(uuid,Status.ACCEPTANCE_TO_OPEN)
                                                 .flatMap(aBoolean ->Mono.empty()))
@@ -170,7 +177,7 @@ public class CourseController {
                                                                             .retrieve()
                                                                             .bodyToMono(Void.class)
                                                                             .switchIfEmpty(Mono.defer(() -> Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
-                                                                                    .delayElements(Duration.ofMillis(1000))
+                                                                                    .delayElements(Duration.ofMillis(1500))
                                                                                     .flatMap(s -> {
                                                                                         AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
                                                                                                 s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()

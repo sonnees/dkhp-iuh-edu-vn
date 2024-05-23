@@ -132,26 +132,6 @@ COPY public.student_auth (id, password, role) FROM stdin;
 10000067	$2a$10$0EkbhvSNjDpnZXLB1Aw2CepsAqivljr/.MREwzPdSKB.HgLiaYTpq	1
 10000068	$2a$10$kDh8Rk0L5vR9OZiRK8rnhe4ts8Aa9UL2biWUPxeCRoztSfKrTYwFi	1
 10000069	$2a$10$g2jmXtlC/bn.wNGGazJDmu53ApQsGTWTQsER3dmh7C4ze6Nu/JkFa	1
-10000070	$2a$10$fbCJA7V.7cUJzXNkggpYS.IvOmdSceglhX.K5.l3xdm6XwkKD9SKS	0
-10000072	$2a$10$ku0p6jkjVhJLjQmtkW/g4uonT.CenL/PSC0ojpmv23aMWzecUQ24G	0
-10000073	$2a$10$DG8Tli9RJeMbKVmThH814eSVMy8s9nhyqsEiXwSfndtD0NJ94RoFi	0
-10000071	$2a$10$jGfHoJ7H526YDPel2WignuCmI0DlKHbqn55//J7JCckyk87A1caxO	0
-10000074	$2a$10$HRyGyTeA7Q8SBqo2kkih1eDNwfNhh536weG/hb2OMQ7KdrDwSwVAm	0
-10000075	$2a$10$nUPJ4/3Lc6ouFwTEMxvd6eZhrySQ9lXhmgYSzG.6LVCgb1Jfd19PG	0
-10000077	$2a$10$JFW3ACCYBLds1YC4aZGAyOghHy/cwiDRnIKxdoU19z5oUAZi3pTny	0
-10000076	$2a$10$TtruUUI6KL/G17SsQE5NmeqxNdnyEgF35Hcgrv7PUnZFx6vqYtUyi	0
-10000078	$2a$10$9q14y12v.0GYGQFJNUgjaejSSR/kGqzqFgyAPJmDyCP8vxCU6/IeW	0
-10000079	$2a$10$3dhX8GBYbHoxFcp6XikJweqRZWqJROdcycXU5agkW0Bg7aFMcC24u	0
-10000080	$2a$10$aiXztkjTv63WEFiyg.mj.eufX6UNw0hKUR5GejOE2VwHJRmdA.YCi	0
-10000081	$2a$10$uhEj3pcRcdiBKIzPJTYjl.2UVkYYGFzWlb12cTC452pqWAwZXHVPy	0
-10000089	$2a$10$IubWi6qZEwR.plmufZHyXe3B2ZFQGLC7SCruvg5Z485HO/5HF8kG6	0
-10000083	$2a$10$k6pHu3xzQ.kxyKKPWCq3weSFWfrpGj2uDKToxgEUC.AgJLmmR5lUy	0
-10000082	$2a$10$S0g7XLmqalmpR.LcJRsbY.VBkzhv.Oq1WLKK.feW3huHQR04P51GC	0
-10000086	$2a$10$su8ncJPvepcSRpGTGUbizu4q1hCn4JJf9THRneFRe8IIX/0eG.XrO	0
-10000085	$2a$10$VUHNUkc3/6z4bmFLpLj4cuUodMljM255Uz3DfnTFYXrYLd6UiuGRq	0
-10000084	$2a$10$1S2grT0O0rytdFFyu6IC0ekWnPECU58LLLUPb2CLrSF9qed6bifEi	0
-10000087	$2a$10$HcEyJHW0VO4smwH1TJ4Zr.1wbQGaDsk4A/EXhdyDyKtudVoSrPyl2	0
-10000088	$2a$10$rk7ssjD/ytJRFO28U3kfJucBVOEmgUwMJtEvLvPy0LyoFh3RaP9DO	0
 \.
 
 
@@ -159,8 +139,7 @@ COPY public.student_auth (id, password, role) FROM stdin;
 -- Name: entity_seq; Type: SEQUENCE SET; Schema: public; Owner: authenticationservice_user
 --
 
-SELECT pg_catalog.setval('public.entity_seq', 10000089, true);
-
+SELECT pg_catalog.setval('public.entity_seq', 10000069, true);
 
 --
 -- Name: student_auth student_auth_pkey; Type: CONSTRAINT; Schema: public; Owner: authenticationservice_user
