@@ -64,7 +64,7 @@ public class RegistrationFormController {
                 )
                 .collectList()
                 .flatMap(list -> {
-                    if(list.size()==1){
+                    if(detailCourseIDs.size()==1){
                         if(list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
                     }
                     else{
@@ -160,11 +160,13 @@ public class RegistrationFormController {
                             .flatMap(registrationForm -> detailCourseRepository.searchByCourseID(registrationForm.getCourse().getId())
                                     .collectList()
                                     .flatMap(detailCourses -> {
-                                        DetailCourse detailCourse = detailCourses.get(0);
-                                        DetailCourse detailCourse1 = detailCourses.get(registrationForm.getGroupNumber());
                                         List<UUID> uuids = new ArrayList<>();
+                                        DetailCourse detailCourse = detailCourses.get(0);
+                                        if(detailCourses.size()==2){
+                                            DetailCourse detailCourse1 = detailCourses.get(registrationForm.getGroupNumber());
+                                            uuids.add(detailCourse1.getId());
+                                        }
                                         uuids.add(detailCourse.getId());
-                                        uuids.add(detailCourse1.getId());
                                         log.info("** {} {}", uuids.get(0), uuids.get(1));
                                         return Flux.fromIterable(uuids)
                                                 .flatMap(detailCourseRepository::increaseClassSizeAvailable)
