@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RequestMapping("/api/v1/academic-results")
@@ -100,6 +101,18 @@ public class AcademicResultsController {
                             return academicResultsRepository.updateScore(dto.getId(), dto.getSemesterID(), dto.getSubjectID(), list.get())
                                     .flatMap(aLong -> Mono.empty());
                         })).then(Mono.just(ResponseEntity.ok("Success")))
+                .onErrorResume(e -> {
+                    log.error("Error occurred: {}", e.getMessage());
+                    return Mono.error(new Throwable(e));
+                });
+    }
+
+    @PostMapping("/statistic-score")
+    public Mono<ResponseEntity<String>> statisticScore(@RequestParam String studentID, @RequestParam UUID semesterID){
+        log.info("### enter api.v1.statistic-score  ###");
+        log.info("# studentID: {} #", studentID);
+        return academicResultsRepository.statisticScore(studentID, semesterID)
+                .flatMap(statisticScore -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(statisticScore))))
                 .onErrorResume(e -> {
                     log.error("Error occurred: {}", e.getMessage());
                     return Mono.error(new Throwable(e));
