@@ -154,20 +154,34 @@ public class CourseController {
                                                 .flatMap(registrationSearch3FieldDTO -> courseRepository.findById(registrationSearch3FieldDTO.getIdCourse())
                                                         .flatMap(course -> detailCourseRepository.searchByCourseID(registrationSearch3FieldDTO.getIdCourse())
                                                                 .collectList()
-                                                                .delayElement(Duration.ofMillis(500))
+                                                                .delayElement(Duration.ofMillis(100))
                                                                 .flatMap(detailCourses -> {
                                                                     List<TimetableCreateDTO> timetableCreateDTOS = new ArrayList<>();
 
-                                                                    Date date = detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()).getCalender().getStart();
+
+                                                                    Date date = detailCourses.get(0).getCalender().getStart();
                                                                     Calendar calendar = Calendar.getInstance();
                                                                     calendar.setTime(date);
-                                                                    Date dateEnd = detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()).getCalender().getEnd();
+                                                                    Date dateEnd = detailCourses.get(0).getCalender().getEnd();
                                                                     while (date.before(dateEnd)){
-                                                                        TimetableCreateDTO timetableCreateDTO = new TimetableCreateDTO(registrationSearch3FieldDTO, detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()), course, date);
+                                                                        TimetableCreateDTO timetableCreateDTO = new TimetableCreateDTO(registrationSearch3FieldDTO, detailCourses.get(0), course, date);
                                                                         timetableCreateDTOS.add(timetableCreateDTO);
                                                                         calendar.add(Calendar.WEEK_OF_YEAR, 1);
                                                                         date=calendar.getTime();
                                                                     }
+                                                                    if(detailCourses.size()>1){
+                                                                        Date date1 = detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()).getCalender().getStart();
+                                                                        Calendar calendar1 = Calendar.getInstance();
+                                                                        calendar1.setTime(date1);
+                                                                        Date dateEnd1 = detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()).getCalender().getEnd();
+                                                                        while (date1.before(dateEnd1)){
+                                                                            TimetableCreateDTO timetableCreateDTO = new TimetableCreateDTO(registrationSearch3FieldDTO, detailCourses.get(registrationSearch3FieldDTO.getGroupNumber()), course, date1);
+                                                                            timetableCreateDTOS.add(timetableCreateDTO);
+                                                                            calendar1.add(Calendar.WEEK_OF_YEAR, 1);
+                                                                            date1=calendar1.getTime();
+                                                                        }
+                                                                    }
+
                                                                     TimetableCreateDTO timetableCreateDTO = timetableCreateDTOS.get(0);
                                                                     return webClient.post()
                                                                             .uri("http://STUDENT-SERVICE/api/v1/timetable/creates")
@@ -177,7 +191,7 @@ public class CourseController {
                                                                             .retrieve()
                                                                             .bodyToMono(Void.class)
                                                                             .switchIfEmpty(Mono.defer(() -> Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
-                                                                                    .delayElements(Duration.ofMillis(1500))
+                                                                                    .delayElements(Duration.ofMillis(100))
                                                                                     .flatMap(s -> {
                                                                                         AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
                                                                                                 s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()
