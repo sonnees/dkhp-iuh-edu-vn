@@ -13,9 +13,26 @@ function submitLoginForm() {
         .then(response => response.json()) // Parse phản hồi thành JSON
         .then(data => {
             if (data.token) {
-                localStorage.setItem("studentID", id);
-                localStorage.setItem("token", data.token);
-                window.location.href = "dashboard.html";
+                
+                fetch(`http://localhost:8080/api/v1/check-administrator`, {
+                    method: 'Post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${data.token}`
+                    }
+                }).then(response => {
+                    if (response.status === 200) {
+                        alert("Bạn không phải là sinh viên!")
+                    }
+                    else if (response.status === 401 || response.status === 403){
+                        localStorage.setItem("studentID", id);
+                        localStorage.setItem("token", data.token);
+                        window.location.href = "dashboard.html";
+                    }
+                    else
+                        alert("oops! Có lỗi xảy ra!")
+
+                });
             } else {
                 document.getElementById('passwordAlert').innerHTML = "Thông tin không chính xác!";
                 document.getElementById('passwordAlert').style.display = 'block';

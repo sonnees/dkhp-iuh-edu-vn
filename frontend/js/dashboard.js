@@ -107,6 +107,8 @@ function updateSemester() {
                 option.value = element.id;
                 select.add(option);
             });
+            document.getElementById("chartSelect").value = semester[0].id;
+            showChart()
         })
 
 
@@ -116,9 +118,75 @@ function showChart() {
     let semesterID = document.getElementById("chartSelect").value;
     const ctx = document.getElementById('myChart').getContext('2d');
     let chartData = null;
-    if (semesterID == 'null') chartData = {
-        labels: [],
-        scores: []
+    if (semesterID == 'null') chartData = {labels: [],scores: []}
+    else {
+        // http://localhost:8084/api/v1/academic-results/statistic-score?studentID=10000090&semesterID=dd2e5d9a-74c7-4232-9d56-ee253821241d
+        fetch('http://localhost:8080/api/v1/academic-results/statistic-score?studentID=' + localStorage.getItem("studentID") + '&semesterID=' + semesterID, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                if (data == "") chartData = { labels: [], scores: [] } 
+                else{
+                    data = JSON.parse(data);
+                    chartData = { labels: data.subjectNames, scores: data.finalScores }
+                }
+
+                if (chart) {
+                    chart.destroy(); // Destroy the existing chart instance if it exists
+                }
+
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: 'Điểm',
+                            data: chartData.scores,
+                            backgroundColor: 'rgb(250, 108, 81)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // This setting makes the bar chart horizontal
+                        scales: {
+                            y: {
+
+                                display: false, // Hide the y-axis labels
+                            },
+                            x: {
+                                beginAtZero: true,
+                                max: 10, // Set the maximum value for the x-axis
+                                ticks: {
+                                    stepSize: 1 // Set the step size for x-axis
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        let label = context.dataset.label || '';
+                                        let subject = context.chart.data.labels[context.dataIndex];
+                                        let score = context.parsed.x.toFixed(1); // Use 'x' instead of 'y' for horizontal bar chart
+                                        return [subject, `${label}: ${score}`]; // Return an array with two lines
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
     }
 
     if (chart) {
