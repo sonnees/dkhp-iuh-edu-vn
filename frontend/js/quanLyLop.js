@@ -99,29 +99,6 @@ function displayClasses() {
         `;
         classList.insertAdjacentHTML("beforeend", row);
     });
-
-    // var deleteButtons = document.querySelectorAll(".btn-delete");
-    // deleteButtons.forEach(function(button) {
-    //     button.addEventListener("click", function() {
-    //         var classId = button.getAttribute("data-id");
-    //         deleteClass(classId);
-    //     });
-    // });
-
-    // var editButtons = document.querySelectorAll(".btn-edit");
-    // editButtons.forEach(function(button) {
-    //     button.addEventListener("click", function() {
-    //         var classId = button.getAttribute("data-id");
-    //         fillClassForm(classId);
-    //     });
-    // });
-}
-
-function deleteClass(classId) {
-    classes = classes.filter(function(classItem) {
-        return classItem.id !== classId;
-    });
-    displayClasses();
 }
 
 function fillClassForm(classId) {
@@ -132,28 +109,37 @@ function fillClassForm(classId) {
     document.getElementById("departmentInput").value = classItem.majorsID;
     document.getElementById("educationLevelInput").value = classItem.typeOfEducation;
     document.getElementById("trainingTypeInput").value = classItem.modeOfEducation;
-    document.getElementById("updateButton").setAttribute("data-id", classId);
 }
 
-document.addEventListener("DOMContentLoaded", fetchClasses);
-
-document.getElementById("classForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    var className = document.getElementById("classNameInput").value;
-    var majorID = document.getElementById("majorInput").value;
-    // var educationLevel = document.getElementById("educationLevelInput").value;
-    // var trainingType = document.getElementById("trainingTypeInput").value;
-    createClass(className, majorID);
-    displayClasses();
-    document.getElementById("classForm").reset();
-});
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
+document.addEventListener("DOMContentLoaded", function () {
+    fetchClasses()
+    document.getElementById("classForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var className = document.getElementById("classNameInput").value;
+        var majorID = document.getElementById("majorInput").value;
+        // var educationLevel = document.getElementById("educationLevelInput").value;
+        // var trainingType = document.getElementById("trainingTypeInput").value;
+        console.log(">>>>",majorID);
+        if(className===""){
+            showErrorToast("Bạn chưa nhập tên lớp")
+        }
+        else if (majorID===""){
+            showErrorToast("Bạn chưa chọn ngành")
+        }
+        else {
+            createClass(className, majorID);
+            displayClasses();
+            document.getElementById("classForm").reset();
+        }
+        
     });
-}
+    document.getElementById("departmentInput").addEventListener("change", async function() {
+        var departmentID = this.value;
+        await fetchMajorsByDepartment(departmentID); // Sử dụng await để đảm bảo fetch hoàn tất trước khi tiếp tục
+    });
+});
+
+
 
 function createClass(className, majorID) {
     var newClass = {
@@ -176,17 +162,16 @@ function createClass(className, majorID) {
         return response.json();
     })
     .then(data => {
-        classes.push(data);
+        showSuccessToast("Tạo lớp học mới thành công")
+        // classes.push(data);
         displayClasses();
     })
     .catch(error => {
+        showErrorToast("Đã có lỗi khi tạo lớp học mới")
         console.error('Error creating class:', error);
     });
 }
-document.getElementById("departmentInput").addEventListener("change", async function() {
-    var departmentID = this.value;
-    await fetchMajorsByDepartment(departmentID); // Sử dụng await để đảm bảo fetch hoàn tất trước khi tiếp tục
-});
+
 
 async function fetchMajorsByDepartment(departmentID) {
     const url = 'http://localhost:8080/api/v1/majors/search-by-department-id?departmentID=' + departmentID;
@@ -217,4 +202,91 @@ function populateMajorSelect(majors) {
         option.text = major.name;
         majorSelect.appendChild(option);
     });
+}
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function toast({
+    state = 'success',
+    title = 'Thành công !',
+    desc = 'Chúc bạn may mắn lần sau',
+}) {
+    var main = document.getElementById('toast');
+    if (main) {
+        var toastBody = document.createElement('div');
+        icons = {
+            success: 'fa-solid fa-circle-check',
+            info: 'fa-solid fa-circle-info',
+            error: 'fa-solid fa-circle-exclamation',
+            warn: 'fa-solid fa-triangle-exclamation',
+        }
+
+        toastBody.classList.add(`toast--${state}`);
+        toastBody.innerHTML =
+                    `
+                    <div class="toast show">
+                        <div class="toast-icon">
+                            <i class="${icons[state]}" ></i>
+                        </div>
+                        <div class="toast-body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__msg">${desc}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    `
+
+        main.appendChild(toastBody);
+
+        toastBody.onclick = function (event) {
+            if (event.target.closest('.toast__close')) {
+                main.removeChild(toastBody);
+            }
+        }
+
+        setTimeout(function () {
+            if (main.contains(toastBody))
+                main.removeChild(toastBody);
+        }, 4000)
+    }
+}
+
+function showSuccessToast(desc) {
+    toast({
+        state: 'success',
+        title: 'Thành công !',
+        desc: desc,
+    })
+}
+
+function showErrorToast(desc) {
+    toast({
+        state: 'error',
+        title: 'Lỗi !',
+        desc: desc
+    })
+}
+
+function showInfoToast(desc) {
+    toast({
+        state: 'info',
+        title: 'Thông tin !',
+        desc: desc
+    })
+}
+
+function showWarnToast(desc) {
+    toast({
+        state: 'warn',
+        title: 'Cảnh báo !',
+        desc: desc
+    })
 }
