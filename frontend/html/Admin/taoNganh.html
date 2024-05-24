@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+    <link rel="stylesheet" href="/css/toast_GiaoVu.css">
+
     <style>
         .search-container {
             display: flex;
@@ -21,6 +23,7 @@
     </style>
 </head>
 <body>
+    <div id="toast"></div>
     <div id="navbarPlaceholder"></div>
     <div id="sidebarPlaceholder"></div>
 
@@ -36,7 +39,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="majorNameInput">Tên ngành:</label>
-                    <input type="text" class="form-control" id="majorNameInput" placeholder="Nhập tên ngành">
+                    <input type="text" class="form-control" id="majorNameInput" placeholder="Nhập tên ngành" required>
                 </div>
             </div>
             <div class="col-md-6">
@@ -56,6 +59,8 @@
                 <button class="btn btn-success ml-2" id="addMajorButton">Thêm Ngành</button>
             </div>
         </div>
+        <br>
+        <br>
         <!-- Bảng Môn học bắt buộc -->
         <div class="row">
             <div class="col-md-12">

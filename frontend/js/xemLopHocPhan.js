@@ -156,7 +156,8 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         };
         reader.readAsArrayBuffer(file);
     } else {
-        alert('Vui lòng chọn file xlsx');
+        // alert('Vui lòng chọn file xlsx');
+        showErrorToast('Vui lòng chọn file xlsx')
     }
 });
 
@@ -180,19 +181,21 @@ function displayFileContent(content) {
     fileContentDiv.appendChild(table);
 }
 document.getElementById('confirmButton').addEventListener('click', function(event) {
-    console.log('HI>>>>>>>>>.',selectedCourseID);
+    // console.log('HI>>>>>>>>>.',selectedCourseID);
     
     var selectedFile = document.getElementById('fileInput').files[0];
     if (!selectedFile) {
-        alert('Vui lòng chọn một file.');
+        // alert('Vui lòng chọn một file.');
+        showErrorToast('Vui lòng chọn một file.')
         return;
     }
-
     if (!selectedCourseID) {
-        alert('Vui lòng chọn một lớp học phần.');
+        // alert('Vui lòng chọn một lớp học phần.');
+        showErrorToast('Vui lòng chọn một lớp học phần.')
         return;
     }
-
+    $('#gradeModal').modal('hide');
+    showInfoToast('Đang xử lý quá trình nhập điểm')
     fetch('http://localhost:8080/api/v1/course/update-score', {
         method: 'POST',
         headers: {
@@ -200,7 +203,7 @@ document.getElementById('confirmButton').addEventListener('click', function(even
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         },
         body: JSON.stringify(
-            { fileName: 'D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\data\\score.xlsx',
+            { fileName: 'D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\score.xlsx',
               courseID:selectedCourseID
              }
         )
@@ -212,7 +215,8 @@ document.getElementById('confirmButton').addEventListener('click', function(even
         // return response.json();
     })
     .then(data => {
-        alert('Nhập điểm thành công!');
+        // alert('Nhập điểm thành công!');
+        showSuccessToast('Nhập điểm thành công')
         // Thực hiện các hành động khác nếu cần
     })
     .catch(error => {
@@ -310,7 +314,8 @@ document.getElementById('btnStatus').addEventListener('click', function() {
 document.getElementById('confirmStatusButton').addEventListener('click', function() {
     var selectedSemester = document.getElementById('semesterInput').value;
     var selectedStatus = document.getElementById('statusInput').value;
-
+    $('#statusModal').modal('hide');
+    showInfoToast('Đang xử lý quá trình đổi trạng thái')
     const url = `http://localhost:8080/api/v1/course/change-status-by-semester-id?semesterID=${selectedSemester}&status=${selectedStatus}`;
 
     fetch(url, {
@@ -327,12 +332,15 @@ document.getElementById('confirmStatusButton').addEventListener('click', functio
         // return response.json();
     })
     .then(data => {
-        alert('Đổi trạng thái thành công!');
-        $('#statusModal').modal('hide');
+        // alert('Đổi trạng thái thành công!');
+       
         // Cập nhật lại danh sách các khóa học nếu cần
+        showSuccessToast('Đổi trạng thái thành công')
         fetchCoursesBySemesterId(selectedSemester);
     })
     .catch(error => {
+        $('#statusModal').modal('hide');
+        showErrorToast('Đã có lỗi khi cập nhật trạng thái')
         console.error('Lỗi khi cập nhật trạng thái:', error);
     });
 });
@@ -341,43 +349,6 @@ function openChangeStatus(courseID) {
     selectedCourseToChangeStatus = courseID;
     $('#changeStatusModal').modal('show');
 }
-document.getElementById('confirmChangeStatusButton').addEventListener('click', function() {
-    var selectedStatus = document.querySelector('input[name="statusOptions"]:checked');
-    if (!selectedStatus) {
-        alert('Vui lòng chọn một trạng thái.');
-        return;
-    }
-
-    var statusValue = selectedStatus.value;
-    console.log("status>>",statusValue);
-    console.log("couseID >>",selectedCourseToChangeStatus);
-
-    const url = `http://localhost:8080/api/v1/course/change-status-by-id?id=${selectedCourseToChangeStatus}&status=${statusValue}`;
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("token")
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Không thể cập nhật trạng thái.');
-        }
-        // return response.json();
-    })
-    .then(data => {
-        alert('Đổi trạng thái thành công!');
-        $('#changeStatusModal').modal('hide');
-        // Cập nhật lại danh sách các khóa học nếu cần
-        var selectedSemesterId = document.getElementById('semesterInput').value;
-        fetchCoursesBySemesterId(selectedSemesterId);
-    })
-    .catch(error => {
-        console.error('Lỗi khi cập nhật trạng thái:', error);
-    });
-});
 let courseIdToExport = null;
 
 function exportScore(courseID) {
@@ -386,11 +357,12 @@ function exportScore(courseID) {
 }
 
 document.getElementById('confirmExportScoreButton').addEventListener('click', function() {
+    showInfoToast("Đang xử lý quá trình xuất bảng điểm")
     if (courseIdToExport) {
         const url = 'http://localhost:8080/api/v1/registration-form/gen-file-update-score';
         const body = {
             "courseID": courseIdToExport,
-            "fileName": "D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\datascorehihi.xlsx"
+            "fileName": "D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\datascorehihi.xlsx"
         };
 
         fetch(url, {
@@ -408,13 +380,96 @@ document.getElementById('confirmExportScoreButton').addEventListener('click', fu
             // return response.json();
         })
         .then(data => {
-            alert('Xuất điểm thành công!');
+            // alert('Xuất điểm thành công!');
             $('#exportScoreModal').modal('hide');
+            showSuccessToast('Xuất điểm thành công!')
         })
         .catch(error => {
             console.error('Lỗi khi xuất điểm:', error);
-            alert('Có lỗi xảy ra khi xuất điểm.');
+            // alert('Có lỗi xảy ra khi xuất điểm.');
+            $('#exportScoreModal').modal('hide');
+            showErrorToast('Đã có lỗi xảy ra trong quá trình xuất điểm')
         });
     }
 });
+
+
+function toast({
+    state = 'success',
+    title = 'Thành công !',
+    desc = 'Chúc bạn may mắn lần sau',
+}) {
+    var main = document.getElementById('toast');
+    if (main) {
+        var toastBody = document.createElement('div');
+        icons = {
+            success: 'fa-solid fa-circle-check',
+            info: 'fa-solid fa-circle-info',
+            error: 'fa-solid fa-circle-exclamation',
+            warn: 'fa-solid fa-triangle-exclamation',
+        }
+
+        toastBody.classList.add(`toast--${state}`);
+        toastBody.innerHTML =
+                    `
+                    <div class="toast show">
+                        <div class="toast-icon">
+                            <i class="${icons[state]}" ></i>
+                        </div>
+                        <div class="toast-body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__msg">${desc}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    `
+
+        main.appendChild(toastBody);
+
+        toastBody.onclick = function (event) {
+            if (event.target.closest('.toast__close')) {
+                main.removeChild(toastBody);
+            }
+        }
+
+        setTimeout(function () {
+            if (main.contains(toastBody))
+                main.removeChild(toastBody);
+        }, 4000)
+    }
+}
+
+function showSuccessToast(desc) {
+    toast({
+        state: 'success',
+        title: 'Thành công !',
+        desc: desc,
+    })
+}
+
+function showErrorToast(desc) {
+    toast({
+        state: 'error',
+        title: 'Lỗi !',
+        desc: desc
+    })
+}
+
+function showInfoToast(desc) {
+    toast({
+        state: 'info',
+        title: 'Thông tin !',
+        desc: desc
+    })
+}
+
+function showWarnToast(desc) {
+    toast({
+        state: 'warn',
+        title: 'Cảnh báo !',
+        desc: desc
+    })
+}
 

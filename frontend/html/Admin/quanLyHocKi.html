@@ -11,8 +11,10 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
         <link rel="stylesheet"
             href="/css/dashboard_NhanVien.css">
+            <link rel="stylesheet" href="/css/toast_GiaoVu.css">
     </head>
     <body>
+        <div id="toast"></div>
         <div id="navbarPlaceholder"></div>
         <div id="sidebarPlaceholder"></div>
 
@@ -31,10 +33,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary"
                     id="submitButton">Submit</button>
-                <button type="button" class="btn btn-success" id="updateButton"
-                    disabled>Cập nhật</button>
-                <!-- Thay đổi nút Sửa thành Cập nhật -->
-                <input type="hidden" id="editIndex" value>
             </form>
             <table class="table">
                 <thead>

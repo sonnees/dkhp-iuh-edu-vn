@@ -16,13 +16,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Sự kiện cho nút Thêm Ngành
     document.getElementById('addMajorButton').addEventListener('click', function() {
+    const electiveSubjects = [];
+    const requiredCourses = [];
+    const majorName = document.getElementById('majorNameInput').value;
+    document.querySelectorAll('#monHocTuChonTable tr').forEach(row => {
+        const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
+        electiveSubjects.push(id);
+    });
+    document.querySelectorAll('#monHocBatBuocTable tr').forEach(row => {
+        const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
+        requiredCourses.push(id);
+    });
+    if(majorName===''){
+        showErrorToast("Chưa nhập tên ngành")
+    }
+    else if(requiredCourses.length===0){
+        showErrorToast("Chưa chọn môn học bắt buộc")
+    }
+    else if(electiveSubjects.length===0){
+        showErrorToast("Chưa chọn môn học tự chọn")
+    }
+    else {
         $('#confirmAddMajorModal').modal('show');
+    }
+        
     });
 
     // Sự kiện cho nút Xác nhận trong modal
     document.getElementById('confirmAddMajorButton').addEventListener('click', function() {
-        addMajor();
         $('#confirmAddMajorModal').modal('hide');
+        // showInfoToast('Đang xử lý quá trình tạo thêm ngành')
+        
+        addMajor();
     });
 });
 
@@ -84,29 +109,31 @@ function fetchSubjects() {
         console.error('Error fetching subjects:', error);
     });
 }
-
 function displayCourseList(subjects) {
     var tbody = document.getElementById('monHocTable');
     tbody.innerHTML = '';
 
+    const addedSubjectIds = getAddedSubjectIds();
+
     subjects.forEach((subject, index) => {
-        var row = document.createElement("tr");
-        row.innerHTML = "<td>" + (index + 1) + "</td>" +
-            "<td>" + subject.name + "</td>" +
-            "<td>" + subject.creditUnits + "</td>" +
-            "<td>" + subject.theorySessions + "</td>" +
-            "<td>" + subject.practicalSessions + "</td>" +
-            "<td>" + (subject.prerequisites && subject.prerequisites.length > 0 ? getPrerequisitesNames(subject.prerequisites) : "Không có") + "</td>"+
-            "<td>" +
-            "<button class='btn btn-warning add-button'>Thêm</button>" +
-            "</td>";
-        row.querySelector('.add-button').addEventListener('click', function() {
-            addSubject(subject);
-        });
-        tbody.appendChild(row);
+        if (!addedSubjectIds.includes(subject.id)) {
+            var row = document.createElement("tr");
+            row.innerHTML = "<td>" + (index + 1) + "</td>" +
+                "<td>" + subject.name + "</td>" +
+                "<td>" + subject.creditUnits + "</td>" +
+                "<td>" + subject.theorySessions + "</td>" +
+                "<td>" + subject.practicalSessions + "</td>" +
+                "<td>" + (subject.prerequisites && subject.prerequisites.length > 0 ? getPrerequisitesNames(subject.prerequisites) : "Không có") + "</td>"+
+                "<td>" +
+                "<button class='btn btn-warning add-button'>Thêm</button>" +
+                "</td>";
+            row.querySelector('.add-button').addEventListener('click', function() {
+                addSubject(subject);
+            });
+            tbody.appendChild(row);
+        }
     });
 }
-
 function getPrerequisitesNames(prerequisiteIds) {
     let names = [];
     prerequisiteIds.forEach(prerequisiteId => {
@@ -147,7 +174,7 @@ function addSubjectsToClass(classType) {
     
     selectedSubjectsList.forEach((subject, index) => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${index + 1}</td>
+        row.innerHTML = `<td>${targetTableBody.rows.length + 1}</td>
                          <td>${subject.name}</td>
                          <td>${subject.creditUnits}</td>
                          <td>${subject.theorySessions}</td>
@@ -158,9 +185,9 @@ function addSubjectsToClass(classType) {
 
     selectedSubjects = [];
     document.getElementById('selectedSubjectsContainer').innerHTML = '';
+    displayCourseList(subjects);
     $('#addToClassModal').modal('hide');
 }
-
 function addMajor() {
     const majorName = document.getElementById('majorNameInput').value;
     const departmentID = document.getElementById('departmentInput').value;
@@ -170,20 +197,19 @@ function addMajor() {
         const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
         electiveSubjects.push(id);
     });
-
+    
     const requiredCourses = [];
     document.querySelectorAll('#monHocBatBuocTable tr').forEach(row => {
         const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
         requiredCourses.push(id);
     });
-
+    
     const majorData = {
         name: majorName,
         departmentID: departmentID,
         electiveSubjects: electiveSubjects,
         requiredCourses: requiredCourses
     };
-
     fetch('http://localhost:8080/api/v1/majors/create', {
         method: 'POST',
         headers: {
@@ -199,18 +225,117 @@ function addMajor() {
         return response.json();
     })
     .then(data => {
-        alert('Ngành đã được thêm thành công');
-        location.reload(); // Reload lại trang sau khi thêm ngành
+        showSuccessToast('Ngành mới đã được thêm thành công');
+        document.getElementById('majorNameInput').value = '';
+        document.getElementById('monHocBatBuocTable').innerHTML = '';
+        document.getElementById('monHocTuChonTable').innerHTML = '';
+        selectedSubjects = [];
+        fetchSubjects();
     })
     .catch(error => {
         console.error('Error creating major:', error);
-        alert('Có lỗi xảy ra khi thêm ngành');
+        showErrorToast('Đã xảy ra lỗi khi thêm ngành mới');
     });
 }
+function getAddedSubjectIds() {
+    const mandatorySubjectRows = document.querySelectorAll('#monHocBatBuocTable tr');
+    const optionalSubjectRows = document.querySelectorAll('#monHocTuChonTable tr');
+    const addedSubjectIds = [];
 
+    mandatorySubjectRows.forEach(row => {
+        const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
+        addedSubjectIds.push(id);
+    });
+
+    optionalSubjectRows.forEach(row => {
+        const id = subjects.find(subject => subject.name === row.children[1].innerText).id;
+        addedSubjectIds.push(id);
+    });
+
+    return addedSubjectIds;
+}
 // Sự kiện tìm kiếm
 document.getElementById('searchSubjectInput').addEventListener('input', function(event) {
     const keyword = event.target.value.toLowerCase();
     const filteredSubjects = subjects.filter(subject => subject.name.toLowerCase().includes(keyword));
     displayCourseList(filteredSubjects);
 });
+
+function toast({
+    state = 'success',
+    title = 'Thành công !',
+    desc = 'Chúc bạn may mắn lần sau',
+}) {
+    var main = document.getElementById('toast');
+    if (main) {
+        var toastBody = document.createElement('div');
+        icons = {
+            success: 'fa-solid fa-circle-check',
+            info: 'fa-solid fa-circle-info',
+            error: 'fa-solid fa-circle-exclamation',
+            warn: 'fa-solid fa-triangle-exclamation',
+        }
+
+        toastBody.classList.add(`toast--${state}`);
+        toastBody.innerHTML =
+                    `
+                    <div class="toast show">
+                        <div class="toast-icon">
+                            <i class="${icons[state]}" ></i>
+                        </div>
+                        <div class="toast-body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__msg">${desc}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    `
+
+        main.appendChild(toastBody);
+
+        toastBody.onclick = function (event) {
+            if (event.target.closest('.toast__close')) {
+                main.removeChild(toastBody);
+            }
+        }
+
+        setTimeout(function () {
+            if (main.contains(toastBody))
+                main.removeChild(toastBody);
+        }, 4000)
+    }
+}
+
+function showSuccessToast(desc) {
+    toast({
+        state: 'success',
+        title: 'Thành công !',
+        desc: desc,
+    })
+}
+
+function showErrorToast(desc) {
+    toast({
+        state: 'error',
+        title: 'Lỗi !',
+        desc: desc
+    })
+}
+
+function showInfoToast(desc) {
+    toast({
+        state: 'info',
+        title: 'Thông tin !',
+        desc: desc
+    })
+}
+
+function showWarnToast(desc) {
+    toast({
+        state: 'warn',
+        title: 'Cảnh báo !',
+        desc: desc
+    })
+}

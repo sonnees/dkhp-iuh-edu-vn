@@ -11,8 +11,23 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet"
         href="/css/dashboard_NhanVien.css">
+    <link rel="stylesheet" href="/css/toast_GiaoVu.css">
+    <script src="/js/quanLyLop.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $("#navbarPlaceholder").load("./navbar.html");
+            $("#sidebarPlaceholder").load("./sidebar.html");
+        });
+    </script>
 </head>
 <body>
+    <div id="toast"></div>
     <div id="navbarPlaceholder"></div>
     <div id="sidebarPlaceholder"></div>
 
@@ -85,19 +100,5 @@
             </tbody>
         </table>
     </div>
-    <script src="/js/quanLyLop.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        $(function(){
-            $("#navbarPlaceholder").load("./navbar.html");
-            $("#sidebarPlaceholder").load("./sidebar.html");
-        });
-    </script>
-
 </body>
 </html>

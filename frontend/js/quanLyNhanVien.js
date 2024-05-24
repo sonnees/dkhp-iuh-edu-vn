@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
             createStaff(fullName, departmentID);
         else if(typeStaff.value==="administrator") 
             createAdministrator(fullName, departmentID);
+        document.getElementById('employeeName').value="";
     });
 
     document.getElementById('searchInput').addEventListener('input', function() {
@@ -126,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function createStaff(fullName, departmentID) {
+    showInfoToast('Đang xử lý quá trình thêm nhân viên')
     const url = 'http://localhost:8080/api/v1/staff/create-staff';
     const data = {
         fullName: fullName,
@@ -148,7 +150,8 @@ function createStaff(fullName, departmentID) {
     })
     .then(data => {
         console.log('New staff created:', data);
-        alert("Đã thêm nhân viên thành công")
+        // alert("Đã thêm nhân viên thành công")
+        showSuccessToast(`Đã tạo nhân viên ${fullName}`)
         fetchAllStafff(); // Sau khi tạo nhân viên, cập nhật lại bảng nhân viên
     })
     .catch(error => {
@@ -157,8 +160,7 @@ function createStaff(fullName, departmentID) {
 }
 
 function createAdministrator(fullName, departmentID) {
-    console.log('>>>>>>>>>>>.');
-    
+    showInfoToast('Đang xử lý quá trình thêm ADMIN')
     const url = 'http://localhost:8080/api/v1/staff/create-administrator';
     const data = {
         fullName: fullName,
@@ -181,10 +183,91 @@ function createAdministrator(fullName, departmentID) {
     })
     .then(data => {
         console.log('Administrator rights granted:', data);
-        alert(`Đã tạo Administrator cho ${fullName}`);
+        showSuccessToast(`Đã tạo Administrator ${fullName}`)
+
         fetchAllStafff();
     })
     .catch(error => {
         console.error('There was a problem with the request:', error);
     });
+}
+
+
+function toast({
+    state = 'success',
+    title = 'Thành công !',
+    desc = 'Chúc bạn may mắn lần sau',
+}) {
+    var main = document.getElementById('toast');
+    if (main) {
+        var toastBody = document.createElement('div');
+        icons = {
+            success: 'fa-solid fa-circle-check',
+            info: 'fa-solid fa-circle-info',
+            error: 'fa-solid fa-circle-exclamation',
+            warn: 'fa-solid fa-triangle-exclamation',
+        }
+
+        toastBody.classList.add(`toast--${state}`);
+        toastBody.innerHTML =
+                    `
+                    <div class="toast show">
+                        <div class="toast-icon">
+                            <i class="${icons[state]}" ></i>
+                        </div>
+                        <div class="toast-body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__msg">${desc}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    `
+
+        main.appendChild(toastBody);
+
+        toastBody.onclick = function (event) {
+            if (event.target.closest('.toast__close')) {
+                main.removeChild(toastBody);
+            }
+        }
+
+        setTimeout(function () {
+            if (main.contains(toastBody))
+                main.removeChild(toastBody);
+        }, 4000)
+    }
+}
+
+function showSuccessToast(desc) {
+    toast({
+        state: 'success',
+        title: 'Thành công !',
+        desc: desc,
+    })
+}
+
+function showErrorToast(desc) {
+    toast({
+        state: 'error',
+        title: 'Lỗi !',
+        desc: desc
+    })
+}
+
+function showInfoToast(desc) {
+    toast({
+        state: 'info',
+        title: 'Thông tin !',
+        desc: desc
+    })
+}
+
+function showWarnToast(desc) {
+    toast({
+        state: 'warn',
+        title: 'Cảnh báo !',
+        desc: desc
+    })
 }
