@@ -1,6 +1,7 @@
 var semesters = [];
 var allCourses = [];
 var selectedCourseID = null;
+var fileScore="D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\scoreKTTKPM.xlsx"
 
 function fetchSemestersByYear(year) {
     const url = `http://localhost:8080/api/v1/semester/search-by-year?year=${year}`;
@@ -97,7 +98,8 @@ function updateCourseTable(courses) {
     courseList.innerHTML = '';
     courses.forEach((course, index) => {
         const row = document.createElement('tr');
-        row.innerHTML = `
+        if(course.status==='ACCEPTANCE_TO_OPEN'){
+            row.innerHTML = `
             <td>${index + 1}</td>
             <td>${course.subject.name}</td>
             <td>${course.subject.creditUnits}</td>
@@ -108,6 +110,19 @@ function updateCourseTable(courses) {
             <td><button class="btn btn-primary" onclick="openGradeModal('${course.id}','${course.subject.name}')">Nhập điểm</button></td>
             <td><button class="btn btn-primary" onclick="exportScore('${course.id}')">Xuất điểm</button></td>
         `;
+        }
+        else if (course.status==='COURSE_CANCELLED'){
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${course.subject.name}</td>
+            <td>${course.subject.creditUnits}</td>
+            <td>${course.tuitionFee}</td>
+            <td>Học kì ${course.semester.semesterNumber} năm ${course.semester.year}</td>
+            <td>${mapStatus(course.status)}</td>
+            <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
+        `;
+        }
+        
         courseList.appendChild(row);
     });
 }
@@ -203,7 +218,7 @@ document.getElementById('confirmButton').addEventListener('click', function(even
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         },
         body: JSON.stringify(
-            { fileName: 'D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\score.xlsx',
+            { fileName: fileScore,
               courseID:selectedCourseID
              }
         )
@@ -362,7 +377,7 @@ document.getElementById('confirmExportScoreButton').addEventListener('click', fu
         const url = 'http://localhost:8080/api/v1/registration-form/gen-file-update-score';
         const body = {
             "courseID": courseIdToExport,
-            "fileName": "D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\datascorehihi.xlsx"
+            "fileName": fileScore
         };
 
         fetch(url, {
