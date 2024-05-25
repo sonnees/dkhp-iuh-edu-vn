@@ -8,11 +8,13 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
         <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+        <link rel="stylesheet" href="/css/toast_GiaoVu.css">
+
     </head>
     <body>
+        <div id="toast"></div>
         <div id="navbarPlaceholder"></div>
         <div id="sidebarPlaceholder"></div>
-
         <div class="container" id="mainContent">
             <div class="d-flex align-items-center mb-3">
                 <h2 class="mr-auto">Quản lý khoa</h2>
@@ -24,7 +26,7 @@
             <form>
                 <div class="form-group">
                     <label for="khoaName">Nhập tên Khoa:</label>
-                    <input type="text" class="form-control" id="khoaName" placeholder="Tên khoa">
+                    <input type="text" class="form-control" id="khoaName" placeholder="Tên khoa" required>
                 </div>
 
                 <table class="table">

@@ -9,8 +9,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+    <link rel="stylesheet" href="/css/toast_GiaoVu.css">
+
 </head>
 <body>
+    <div id="toast"></div>
     <div id="navbarPlaceholder"></div>
     <div id="sidebarPlaceholder"></div>
 
@@ -49,8 +52,8 @@
             <div class="form-group col-md-3">
                 <label for="statusInput">Trạng thái: </label>
                 <select class="form-control" id="statusInput">
-                    <option value="PREPARING">Chuẩn bị mở</option>
-                    <!-- <option value="WAITING_FOR_STUDENT_REGISTRATION">Chờ sinh viên đăng kí</option> -->
+                    <!-- <option value="PREPARING">Chuẩn bị mở</option> -->
+                    <option value="WAITING_FOR_STUDENT_REGISTRATION">Chờ sinh viên đăng kí</option>
                     <option value="REGISTRATION_DEADLINE_PASSED">Hết thời hạn đăng kí</option>
                     <!-- <option value="ACCEPTANCE_TO_OPEN">Chấp nhận mở lớp</option>
                     <option value="COURSE_CANCELLED">Hủy lớp</option> -->

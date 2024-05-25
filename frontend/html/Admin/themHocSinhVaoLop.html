@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="/css/dashboard_NhanVien.css">
+    <link rel="stylesheet" href="/css/toast_GiaoVu.css">
+
     <style>
         table {
             width: 100%;
@@ -26,6 +28,7 @@
     </style>
 </head>
 <body>
+    <div id="toast"></div>
     <div id="navbarPlaceholder"></div>
     <div id="sidebarPlaceholder"></div>
 
@@ -71,23 +74,23 @@
                 var filePath = $(this).val(); // Lấy đường dẫn tệp tin đã chọn
                 var modifiedFilePath = filePath.replace(/\\/g, '\\\\'); // Thay thế ký tự '\'
                 // $("#filePath").text("Đường dẫn tệp tin: " + modifiedFilePath);// Lấy đường dẫn tệp tin đã chọn
-                console.log('>>>>>',selectedFile);
+                // console.log('>>>>>',selectedFile);
                 // $("#filePath").text("Đường dẫn tệp tin: " + filePath);
             });
 
             $("button.btn-primary").click(function() {
                 if (!selectedFile) {
-                    alert('Vui lòng chọn một file.');
+                    showErrorToast("Bạn chưa chọn file nào")
                     return;
                 }
-
+                console.log(">>>>>",selectedFile.name);
                 fetch('http://localhost:8080/api/v1/classes/create-students', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
-                    body: JSON.stringify({ fileName: 'D:\\Word_Space\\dkhp-iuh-edu-vn\\backend\\data\\student_k16.xlsx' })
+                    body: JSON.stringify({ fileName: 'D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\'+selectedFile.name})
                     // body: JSON.stringify({ fileName: modifiedFilePath })
 
                 })
@@ -98,12 +101,93 @@
                     // return response.json();
                 })
                 .then(data => {
-                    alert('Thêm danh sách sinh viên thành công!');
+                    // alert('Thêm danh sách sinh viên thành công!');
+                    showSuccessToast('Thêm danh sách sinh viên thành công!')
                 })
                 .catch(error => {
                     console.error('Error creating course:', error);
+                    showErrorToast("Đã có lỗi khi thêm danh sách sinh viên")
                 });
             });
+
+            function toast({
+    state = 'success',
+    title = 'Thành công !',
+    desc = 'Chúc bạn may mắn lần sau',
+}) {
+    var main = document.getElementById('toast');
+    if (main) {
+        var toastBody = document.createElement('div');
+        icons = {
+            success: 'fa-solid fa-circle-check',
+            info: 'fa-solid fa-circle-info',
+            error: 'fa-solid fa-circle-exclamation',
+            warn: 'fa-solid fa-triangle-exclamation',
+        }
+
+        toastBody.classList.add(`toast--${state}`);
+        toastBody.innerHTML =
+                    `
+                    <div class="toast show">
+                        <div class="toast-icon">
+                            <i class="${icons[state]}" ></i>
+                        </div>
+                        <div class="toast-body">
+                            <h3 class="toast__title">${title}</h3>
+                            <p class="toast__msg">${desc}</p>
+                        </div>
+                        <div class="toast__close">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    `
+
+        main.appendChild(toastBody);
+
+        toastBody.onclick = function (event) {
+            if (event.target.closest('.toast__close')) {
+                main.removeChild(toastBody);
+            }
+        }
+
+        setTimeout(function () {
+            if (main.contains(toastBody))
+                main.removeChild(toastBody);
+        }, 4000)
+    }
+}
+
+function showSuccessToast(desc) {
+    toast({
+        state: 'success',
+        title: 'Thành công !',
+        desc: desc,
+    })
+}
+
+function showErrorToast(desc) {
+    toast({
+        state: 'error',
+        title: 'Lỗi !',
+        desc: desc
+    })
+}
+
+function showInfoToast(desc) {
+    toast({
+        state: 'info',
+        title: 'Thông tin !',
+        desc: desc
+    })
+}
+
+function showWarnToast(desc) {
+    toast({
+        state: 'warn',
+        title: 'Cảnh báo !',
+        desc: desc
+    })
+}
         });
     </script>
 </body>
