@@ -80,8 +80,8 @@ public class CourseController {
 
     @PostMapping("/search-by-semester-id")
     public Mono<ResponseEntity<String>> searchBySemesterID(@RequestParam UUID semesterID){
-        log.info("### enter api.v1.course.search-by-semester-id ###");
-        log.info("# semesterID: {} #", semesterID);
+//        log.info("### enter api.v1.course.search-by-semester-id ###");
+//        log.info("# semesterID: {} #", semesterID);
         return courseRepository.searchBySemesterID(semesterID)
                 .collectList()
                 .flatMap(courses -> Mono.just(ResponseEntity.ok(jsonConverter.objToString(courses))))
