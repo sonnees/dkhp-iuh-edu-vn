@@ -1,7 +1,7 @@
 var semesters = [];
 var allCourses = [];
 var selectedCourseID = null;
-var fileScore="D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\scoreKTTKPM.xlsx"
+var fileScore="D:\\Word_Space\\New folder\\dkhp-iuh-edu-vn\\backend\\data\\scoreBigData.xlsx"
 
 function fetchSemestersByYear(year) {
     const url = `http://localhost:8080/api/v1/semester/search-by-year?year=${year}`;
@@ -53,6 +53,8 @@ function updateSemesterDropdown() {
 }
 
 function fetchCoursesBySemesterId(semesterID) {
+    console.log('ID SEMESTER>>>>>>',semesterID);
+    
     const url = `http://localhost:8080/api/v1/course/search-by-semester-id?semesterID=${semesterID}`;
     return fetch(url, {
         method: 'POST',
@@ -68,6 +70,8 @@ function fetchCoursesBySemesterId(semesterID) {
         return response.json();
     })
     .then(data => {
+        console.log('data>>>>',data);
+        
         allCourses = data; // Lưu tất cả các khóa học vào biến toàn cục
         updateCourseTable(allCourses);
     })
@@ -98,7 +102,18 @@ function updateCourseTable(courses) {
     courseList.innerHTML = '';
     courses.forEach((course, index) => {
         const row = document.createElement('tr');
-        if(course.status==='ACCEPTANCE_TO_OPEN'){
+        if (course.status==='COURSE_CANCELLED'){
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${course.subject.name}</td>
+            <td>${course.subject.creditUnits}</td>
+            <td>${course.tuitionFee}</td>
+            <td>Học kì ${course.semester.semesterNumber} năm ${course.semester.year}</td>
+            <td>${mapStatus(course.status)}</td>
+            <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
+        `;
+        }
+        else{
             row.innerHTML = `
             <td>${index + 1}</td>
             <td>${course.subject.name}</td>
@@ -111,17 +126,7 @@ function updateCourseTable(courses) {
             <td><button class="btn btn-primary" onclick="exportScore('${course.id}')">Xuất điểm</button></td>
         `;
         }
-        else if (course.status==='COURSE_CANCELLED'){
-            row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${course.subject.name}</td>
-            <td>${course.subject.creditUnits}</td>
-            <td>${course.tuitionFee}</td>
-            <td>Học kì ${course.semester.semesterNumber} năm ${course.semester.year}</td>
-            <td>${mapStatus(course.status)}</td>
-            <td><button class="btn btn-primary" onclick="showCourseDetail('${course.id}')">Xem chi tiết</button></td>
-        `;
-        }
+        
         
         courseList.appendChild(row);
     });
