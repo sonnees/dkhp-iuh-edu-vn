@@ -64,18 +64,11 @@ public class RegistrationFormController {
                 )
                 .collectList()
                 .flatMap(list -> {
-                    if(detailCourseIDs.size()==1){
+                    if(list.size()==1){
                         if(list.get(0)<=0) return Mono.error(new RuntimeException("decrease"));
                     }
                     else{
-                        if(list.get(0)<=0 && list.get(1)<=0) return Mono.error(new RuntimeException("decrease"));
-
-                        if(list.get(0)<=0 && list.get(1)>0){
-                            return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[1])
-                                    .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
-                        }
-
-                        if(list.get(0)>0 && list.get(1)<=0){
+                        if(list.get(0)==0 || list.get(1)==0){
                             return detailCourseRepository.increaseClassSizeAvailable(info.getDetailCourseIDs()[0])
                                     .flatMap(aLong -> Mono.error(new RuntimeException("decrease")));
                         }
