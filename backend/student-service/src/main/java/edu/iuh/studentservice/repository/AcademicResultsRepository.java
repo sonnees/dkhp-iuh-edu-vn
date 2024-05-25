@@ -54,6 +54,7 @@ public interface AcademicResultsRepository extends ReactiveMongoRepository<Acade
             "{$match: {_id: ?0, 'semesters._id': ?1}}",
             "{$unwind: '$semesters'}",
             "{$unwind: '$semesters.subjects'}",
+            "{$match: {'semesters._id': ?1}}",
             "{$addFields: {" +
                     "'semesters.subjects.theoryScore': {$avg: '$semesters.subjects.theoryScore'}," +
                     "'semesters.subjects.practicalScore': {" +

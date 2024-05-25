@@ -79,6 +79,7 @@ function handleLogout() {
 }
 
 function updateSemester() {
+    console.log("updateSemester");
     date = new Date();
     year = date.getFullYear();
     let select = document.getElementById("chartSelect");
@@ -115,13 +116,17 @@ function updateSemester() {
 }
 
 function showChart() {
+    
     let semesterID = document.getElementById("chartSelect").value;
+    console.log("updateSemester " + semesterID);
     const ctx = document.getElementById('myChart').getContext('2d');
     let chartData = null;
     if (semesterID == 'null') chartData = {labels: [],scores: []}
     else {
         // http://localhost:8084/api/v1/academic-results/statistic-score?studentID=10000090&semesterID=dd2e5d9a-74c7-4232-9d56-ee253821241d
-        fetch('http://localhost:8080/api/v1/academic-results/statistic-score?studentID=' + localStorage.getItem("studentID") + '&semesterID=' + semesterID, {
+        let api = 'http://localhost:8080/api/v1/academic-results/statistic-score?studentID=' + localStorage.getItem("studentID") + '&semesterID=' + semesterID
+        console.log(api);
+        fetch(api, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -135,14 +140,17 @@ function showChart() {
                 return response.text();
             })
             .then(data => {
+                console.log(data);
                 if (data == "") chartData = { labels: [], scores: [] } 
                 else{
                     data = JSON.parse(data);
+                    chartData = null;
                     chartData = { labels: data.subjectNames, scores: data.finalScores }
+                    console.log(chartData);
                 }
 
                 if (chart) {
-                    chart.destroy(); // Destroy the existing chart instance if it exists
+                    chart.destroy(); 
                 }
 
                 chart = new Chart(ctx, {
@@ -158,17 +166,17 @@ function showChart() {
                         }]
                     },
                     options: {
-                        indexAxis: 'y', // This setting makes the bar chart horizontal
+                        indexAxis: 'y', 
                         scales: {
                             y: {
 
-                                display: false, // Hide the y-axis labels
+                                display: false, 
                             },
                             x: {
                                 beginAtZero: true,
-                                max: 10, // Set the maximum value for the x-axis
+                                max: 10, 
                                 ticks: {
-                                    stepSize: 1 // Set the step size for x-axis
+                                    stepSize: 1 
                                 }
                             }
                         },
@@ -186,6 +194,7 @@ function showChart() {
                         }
                     }
                 });
+                return;
             })
     }
 
