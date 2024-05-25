@@ -141,6 +141,7 @@ public class CourseController {
                                                 courseAccept.add(uuid);
                                                 log.info("### {}", uuid);
                                             }
+                                            courseCancel.add(uuid);
                                             return Mono.empty();
                                         })
                                         .then(Mono.empty()))
