@@ -381,7 +381,7 @@ function clearTable() {
 function listArray(array, semesterID)  {
     let list = []
     array.forEach((data) => {
-        if (data.id==semesterID) {
+        if (data.id) {
             
             data.subjects.forEach((data) => {
                 list.push(data.id)
