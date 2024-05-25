@@ -154,7 +154,6 @@ public class CourseController {
                                                 .flatMap(registrationSearch3FieldDTO -> courseRepository.findById(registrationSearch3FieldDTO.getIdCourse())
                                                         .flatMap(course -> detailCourseRepository.searchByCourseID(registrationSearch3FieldDTO.getIdCourse())
                                                                 .collectList()
-                                                                .delayElement(Duration.ofMillis(100))
                                                                 .flatMap(detailCourses -> {
                                                                     List<TimetableCreateDTO> timetableCreateDTOS = new ArrayList<>();
 
@@ -191,7 +190,6 @@ public class CourseController {
                                                                             .retrieve()
                                                                             .bodyToMono(Void.class)
                                                                             .switchIfEmpty(Mono.defer(() -> Flux.fromIterable(Arrays.stream(timetableCreateDTO.getStudentID()).toList())
-                                                                                    .delayElements(Duration.ofMillis(100))
                                                                                     .flatMap(s -> {
                                                                                         AcademicResultsDTO academicResultsDTO = new AcademicResultsDTO(
                                                                                                 s,semesterID,course.getSubject().getId(),course.getSubject().getName(),course.getSubject().getCreditUnits()
