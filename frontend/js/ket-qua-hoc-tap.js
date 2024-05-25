@@ -29,7 +29,8 @@ const fetchAcademicResults = async () => {
 
         const tableBody = document.querySelector('#scoreTable tbody');
         tableBody.innerHTML="";
-        let TBTL = 0;
+        let TBTL10 = 0;
+        let TBTL4 = 0;
         
         list.forEach((data, index) => {
 
@@ -130,14 +131,21 @@ const fetchAcademicResults = async () => {
                         <td colspan="19">Điểm trung bình học kỳ hệ 4: ${(TB4/data.subjects.length).toFixed(2) }</td>
                     `;
                     tableBody.appendChild(rowTBK4);
-    
-    
-                    TBTL+=TB4/data.subjects.length
-                    const rowTBKTL = document.createElement('tr');
-                    rowTBKTL.innerHTML = `
-                        <td colspan="19">Điểm trung bình tích lũy (hệ 4): ${(TBTL/(index+1)).toFixed(2)}</td>
+
+                    TBTL10+=TB10/data.subjects.length
+                    const rowTBKTL10 = document.createElement('tr');
+                    rowTBKTL10.innerHTML = `
+                        <td colspan="19">Điểm trung bình tích lũy (hệ 10): ${(TBTL10/(index+1)).toFixed(2)}</td>
                     `;
-                    tableBody.appendChild(rowTBKTL);
+                    tableBody.appendChild(rowTBKTL10);
+    
+    
+                    TBTL4+=TB4/data.subjects.length
+                    const rowTBKTL4 = document.createElement('tr');
+                    rowTBKTL4.innerHTML = `
+                        <td colspan="19">Điểm trung bình tích lũy (hệ 4): ${(TBTL4/(index+1)).toFixed(2)}</td>
+                    `;
+                    tableBody.appendChild(rowTBKTL4);
                 }
             }
             
